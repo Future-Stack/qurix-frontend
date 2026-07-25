@@ -41,7 +41,7 @@ export default function ServiceLineManagementDashboard() {
         <div className="p-8 pb-12 max-w-full mx-auto">
 
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col md:flex-row gap-3 justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
                 <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
@@ -65,7 +65,7 @@ export default function ServiceLineManagementDashboard() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <StatCard icon={Monitor} title="Total Service lines" value="240" iconColor="text-blue-500" />
             <StatCard icon={Users} title="Total Teams" value="70" iconColor="text-red-500" />
             <StatCard icon={CheckCircle2} title="Running Projects" value="12" iconColor="text-green-500" />
@@ -76,14 +76,14 @@ export default function ServiceLineManagementDashboard() {
           {/* Main Content Area */}
           <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden">
             {/* Controls */}
-            <div className="p-4 flex items-center justify-between border-b border-[#E2E8F0]">
+            <div className="p-4 flex flex-col md:flex-row gap-3 items-center justify-between border-b border-[#E2E8F0]">
               <div className="flex items-center gap-2">
                 <button className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
                   All Service line <ChevronDown className="w-4 h-4" />
                 </button>
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row gap-3 items-center">
                 <div className="relative">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 

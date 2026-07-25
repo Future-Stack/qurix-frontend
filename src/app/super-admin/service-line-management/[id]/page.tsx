@@ -159,9 +159,9 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
                             <button className="hover:opacity-70"><Trash className="w-4 h-4" /></button>
                           </div>
                         ) : (
-                          <button className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
+                          <Link href={`/super-admin/service-line-management/${params.id}/teams/${team.id}`} className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
                             <Eye className="w-4 h-4" /> View Team
-                          </button>
+                          </Link>
                         )}
                       </td>
                     </tr>
