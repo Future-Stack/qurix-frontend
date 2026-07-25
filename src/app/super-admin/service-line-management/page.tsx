@@ -1,9 +1,154 @@
-import React from 'react';
+"use client";
 
-export default function ServiceLineManagementPage() {
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { 
+  FolderOpen, AlertTriangle, CheckCircle2, Calendar, MessageSquare, 
+  Search, Filter, Eye, Plus, ChevronDown, Monitor, Clock, Users, Briefcase
+} from 'lucide-react';
+import { CreateServiceLineModal } from '@/components/ui/Modal/CreateServiceLineModal';
+
+const mockServiceLines = [
+  { id: '1', name: 'FSD', icon: 'M', iconBg: 'bg-blue-100', iconColor: 'text-blue-500', leadName: 'Imran', leadAvatar: 'https://i.pravatar.cc/150?u=1', teams: '4 Teams', employees: '42 Members', workload: '$3615', projects: '35 Projects', updated: '01/01/2026' },
+  { id: '2', name: 'Shopify', icon: 'S', iconBg: 'bg-red-100', iconColor: 'text-red-500', leadName: 'Leslie Alexander', leadAvatar: 'https://i.pravatar.cc/150?u=2', teams: '4 Teams', employees: '42 Members', workload: '$4640', projects: '35 Projects', updated: '16/08/2023' },
+  { id: '3', name: 'Squarespace', icon: 'Sq', iconBg: 'bg-gray-100', iconColor: 'text-gray-500', leadName: 'Arlene McCoy', leadAvatar: 'https://i.pravatar.cc/150?u=3', teams: '4 Teams', employees: '42 Members', workload: '$6461', projects: '35 Projects', updated: '01/01/2026' },
+  { id: '4', name: 'Webflow', icon: 'W', iconBg: 'bg-blue-50', iconColor: 'text-blue-400', leadName: 'Floyd Miles', leadAvatar: 'https://i.pravatar.cc/150?u=4', teams: '4 Teams', employees: '42 Members', workload: '$10176', projects: '35 Projects', updated: '16/08/2023' },
+  { id: '5', name: 'WordPress', icon: 'Wp', iconBg: 'bg-red-100', iconColor: 'text-red-500', leadName: 'Savannah Nguyen', leadAvatar: 'https://i.pravatar.cc/150?u=5', teams: '4 Teams', employees: '42 Members', workload: '$5969', projects: '35 Projects', updated: '12/06/2020' },
+  { id: '6', name: 'Framer', icon: 'F', iconBg: 'bg-black', iconColor: 'text-white', leadName: 'Jerome Bell', leadAvatar: 'https://i.pravatar.cc/150?u=6', teams: '4 Teams', employees: '42 Members', workload: '$7188', projects: '35 Projects', updated: '28/10/2012' },
+  { id: '7', name: 'H&C', icon: 'C', iconBg: 'bg-indigo-100', iconColor: 'text-indigo-500', leadName: 'Jacob Jones', leadAvatar: 'https://i.pravatar.cc/150?u=7', teams: '4 Teams', employees: '42 Members', workload: '$5860', projects: '35 Projects', updated: '16/08/2013' },
+];
+
+function StatCard({ icon: Icon, title, value, iconBg, iconColor }: any) {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Service Line Management</h1>
+    <div className="bg-white border border-[#E2E8F0] rounded-[20px] p-5 flex flex-col justify-between w-full h-[140px] shadow-sm">
+      <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#E2E8F0] shadow-sm mb-4">
+        <Icon className={`w-5 h-5 ${iconColor}`} />
+      </div>
+      <div>
+        <div className="text-[28px] font-bold text-[#0F172A] leading-none mb-1">{value}</div>
+        <div className="text-[12px] font-medium text-[#64748B]">{title}</div>
+      </div>
+    </div>
+  );
+}
+
+export default function ServiceLineManagementDashboard() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  return (
+    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
+      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
+        <div className="p-8 pb-12 max-w-full mx-auto">
+
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
+                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                  <span className="z-10">A</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                </div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-[#0F172A] mb-1">Welcome back, Admin</h1>
+                <p className="text-sm text-[#64748B]">Monday, July 14, 2026</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setIsCreateModalOpen(true)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
+              >
+                <Plus className="w-4 h-4" /> Create Service Line
+              </button>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-5 gap-4 mb-8">
+            <StatCard icon={Monitor} title="Total Service lines" value="240" iconColor="text-blue-500" />
+            <StatCard icon={Users} title="Total Teams" value="70" iconColor="text-red-500" />
+            <StatCard icon={CheckCircle2} title="Running Projects" value="12" iconColor="text-green-500" />
+            <StatCard icon={Briefcase} title="Omega Force Total Workload" value="8" iconColor="text-yellow-500" />
+            <StatCard icon={MessageSquare} title="Omega Force Total Cancellations" value="43" iconColor="text-purple-500" />
+          </div>
+
+          {/* Main Content Area */}
+          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+            {/* Controls */}
+            <div className="p-4 flex items-center justify-between border-b border-[#E2E8F0]">
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
+                  All Service line <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by Service Name..." 
+                    className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
+                  />
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm font-semibold text-[#475569] hover:bg-gray-100 transition-colors">
+                  <Filter className="w-4 h-4" /> Service line Filter
+                </button>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="w-full overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-max">
+                <thead>
+                  <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Service Line Name</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Service Line Lead</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Total Teams</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Total Employee</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Workload</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Active Projects</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Last Updated</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockServiceLines.map((sl, i) => (
+                    <tr key={i} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full ${sl.iconBg} ${sl.iconColor} flex items-center justify-center font-bold text-xs`}>
+                            {sl.icon}
+                          </div>
+                          <span className="text-[13px] font-bold text-[#0F172A]">{sl.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <img src={sl.leadAvatar} alt={sl.leadName} className="w-6 h-6 rounded-full object-cover" />
+                          <span className="text-[13px] font-medium text-[#475569]">{sl.leadName}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.teams}</td>
+                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.employees}</td>
+                      <td className="px-6 py-4 text-[13px] font-bold text-[#0F172A]">{sl.workload}</td>
+                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.projects}</td>
+                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.updated}</td>
+                      <td className="px-6 py-4">
+                        <Link href={`/super-admin/service-line-management/${sl.id}`} className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
+                          <Eye className="w-4 h-4" /> View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <CreateServiceLineModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );
 }
