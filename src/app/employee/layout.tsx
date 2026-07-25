@@ -5,14 +5,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import SettingsModal from '@/components/employee-team-leader/shared/Settings/SettingsModal';
 
-export default function TeamLeaderLayout({ children }: { children: React.ReactNode }) {
+export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
-  const isSettingsRoute = pathname?.startsWith('/team-leader/settings');
+  const isSettingsRoute = pathname?.startsWith('/employee/settings');
 
-  // Open settings modal if user lands directly on /team-leader/settings route
+  // Open settings modal if user lands directly on /employee/settings route
   useEffect(() => {
     if (isSettingsRoute) {
       setIsSettingsOpen(true);
@@ -22,7 +22,7 @@ export default function TeamLeaderLayout({ children }: { children: React.ReactNo
   const handleCloseSettings = () => {
     setIsSettingsOpen(false);
     if (isSettingsRoute) {
-      router.push('/team-leader/dashboard');
+      router.push('/employee/dashboard');
     }
   };
 
@@ -30,7 +30,6 @@ export default function TeamLeaderLayout({ children }: { children: React.ReactNo
     <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
       {/* Navigation Sidebar */}
       <Sidebar
-        basePath="/team-leader"
         onOpenSettings={() => setIsSettingsOpen(true)}
         isSettingsActive={isSettingsOpen}
       />
