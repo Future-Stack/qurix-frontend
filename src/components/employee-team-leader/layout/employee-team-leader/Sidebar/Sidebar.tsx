@@ -25,16 +25,20 @@ interface SidebarProps {
   onOpenSettings?: () => void;
   isSettingsActive?: boolean;
   basePath?: string;
+  customMenuItems?: SidebarItem[];
+  customLogo?: React.ReactNode;
 }
 
 export default function Sidebar({ 
   onOpenSettings, 
   isSettingsActive = false,
-  basePath = '/employee' 
+  basePath = '/employee',
+  customMenuItems,
+  customLogo
 }: SidebarProps) {
   const pathname = usePathname();
 
-  const menuItems: SidebarItem[] = [
+  const menuItems: SidebarItem[] = customMenuItems || [
     { icon: LayoutGrid, href: `${basePath}/dashboard`, label: 'Dashboard' },
     { icon: MessageCircle, href: `${basePath}/messages`, label: 'Messages' },
     { icon: Users, href: `${basePath}/contacts`, label: 'Contacts' },
@@ -65,9 +69,13 @@ export default function Sidebar({
         <div className="flex flex-col gap-8 items-center w-full">
           {/* Brand Logo */}
           <Link href={`${basePath}/dashboard`} className="flex items-center justify-center">
-            <div className="relative size-12 rounded-[17px] overflow-hidden flex items-center justify-center bg-[#06530b] text-white font-bold text-xl shadow-md group">
-              <span className="group-hover:scale-110 transition-transform">Q</span>
-            </div>
+            {customLogo ? (
+              customLogo
+            ) : (
+              <div className="relative size-12 rounded-[17px] overflow-hidden flex items-center justify-center bg-[#06530b] text-white font-bold text-xl shadow-md group">
+                <span className="group-hover:scale-110 transition-transform">Q</span>
+              </div>
+            )}
           </Link>
 
           {/* Navigation Links */}

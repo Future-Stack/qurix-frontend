@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   Search, Filter, Eye, Plus, FolderOpen, AlertTriangle, CheckCircle2, Calendar, MessageSquare
 } from 'lucide-react';
+import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
+import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
+import StatusBadge, { ProjectStatus } from '@/app/super-admin/dashboard/component/StatusBadge';
+import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 
 const mockProjects = [
   { id: 'FO2D9BC6E142', client: 'lawalx', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$3615', timeline: '3D 9H 25M 53S' },
@@ -23,62 +27,190 @@ const mockTeamMembers = [
   { name: 'Supratik Chaudhry', username: '@katwa0', empId: 'KNC-8821', designation: 'Project Manager', email: 'bill.sanders@example.com', status: 'suspended', joined: '2022-10-10', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=4' },
   { name: 'Punyasloka Megana', username: '@anitafaraji', empId: 'KNC-8821', designation: 'React JS Developer', email: 'alma.lawson@example.com', status: 'inactive', joined: '2021-01-01', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=5' },
 ];
+function CountdownTimer({
+  initialSeconds,
+}: {
+  initialSeconds: number;
+}) {
+  const [timeLeft, setTimeLeft] = useState(initialSeconds);
 
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    urgent: 'bg-gray-100 text-gray-500', // As seen in image 5
-    wip: 'bg-gray-100 text-gray-500',
-    late: 'bg-gray-100 text-gray-500',
-    delivered: 'bg-gray-100 text-gray-500',
-    active: 'text-[#00AB0C]',
-    suspended: 'text-[#EF4444]',
-    inactive: 'text-[#475569]',
-  };
-  
-  if (['active', 'suspended', 'inactive'].includes(status)) {
-    const dotColor = status === 'active' ? 'bg-[#00AB0C]' : status === 'suspended' ? 'bg-[#EF4444]' : 'bg-[#475569]';
-    return (
-      <div className={`flex items-center gap-1.5 font-bold text-[11px] ${styles[status]}`}>
-        <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span> {status.toUpperCase()}
-      </div>
-    );
-  }
-  
+  useEffect(() => {
+    setTimeLeft(initialSeconds);
+  }, [initialSeconds]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => Math.max(prev - 1, 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const days = Math.floor(timeLeft / 86400);
+  const hours = Math.floor((timeLeft % 86400) / 3600);
+  const minutes = Math.floor((timeLeft % 3600) / 60);
+  const seconds = timeLeft % 60;
+
   return (
-    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${styles[status] || 'bg-gray-100 text-gray-500'}`}>
-      {status === 'wip' ? 'WIP' : status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
+    <div className="flex w-[120px] items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white">
+  <span>{days}d</span>
+  <span>{String(hours).padStart(2, "0")}h</span>
+  <span>{String(minutes).padStart(2, "0")}m</span>
+  <span>{String(seconds).padStart(2, "0")}s</span>
+</div>
   );
 }
-
-function StatCard({ icon: Icon, title, value, iconBg, iconColor, trend }: any) {
-  return (
-    <div className="bg-white border border-[#E2E8F0] rounded-[20px] p-5 flex flex-col justify-between w-full h-[140px] shadow-sm relative">
-      <div className="flex justify-between items-start">
-        <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center`}>
-          <Icon className={`w-5 h-5 ${iconColor}`} />
-        </div>
-        {trend && (
-          <div className="text-[13px] font-bold text-[#94A3B8]">
-            <span className="text-[#00AB0C]">↗</span>
-          </div>
-        )}
-      </div>
-      <div>
-        <div className="text-[28px] font-bold text-[#0F172A] leading-none mb-1">{value}</div>
-        <div className="text-[13px] font-medium text-[#64748B]">{title}</div>
-      </div>
-    </div>
-  );
-}
+type Project = (typeof mockProjects)[number];
+type TeamMember = (typeof mockTeamMembers)[number];
 
 export default function TeamDetailsDashboard({ params }: { params: { id: string, teamId: string } }) {
   const [activeTab, setActiveTab] = useState('All Project');
+  const projectColumns: Column<Project>[] = [
+  {
+    key: "id",
+    header: "Order ID",
+    render: (value) => (
+      <span className="text-[13px] font-semibold text-[#0F172A]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "client",
+    header: "Client Name",
+  },
+
+  {
+    key: "profile",
+    header: "Profile Name",
+  },
+
+  {
+    key: "team",
+    header: "Team",
+  },
+
+  {
+    key: "status",
+    header: "Status",
+    render: (value) => (
+      <StatusBadge status={value as ProjectStatus} />
+    ),
+  },
+
+  {
+    key: "value",
+    header: "Value",
+    render: (value) => (
+      <span className="font-semibold text-[#0F172A]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: 'timeline',
+    header: 'Timeline',
+   render: (_, project) => (
+  <CountdownTimer
+    initialSeconds={
+      project.timeline === "24:00:00"
+        ? 86400
+        : 5 * 3600
+    }
+  />
+  )
+  },
+
+  {
+    key: "id",
+    header: "Actions",
+    render: (_, project) => (
+      <Link
+        href={`/super-admin/service-line-management/${params.id}/teams/${params.teamId}/projects/${project.id}`}
+        className="flex items-center gap-1 text-xs font-bold text-[#06530B] hover:underline"
+      >
+        <Eye className="h-4 w-4" />
+        View
+      </Link>
+    ),
+  },
+];
+const teamMemberColumns: Column<TeamMember>[] = [
+  {
+    key: "name",
+    header: "Profile",
+    render: (_, member) => (
+      <div className="flex items-center gap-3">
+        <img
+          src={member.avatar}
+          alt={member.name}
+          className="h-10 w-10 rounded-full object-cover"
+        />
+
+        <div>
+          <p className="text-[13px] font-bold text-[#0F172A]">
+            {member.name}
+          </p>
+
+          <p className="text-[11px] text-[#64748B]">
+            {member.username}
+          </p>
+        </div>
+      </div>
+    ),
+  },
+
+  {
+    key: "empId",
+    header: "Emp ID",
+  },
+
+  {
+    key: "designation",
+    header: "Designation",
+  },
+
+  {
+    key: "email",
+    header: "E-mail",
+  },
+
+  {
+    key: "status",
+    header: "Status",
+    render: (value) => (
+      <StatusBadge status={value as ProjectStatus} />
+    ),
+  },
+
+  {
+    key: "joined",
+    header: "Joining Date",
+  },
+
+  {
+    key: "lastLogin",
+    header: "Last Login",
+  },
+
+  {
+    key: "name",
+    header: "Action",
+    render: (_, member) => (
+      <button className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]">
+        <Eye className="h-4 w-4" />
+        View
+      </button>
+    ),
+  },
+];
 
   return (
     <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
-        <div className="p-8 pb-12 max-w-full mx-auto">
+      <div className="h-full  overflow-y-auto no-scrollbar">
+        <div className="max-w-full mx-auto">
 
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
@@ -105,18 +237,18 @@ export default function TeamDetailsDashboard({ params }: { params: { id: string,
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-5 gap-4 mb-8">
-            <StatCard icon={FolderOpen} title="Active Projects" value="24" iconBg="bg-blue-50" iconColor="text-blue-500" trend />
-            <StatCard icon={AlertTriangle} title="Urgent Projects" value="7" iconBg="bg-red-50" iconColor="text-red-500" trend />
-            <StatCard icon={CheckCircle2} title="Total Delivered" value="12" iconBg="bg-green-50" iconColor="text-green-500" trend />
-            <StatCard icon={Calendar} title="Upcoming Deadlines" value="8" iconBg="bg-yellow-50" iconColor="text-yellow-500" trend />
-            <StatCard icon={MessageSquare} title="Unread Messages" value="43" iconBg="bg-purple-50" iconColor="text-purple-500" trend />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <StatsCard icon={FolderOpen} title="Active Projects" value="24" iconColor="#4F46E5" iconBgColor="#EEF2FF" />
+            <StatsCard icon={AlertTriangle} title="Urgent Projects" value="7" iconBgColor="#FEF2F2" iconColor="#EF4444" />
+            <StatsCard icon={CheckCircle2} title="Total Delivered" value="12" iconBgColor="#F0FDF4" iconColor="#06530B" />
+            <StatsCard icon={Calendar} title="Upcoming Deadlines" value="8" iconBgColor="#FFFBEB" iconColor="#F59E0B" />
+            <StatsCard icon={MessageSquare} title="Unread Messages" value="43" iconBgColor="#f5f3ff" iconColor="#a855f7" />
           </div>
 
           {/* Main Content Area */}
           <div className="bg-white rounded-3xl overflow-hidden">
             {/* Controls */}
-            <div className="pb-4 flex items-center justify-between border-b border-[#E2E8F0]">
+            <div className="pb-4 flex flex-col lg:flex-row items-end lg:items-center gap-4 justify-between border border-[#E2E8F0] rounded-[16px] p-4 mb-8">
               <div className="flex gap-2">
                 <button 
                   onClick={() => setActiveTab('All Project')}
@@ -168,85 +300,24 @@ export default function TeamDetailsDashboard({ params }: { params: { id: string,
             {/* Table */}
             <div className="w-full overflow-x-auto mt-4">
               {activeTab === 'All Project' && (
-                <table className="w-full text-left border-collapse min-w-max">
-                  <thead>
-                    <tr className="border-b border-[#E2E8F0]">
-                      <th className="px-2 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Order ID</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Client name</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Profile name</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Team</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Value</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Timeline</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockProjects.map((project, i) => (
-                      <tr key={i} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-gray-50 transition-colors">
-                        <td className="px-2 py-4 text-[13px] font-semibold text-[#0F172A]">{project.id}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{project.client}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{project.profile}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{project.team}</td>
-                        <td className="px-6 py-4"><StatusBadge status={project.status} /></td>
-                        <td className="px-6 py-4 text-[13px] font-semibold text-[#0F172A]">{project.value}</td>
-                        <td className="px-6 py-4">
-                          <div className="bg-[#06530B] text-white text-[10px] font-bold px-2 py-1 rounded inline-block">
-                            {project.timeline}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <button className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
-                            <Eye className="w-4 h-4" /> View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <DashboardTable
+                  data={mockProjects}
+                  columns={projectColumns}
+                  caption="All Projects"
+                  emptyMessage="No projects found."
+                  getRowKey={(row) => row.id}
+                />
+                
               )}
 
               {activeTab === 'Team Member' && (
-                <table className="w-full text-left border-collapse min-w-max">
-                  <thead>
-                    <tr className="border-b border-[#E2E8F0]">
-                      <th className="px-2 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Profile</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Emp id</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Designation</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">E-mail</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Joining Date</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Last login</th>
-                      <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockTeamMembers.map((member, i) => (
-                      <tr key={i} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-gray-50 transition-colors">
-                        <td className="px-2 py-4">
-                          <div className="flex items-center gap-3">
-                            <img src={member.avatar} alt={member.name} className="w-10 h-10 rounded-full object-cover" />
-                            <div>
-                              <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{member.name}</div>
-                              <div className="text-[11px] text-[#64748B]">{member.username}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{member.empId}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{member.designation}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{member.email}</td>
-                        <td className="px-6 py-4"><StatusBadge status={member.status} /></td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{member.joined}</td>
-                        <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{member.lastLogin}</td>
-                        <td className="px-6 py-4">
-                          <button className="flex items-center gap-1 text-[#64748B] hover:text-[#0F172A] font-bold text-xs transition-colors">
-                            <Eye className="w-4 h-4" /> View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <DashboardTable
+                  data={mockTeamMembers}
+                  columns={teamMemberColumns}
+                  caption="All Team Members"
+                  emptyMessage="No team members found."
+                  getRowKey={(row) => row.empId}
+                />
               )}
 
               {activeTab === 'Refunds and Cancellations' && (

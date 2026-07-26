@@ -319,6 +319,8 @@ export default function EmployeeDashboardPage() {
           data={filteredOrders}
           columns={columns}
           caption="Active Project orders and details"
+          getRowKey={(row, index) => row.id || index}
+          emptyMessage={`No ${activeTab === 'refunds' ? 'refunds or cancellations' : 'active projects'} found.`}
         />
       </div>
 

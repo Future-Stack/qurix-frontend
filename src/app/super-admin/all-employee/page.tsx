@@ -3,7 +3,9 @@
 import React from 'react';
 import { Search, ChevronDown, Eye, FileDown, Plus, Users, UserCheck, UserX, UserSquare, UserPlus, Radio } from 'lucide-react';
 import Link from 'next/link';
-
+import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
+import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
+type Employee = (typeof mockEmployees)[number];
 const mockEmployees = [
   { id: '1', name: 'Vrajakishore Loy', username: '@julie_mutie', empId: 'KNC-8821', designation: 'Node JS Developer', email: 'tanya.hill@example.com', serviceLine: 'Web flow', team: 'CM', status: 'active', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=1' },
   { id: '2', name: 'Chintamani Pavithran', username: '@dumakaka', empId: 'KNC-8821', designation: 'ROR Developer', email: 'debbie.baker@example.com', serviceLine: 'Framer', team: 'FS', status: 'active', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=2' },
@@ -48,12 +50,120 @@ function StatCard({ icon: Icon, title, value, trend, isOnline }: any) {
 }
 
 export default function AllEmployeePage() {
+
+  const employeeColumns: Column<Employee>[] = [
+  {
+    key: "name",
+    header: "Profile",
+    render: (_, emp) => (
+      <div className="flex items-center gap-3">
+        <img
+          src={emp.avatar}
+          alt={emp.name}
+          className="h-10 w-10 rounded-full object-cover"
+        />
+
+        <div>
+          <p className="text-[13px] font-bold text-[#0F172A]">
+            {emp.name}
+          </p>
+
+          <p className="text-[11px] text-[#64748B]">
+            {emp.username}
+          </p>
+        </div>
+      </div>
+    ),
+  },
+
+  {
+    key: "empId",
+    header: "Emp ID",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "designation",
+    header: "Designation",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "email",
+    header: "E-mail",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "serviceLine",
+    header: "Service Line",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "team",
+    header: "Team",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "status",
+    header: "Status",
+    render: (value) => (
+      <StatusBadge status={String(value)} />
+    ),
+  },
+
+  {
+    key: "lastLogin",
+    header: "Last Login",
+    render: (value) => (
+      <span className="text-[13px] font-medium text-[#475569]">
+        {String(value)}
+      </span>
+    ),
+  },
+
+  {
+    key: "id",
+    header: "Action",
+    render: (_, emp) => (
+      <Link
+        href={`/super-admin/all-employee/${emp.id}`}
+        className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]"
+      >
+        <Eye className="h-4 w-4" />
+        View
+      </Link>
+    ),
+  },
+];
   return (
     <div className="h-full max-w-full overflow-hidden m-2 md:m-4 md:mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] flex flex-col">
+      <div className="h-full flex flex-col">
         
         <div className="flex-1 overflow-y-auto no-scrollbar">
-          <div className="p-8 pb-12 max-w-full mx-auto">
+          <div className="max-w-full mx-auto">
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
@@ -95,7 +205,7 @@ export default function AllEmployeePage() {
             {/* Main Content Area */}
             <div className="bg-white rounded-3xl overflow-hidden mt-4">
               {/* Controls */}
-              <div className="pb-4 flex flex-col xl:flex-row items-start xl:items-center justify-between border-b border-[#E2E8F0] gap-4 xl:gap-0">
+              <div className="pb-4 flex flex-col xl:flex-row items-start xl:items-center justify-between border border-[#E2E8F0] p-4 rounded-[16px] gap-4 xl:gap-0">
                 <div className="flex gap-2 w-full overflow-x-auto no-scrollbar pb-2 xl:pb-0">
                   <button className="px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors bg-[#06530B] text-white">
                     All Employees
@@ -123,7 +233,14 @@ export default function AllEmployeePage() {
 
               {/* Table */}
               <div className="w-full overflow-x-auto mt-4">
-                <table className="w-full text-left border-collapse min-w-max">
+                <DashboardTable
+                  data={mockEmployees}
+                  columns={employeeColumns}
+                  caption="All Employees"
+                  emptyMessage="No employees found."
+                  getRowKey={(row) => row.id}
+                />
+                {/* <table className="w-full text-left border-collapse min-w-max">
                   <thead>
                     <tr className="border-b border-[#E2E8F0]">
                       <th className="px-2 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Profile</th>
@@ -167,7 +284,7 @@ export default function AllEmployeePage() {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table> */}
               </div>
             </div>
 

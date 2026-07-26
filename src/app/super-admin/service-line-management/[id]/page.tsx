@@ -6,6 +6,12 @@ import {
   Search, Filter, Eye, Plus, Edit, Trash, Settings
 } from 'lucide-react';
 import { CreateTeamModal } from '@/components/ui/Modal/CreateTeamModal';
+import { Column } from "@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types";
+import Image from "next/image";
+import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
+
+
+type Team = (typeof mockTeams)[number];
 
 const mockTeams = [
   { id: '1', name: 'Future Stack', icon: 'M', iconBg: 'bg-red-500', iconColor: 'text-white', date: '2025-05-01', leader: '4 Teams', members: '42 Members', workload: '$3615', projects: '35 Projects', updated: '2025-12-12', actionsType: 'icons' },
@@ -16,8 +22,8 @@ const mockTeams = [
 function StatCard({ title, value }: any) {
   return (
     <div className="bg-white border border-[#E2E8F0] rounded-[20px] p-6 flex flex-col justify-center shadow-sm w-full">
-      <div className="text-[28px] font-bold text-[#0F172A] leading-none mb-2">{value}</div>
-      <div className="text-[12px] font-medium text-[#64748B]">{title}</div>
+      <div className="text-[25px] font-bold text-[#0F172A] leading-none mb-2">{value}</div>
+      <div className="text-[14px] font-semibold text-[#414141]">{title}</div>
     </div>
   );
 }
@@ -26,13 +32,98 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
   const [activeTab, setActiveTab] = useState('Team');
   const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
 
+
+  const teamColumns: Column<Team>[] = [
+  {
+    key: "name",
+    header: "Team Name",
+    render: (_, team) => (
+      <div className="flex items-center gap-3">
+        <div
+          className={`w-8 h-8 rounded-full ${team.iconBg} ${team.iconColor} flex items-center justify-center text-xs font-bold`}
+        >
+          {team.icon}
+        </div>
+
+        <span className="font-bold text-[#0F172A]">
+          {team.name}
+        </span>
+      </div>
+    ),
+  },
+
+  {
+    key: "date",
+    header: "Group Date",
+  },
+
+  {
+    key: "leader",
+    header: "Team Leader",
+  },
+
+  {
+    key: "members",
+    header: "Total Members",
+  },
+
+  {
+    key: "workload",
+    header: "Workload",
+    render: (value) => (
+      <span className="font-bold text-[#0F172A]">
+        {value}
+      </span>
+    ),
+  },
+
+  {
+    key: "projects",
+    header: "Active Projects",
+  },
+
+  {
+    key: "updated",
+    header: "Last Updated",
+  },
+
+  {
+    key: "id",
+    header: "Action Menu",
+    render: (_, team) =>
+      team.actionsType === "icons" ? (
+        <div className="flex items-center gap-3 text-[#06530B]">
+          <button>
+            <Eye className="w-4 h-4" />
+          </button>
+
+          <button>
+            <Edit className="w-4 h-4" />
+          </button>
+
+          <button>
+            <Trash className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <Link
+          href={`/super-admin/service-line-management/${params.id}/teams/${team.id}`}
+          className="flex items-center gap-1 text-[#06530B] text-xs font-bold hover:underline"
+        >
+          <Eye className="w-4 h-4" />
+          View Team
+        </Link>
+      ),
+  },
+];
+
   return (
     <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
-        <div className="p-8 pb-12 max-w-full mx-auto">
+      <div className="h-full overflow-y-auto no-scrollbar">
+        <div className="max-w-full mx-auto">
 
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col lg:flex-row gap-3 items-start justify-between lg:items-center mb-8">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
                 <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
@@ -45,7 +136,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
                 <p className="text-sm text-[#64748B]">Monday, July 14, 2024</p>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-full lg:w-auto lg:justify-start justify-end">
               <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E2E8F0] text-[#64748B] rounded-xl text-sm font-bold transition-colors shadow-sm hover:bg-gray-50">
                 <Settings className="w-4 h-4" /> Edit Service Line
               </button>
@@ -59,7 +150,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             <StatCard title="Total Team" value="240" />
             <StatCard title="Total Employee" value="70" />
             <StatCard title="Running Projects" value="12" />
@@ -68,9 +159,9 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
           </div>
 
           {/* Main Content Area */}
-          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden">
+          <div className=" overflow-hidden">
             {/* Controls */}
-            <div className="p-4 flex items-center justify-between border-b border-[#E2E8F0]">
+            <div className="p-4 flex flex-col lg:flex-row lg:items-center justify-between border border-[#E2E8F0] rounded-2xl mb-5 gap-4 items-end">
               <div className="flex gap-2">
                 <button 
                   onClick={() => setActiveTab('Team')}
@@ -120,7 +211,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
             </div>
 
             {/* Table */}
-            <div className="w-full overflow-x-auto">
+            {/* <div className="w-full overflow-x-auto">
               <table className="w-full text-left border-collapse min-w-max">
                 <thead>
                   <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
@@ -174,6 +265,15 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
                   )}
                 </tbody>
               </table>
+            </div> */}
+            <div className="overflow-hidden mb-8">
+              <DashboardTable
+                data={activeTab === "Team" ? mockTeams : []}
+                columns={teamColumns}
+                caption="All Teams"
+                emptyMessage={`No data available for ${activeTab}.`}
+                getRowKey={(row) => row.id}
+              />
             </div>
           </div>
         </div>

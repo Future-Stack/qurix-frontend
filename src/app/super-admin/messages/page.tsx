@@ -56,7 +56,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="flex h-full max-w-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-hidden my-4 mx-4  ">
+    <div className="flex h-full max-w-full overflow-hidden my-1 mx-2 ">
       
       {/* Left Sidebar - Chat List */}
       <div className={`w-full lg:w-[380px] border-r border-[#E2E8F0] flex-col h-full bg-white shrink-0 ${isChatListOpen ? 'flex' : 'hidden lg:flex'}`}>
@@ -215,6 +215,7 @@ export default function MessagesPage() {
                 </button>
                 <Dropdown 
                   align="right"
+
                   trigger={
                     <button className="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
                       <MoreVertical className="w-5 h-5" />
