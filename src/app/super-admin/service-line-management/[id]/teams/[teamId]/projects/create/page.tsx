@@ -1,288 +1,420 @@
 "use client";
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { 
-  FolderOpen, Calendar, Clock, UploadCloud, Search, ChevronDown, Check
+  FileText, User, Hash, ChevronDown, Calendar, Clock, 
+  Upload, Link as LinkIcon, FilePlus2, Trash2, CheckCircle2, ArrowLeft
 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function CreateProjectGroup({ params }: { params: { id: string, teamId: string } }) {
+export default function CreateProjectGroupPage() {
   const router = useRouter();
 
-  return (
-    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
-        <div className="p-8 pb-12 max-w-3xl mx-auto">
+  const [formData, setFormData] = useState({
+    clientName: 'alexjlauis',
+    orderId: 'FO2354BC7EA142',
+    profileName: 'code_tribe_fiverr',
+    serviceLine: 'CUSTOM-FSD',
+    team: 'Future Stack',
+    status: 'PLANING',
+    startDate: '2026-07-18',
+    deliveryDeadline: '2026-07-30',
+    deadlineTime: '16:57',
+  });
 
-          {/* Header */}
-          <div className="flex justify-between items-center mb-10 border-b border-[#E2E8F0] pb-6">
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [customLinks, setCustomLinks] = useState<{ label: string; url: string }[]>([]);
+  const [newLinkUrl, setNewLinkUrl] = useState('');
+  const [newLinkLabel, setNewLinkLabel] = useState('Custom URL');
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setUploadedFiles(prev => [...prev, ...Array.from(e.target.files || [])]);
+    }
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAddLink = (label: string, defaultUrl: string) => {
+    const url = prompt(`Enter ${label} Link URL:`, defaultUrl || 'https://');
+    if (url) {
+      setCustomLinks(prev => [...prev, { label, url }]);
+    }
+  };
+
+  const handleRemoveLink = (index: number) => {
+    setCustomLinks(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSuccess(true);
+    setTimeout(() => {
+      router.push('/service-line/projects');
+    }, 1200);
+  };
+
+  return (
+    <div className="h-full max-w-full overflow-hidden p-4 md:p-6">
+      <div className="h-full overflow-y-auto no-scrollbar">
+        <div className="pb-12 w-full  mx-auto">
+        
+          {/* Top Page Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E2E8F0] pb-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border border-[#E2E8F0] p-0.5 flex items-center justify-center shrink-0 bg-[#0F172A] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-80"></div>
-                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-inner mix-blend-overlay"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400 absolute top-[30%] right-[30%]"></div>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-4 border-[#00AB0C] p-0.5 flex items-center justify-center shrink-0">
+                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-lg md:text-xl overflow-hidden relative">
+                  <span className="z-10">C</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#0F172A] mb-0.5">Omega Force</h1>
-                <p className="text-[12px] text-[#64748B]">Admin Panel</p>
+                <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-0.5">Omega Force</h1>
+                <p className="text-xs md:text-sm text-[#64748B]">Admin Panel</p>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button 
-                onClick={() => router.back()}
-                className="px-6 py-2.5 bg-white border border-[#E2E8F0] text-[#475569] rounded-xl text-[13px] font-bold transition-colors shadow-sm hover:bg-gray-50"
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <Link 
+                href="/service-line/dashboard"
+                className="flex-1 sm:flex-none text-center px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-xs md:text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm"
               >
                 Cancel
-              </button>
-              <button className="px-6 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-[13px] font-bold transition-colors shadow-sm">
-                Create Project Group
+              </Link>
+              <button 
+                onClick={handleSubmit}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
+              >
+                {isSuccess ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-green-300" /> Created!
+                  </>
+                ) : (
+                  'Create Project Group'
+                )}
               </button>
             </div>
           </div>
 
-          <form className="space-y-8">
+          {/* Form Container */}
+          <form onSubmit={handleSubmit} className="bg-white border-r border-l border-[#E2E8F0] p-6 md:p-8 space-y-10 mx-auto lg:max-w-6xl">
             
-            {/* Project Information */}
+            {/* Section 1: Project Information */}
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
-                  <FolderOpen className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-[#F0FDF4] flex items-center justify-center shrink-0">
+                  <FilePlus2 className="w-4 h-4 text-[#00AB0C]" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-[#0F172A]">Project Information</h3>
-                  <p className="text-[11px] text-[#64748B]">Core project details and metadata</p>
+                  <h3 className="text-base md:text-lg font-bold text-[#0F172A]">Project Information</h3>
+                  <p className="text-xs text-[#94A3B8]">Core project details and metadata</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+              {/* Form Input Grid - Responsive for Mobile, Tablet & Desktop */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                
+                {/* Client Name */}
+                <div className="space-y-1.5">
+                  <label htmlFor="clientName" className="block text-xs font-bold text-[#475569]">
                     Client Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-gray-200 rounded flex items-center justify-center">
-                      <span className="text-[10px]">👤</span>
-                    </span>
-                    <input type="text" placeholder="alexjovis" className="w-full pl-9 pr-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-green-500" />
+                    <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#00AB0C]" />
+                    <input 
+                      id="clientName"
+                      type="text" 
+                      value={formData.clientName}
+                      onChange={(e) => handleInputChange('clientName', e.target.value)}
+                      placeholder="RetailCo, Acme Corp..."
+                      required
+                      className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium" 
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Fiverr Order ID */}
+                <div className="space-y-1.5">
+                  <label htmlFor="orderId" className="block text-xs font-bold text-[#475569]">
                     Fiverr Order ID <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">#</span>
-                    <input type="text" placeholder="FO2D9BC6E142" className="w-full pl-8 pr-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-green-500" />
+                    <Hash className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input 
+                      id="orderId"
+                      type="text" 
+                      value={formData.orderId}
+                      onChange={(e) => handleInputChange('orderId', e.target.value)}
+                      placeholder="FO2354BC7EA142"
+                      required
+                      className="w-full pl-9 pr-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-bold" 
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Profile Name */}
+                <div className="space-y-1.5">
+                  <label htmlFor="profileName" className="block text-xs font-bold text-[#475569]">
                     Profile Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <select className="w-full px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium appearance-none focus:outline-none focus:ring-1 focus:ring-green-500">
-                      <option>code_tribe_fiverr</option>
+                    <select 
+                      id="profileName" 
+                      value={formData.profileName}
+                      onChange={(e) => handleInputChange('profileName', e.target.value)}
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium appearance-none cursor-pointer"
+                    >
+                      <option value="code_tribe_fiverr">code_tribe_fiverr</option>
+                      <option value="softvence_official">softvence_official</option>
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Service Line */}
+                <div className="space-y-1.5">
+                  <label htmlFor="serviceLine" className="block text-xs font-bold text-[#475569]">
                     Service Line <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <select className="w-full px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium appearance-none focus:outline-none focus:ring-1 focus:ring-green-500">
-                      <option>CUSTOM FSD</option>
+                    <select 
+                      id="serviceLine" 
+                      value={formData.serviceLine}
+                      onChange={(e) => handleInputChange('serviceLine', e.target.value)}
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium appearance-none cursor-pointer"
+                    >
+                      <option value="CUSTOM-FSD">CUSTOM-FSD</option>
+                      <option value="UI-UX-DESIGN">UI-UX-DESIGN</option>
+                      <option value="QA-TESTING">QA-TESTING</option>
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Team */}
+                <div className="space-y-1.5">
+                  <label htmlFor="team" className="block text-xs font-bold text-[#475569]">
                     Team <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <select className="w-full px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium appearance-none focus:outline-none focus:ring-1 focus:ring-green-500">
-                      <option>Future Stack</option>
+                    <select 
+                      id="team" 
+                      value={formData.team}
+                      onChange={(e) => handleInputChange('team', e.target.value)}
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium appearance-none cursor-pointer"
+                    >
+                      <option value="Future Stack">Future Stack</option>
+                      <option value="Innosight Design">Innosight Design</option>
+                      <option value="Bits Wise">Bits Wise</option>
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Project Status */}
+                <div className="space-y-1.5">
+                  <label htmlFor="status" className="block text-xs font-bold text-[#475569]">
                     Project Status <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <select className="w-full pl-4 pr-9 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium text-green-600 appearance-none focus:outline-none focus:ring-1 focus:ring-green-500">
-                      <option>Planning</option>
+                    <select 
+                      id="status" 
+                      value={formData.status}
+                      onChange={(e) => handleInputChange('status', e.target.value)}
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium appearance-none cursor-pointer"
+                    >
+                      <option value="PLANING">PLANING</option>
+                      <option value="WIP">WIP</option>
+                      <option value="Delivered">Delivered</option>
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Start Date */}
+                <div className="space-y-1.5">
+                  <label htmlFor="startDate" className="block text-xs font-bold text-[#475569]">
                     Start Date <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <input type="text" placeholder="15 July 2026" className="w-full pl-4 pr-10 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-green-500" />
-                    <Calendar className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input 
+                      id="startDate"
+                      type="date" 
+                      value={formData.startDate}
+                      onChange={(e) => handleInputChange('startDate', e.target.value)}
+                      required
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium" 
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Delivery Deadline */}
+                <div className="space-y-1.5">
+                  <label htmlFor="deliveryDeadline" className="block text-xs font-bold text-[#475569]">
                     Delivery Deadline <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <input type="text" placeholder="30 July 2026" className="w-full pl-4 pr-10 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-green-500" />
-                    <Clock className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input 
+                      id="deliveryDeadline"
+                      type="date" 
+                      value={formData.deliveryDeadline}
+                      onChange={(e) => handleInputChange('deliveryDeadline', e.target.value)}
+                      required
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium" 
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#475569] mb-2">
+                {/* Deadline Time */}
+                <div className="space-y-1.5">
+                  <label htmlFor="deadlineTime" className="block text-xs font-bold text-[#475569]">
                     Deadline Time
                   </label>
                   <div className="relative">
-                    <input type="text" placeholder="4:57 PM" className="w-full pl-4 pr-10 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[13px] font-medium focus:outline-none focus:ring-1 focus:ring-green-500" />
-                    <Clock className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Timeline Info Card */}
-              <div className="mt-6 bg-[#F0FDF4] border border-[#DCFCE7] rounded-xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#DCFCE7]">
-                    <Clock className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-[12px] font-bold text-[#0F172A] mb-0.5">Remaining Timeline</div>
-                    <div className="text-[15px] font-extrabold text-[#06530B]">3D 9H 25M 53S</div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[12px] font-bold text-[#00AB0C] mb-2">Timeline Health</div>
-                  <div className="w-32 h-1.5 bg-green-200 rounded-full overflow-hidden">
-                    <div className="w-[85%] h-full bg-[#00AB0C] rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Members Selection */}
-              <div className="mt-6 border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-sm">
-                
-                {/* Fixed Admin Member */}
-                <div className="p-4 flex items-center justify-between border-b border-[#E2E8F0] bg-gray-50/50">
-                  <div className="flex items-center gap-3">
-                    <img src="https://i.pravatar.cc/150?u=a" alt="Softvence" className="w-10 h-10 rounded-full" />
-                    <div>
-                      <div className="text-[13px] font-bold text-[#0F172A]">Softvence</div>
-                      <div className="text-[11px] text-[#64748B]">Platform Admin - @qurix.dev - EMP001</div>
-                    </div>
-                  </div>
-                  <div className="px-3 py-1.5 bg-white border border-[#E2E8F0] rounded-lg text-[10px] font-bold text-[#64748B] flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-gray-300"></span> Cannot be changed
-                  </div>
-                </div>
-
-                {/* Member Search and List */}
-                <div className="p-4">
-                  <div className="relative mb-4">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input 
-                      type="text" 
-                      placeholder="Search by name, username, or Employee ID..." 
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-[13px] focus:outline-none focus:ring-1 focus:ring-green-500"
+                      id="deadlineTime"
+                      type="time" 
+                      value={formData.deadlineTime}
+                      onChange={(e) => handleInputChange('deadlineTime', e.target.value)}
+                      className="w-full px-3 py-2.5 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-[#00AB0C] focus:outline-none text-[#0F172A] font-medium" 
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-1">
-                    {[
-                      { name: 'Kathryn Murphy', role: 'Lead Designer', username: '@alex.chin', emp: 'EMP001', selected: false, img: 'https://i.pravatar.cc/150?u=11' },
-                      { name: 'Annette Black', role: 'UI/UX Designer', username: '@cunish.chen', emp: 'EMP002', selected: false, img: 'https://i.pravatar.cc/150?u=12' },
-                      { name: 'Courtney Henry', role: 'Backend Engineer', username: '@junaka.t', emp: 'EMP003', selected: false, img: 'https://i.pravatar.cc/150?u=13' },
-                      { name: 'Robert Fox', role: 'Product Manager', username: '@james.fox', emp: 'EMP004', selected: false, img: 'https://i.pravatar.cc/150?u=14' },
-                      { name: 'Kristin Watson', role: 'QA Lead', username: '@emily.park', emp: 'EMP005', selected: false, img: 'https://i.pravatar.cc/150?u=15' },
-                    ].map((user, i) => (
-                      <div key={i} className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors">
-                        <div className="flex items-center gap-3">
-                          <img src={user.img} alt={user.name} className="w-10 h-10 rounded-full" />
-                          <div>
-                            <div className="text-[13px] font-bold text-[#0F172A]">{user.name}</div>
-                            <div className="text-[11px] text-[#64748B]">{user.role} - {user.username} - {user.emp}</div>
-                          </div>
-                        </div>
-                        <div className="w-5 h-5 rounded-full border border-[#CBD5E1] flex items-center justify-center">
-                          {/* Empty circle for unselected state to match image */}
-                        </div>
-                      </div>
-                    ))}
+              </div>
+
+              {/* Live Remaining Timeline Preview Box */}
+              <div className="bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5 text-[#00AB0C]" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium text-[#94A3B8] block">Remaining Timeline</span>
+                    <span className="text-sm font-bold text-[#06530B]">3D 9H 25M 53S</span>
                   </div>
                 </div>
-
-                <div className="p-4 pt-0 flex items-center justify-between">
-                  <div className="text-[12px] font-bold text-[#0F172A]">5 members selected (including owner)</div>
-                  <div className="text-[10px] text-[#94A3B8]">Members can leave the group but cannot delete it</div>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <span className="text-xs font-bold text-[#64748B]">Timeline Health:</span>
+                  <div className="w-32 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="w-3/4 h-full bg-[#00AB0C] rounded-full" />
+                  </div>
                 </div>
               </div>
+
             </div>
 
-            {/* Project Requirements */}
-            <div className="pt-6">
+            {/* Section 2: Project Requirements & Resources */}
+            <div className="pt-6 border-t border-[#E2E8F0]">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
-                  <UploadCloud className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-[#F0FDF4] flex items-center justify-center shrink-0">
+                  <FileText className="w-4 h-4 text-[#00AB0C]" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-[#0F172A]">Project Requirements</h3>
-                  <p className="text-[11px] text-[#64748B]">Attach files, links, and resources for the project</p>
+                  <h3 className="text-base md:text-lg font-bold text-[#0F172A]">Project Requirements</h3>
+                  <p className="text-xs text-[#94A3B8]">Attach files, links, and resources for the project</p>
                 </div>
               </div>
 
-              <div className="border border-dashed border-[#CBD5E1] rounded-2xl bg-[#F8FAFC] p-10 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-4">
-                  <UploadCloud className="w-5 h-5 text-gray-400" />
+              {/* Drag & Drop File Upload Box */}
+              <div className="border-2 border-dashed border-[#CBD5E1] hover:border-[#00AB0C] transition-colors rounded-2xl p-8 text-center bg-[#F8FAFC] relative">
+                <input 
+                  type="file" 
+                  multiple 
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                />
+                <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-3">
+                  <Upload className="w-6 h-6 text-[#00AB0C]" />
                 </div>
-                <div className="text-[14px] font-bold text-[#0F172A] mb-1">Drag & drop files here</div>
-                <div className="text-[12px] text-[#64748B] mb-6">or click to browse from your computer</div>
-                
-                <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-                  {['PDF', 'DOC', 'XLSX', 'PPTX', 'ZIP', 'PNG', 'MP4'].map((ext) => (
-                    <span key={ext} className="px-2.5 py-1 bg-white border border-[#E2E8F0] rounded text-[10px] font-bold text-[#64748B]">
+                <p className="text-sm font-bold text-[#0F172A] mb-1">Drag & drop files here</p>
+                <p className="text-xs text-[#64748B] mb-4">or click to browse from your computer</p>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {['PDF', 'DOC', 'XLSX', 'PPTX', 'ZIP', 'PNG', 'MP4'].map(ext => (
+                    <span key={ext} className="text-[10px] font-bold text-[#475569] bg-white border border-[#E2E8F0] px-2.5 py-1 rounded-md shadow-2xs">
                       {ext}
                     </span>
                   ))}
                 </div>
-
-                <div className="flex items-center gap-4 w-full max-w-sm">
-                  <div className="h-px bg-[#E2E8F0] flex-1"></div>
-                  <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider">or add link</span>
-                  <div className="h-px bg-[#E2E8F0] flex-1"></div>
-                </div>
-
-                <div className="flex gap-3 mt-6">
-                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-full text-[11px] font-bold text-[#475569] shadow-sm hover:bg-gray-50">
-                    <span className="text-orange-500">F</span> Figma +
-                  </button>
-                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-full text-[11px] font-bold text-[#475569] shadow-sm hover:bg-gray-50">
-                    <span>🗂️</span> Google Drive +
-                  </button>
-                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-full text-[11px] font-bold text-[#475569] shadow-sm hover:bg-gray-50">
-                    <span>🐙</span> GitHub +
-                  </button>
-                  <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-full text-[11px] font-bold text-[#475569] shadow-sm hover:bg-gray-50">
-                    <span>🔗</span> External URL +
-                  </button>
-                </div>
               </div>
+
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <p className="text-xs font-bold text-[#0F172A]">Uploaded Files ({uploadedFiles.length})</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {uploadedFiles.map((file, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-2.5 bg-white border border-[#E2E8F0] rounded-xl text-xs">
+                        <div className="flex items-center gap-2 truncate">
+                          <FileText className="w-4 h-4 text-[#00AB0C] shrink-0" />
+                          <span className="font-medium text-[#0F172A] truncate">{file.name}</span>
+                        </div>
+                        <button type="button" onClick={() => handleRemoveFile(idx)} className="text-red-400 hover:text-red-600 p-1">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Link Buttons */}
+              <div className="mt-6">
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-[#E2E8F0]"></div>
+                  <span className="flex-shrink mx-4 text-xs font-medium text-[#94A3B8]">or add link</span>
+                  <div className="flex-grow border-t border-[#E2E8F0]"></div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+                  <button 
+                    type="button" 
+                    onClick={() => handleAddLink('Figma', 'https://figma.com/design/...')}
+                    className="flex items-center gap-2 px-4 py-2 border border-[#E2E8F0] bg-white hover:bg-gray-50 rounded-xl text-xs font-bold text-[#0F172A] transition-colors shadow-2xs"
+                  >
+                    <LinkIcon className="w-3.5 h-3.5 text-purple-600" /> Figma
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => handleAddLink('Google Drive', 'https://drive.google.com/...')}
+                    className="flex items-center gap-2 px-4 py-2 border border-[#E2E8F0] bg-white hover:bg-gray-50 rounded-xl text-xs font-bold text-[#0F172A] transition-colors shadow-2xs"
+                  >
+                    <LinkIcon className="w-3.5 h-3.5 text-blue-600" /> Google Drive
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => handleAddLink('GitHub', 'https://github.com/...')}
+                    className="flex items-center gap-2 px-4 py-2 border border-[#E2E8F0] bg-white hover:bg-gray-50 rounded-xl text-xs font-bold text-[#0F172A] transition-colors shadow-2xs"
+                  >
+                    <LinkIcon className="w-3.5 h-3.5 text-gray-800" /> GitHub
+                  </button>
+                </div>
+
+                {/* Custom Attached Links */}
+                {customLinks.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <p className="text-xs font-bold text-[#0F172A]">Attached Links</p>
+                    <div className="space-y-1.5">
+                      {customLinks.map((link, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl text-xs border border-[#E2E8F0]">
+                          <span className="font-bold text-[#00AB0C]">{link.label}: <a href={link.url} target="_blank" rel="noreferrer" className="font-normal text-blue-600 underline ml-1">{link.url}</a></span>
+                          <button type="button" onClick={() => handleRemoveLink(idx)} className="text-red-400 hover:text-red-600 p-1">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
             </div>
 
           </form>

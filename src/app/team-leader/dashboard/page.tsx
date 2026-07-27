@@ -12,9 +12,12 @@ import {
   Eye,
   Plus
 } from 'lucide-react';
+import Link from 'next/link';
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
-
-type TabType = 'all-projects' | 'team-members' | 'refunds';
+import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
+import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
+import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
 // Sample team members data matching node 324-18549
 const teamMembers = [
@@ -92,7 +95,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E143',
     clientName: 'Wade Warren',
     profileName: 'bits_wise',
     team: 'CM',
@@ -101,7 +104,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E144',
     clientName: 'Dianne Russell',
     profileName: 'bits_wise',
     team: 'FS',
@@ -110,7 +113,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E145',
     clientName: 'Ronald Richards',
     profileName: 'bits_wise',
     team: 'FS',
@@ -119,7 +122,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E146',
     clientName: 'Leslie Alexander',
     profileName: 'bits_wise',
     team: 'FS',
@@ -128,7 +131,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E147',
     clientName: 'Guy Hawkins',
     profileName: 'bits_wise',
     team: 'FS',
@@ -137,7 +140,7 @@ const allProjectsData = [
     timeline: '3D 9H 25M 53S'
   },
   {
-    orderId: 'FO2D9BC6E142',
+    orderId: 'FO2D9BC6E148',
     clientName: 'Jenny Wilson',
     profileName: 'bits_wise',
     team: 'FS',
@@ -148,6 +151,8 @@ const allProjectsData = [
 ];
 
 import { useRouter } from 'next/navigation';
+
+type TabType = 'all-projects' | 'team-members' | 'refunds';
 
 export default function TeamLeaderDashboardPage() {
   const router = useRouter();
@@ -183,7 +188,7 @@ export default function TeamLeaderDashboardPage() {
   });
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-5 select-none">
+    <div className="flex flex-col h-full w-full min-h-0 overflow-y-auto no-scrollbar space-y-5 select-none">
 
       {/* Fixed Top Section (Header + 5 Stats Cards + Tab Bar) */}
       <div className="shrink-0 space-y-5">
@@ -351,184 +356,77 @@ export default function TeamLeaderDashboardPage() {
       {/* ========================================================================= */}
       {/* TAB CONTENT: ALL PROJECTS OR REFUNDS TABLE (Node 318-11125) */}
       {/* ========================================================================= */}
+      {/* ========================================================================= */}
+      {/* TAB CONTENT: ALL PROJECTS OR REFUNDS TABLE */}
+      {/* ========================================================================= */}
       {(activeTab === 'all-projects' || activeTab === 'refunds') && (
-        <div className="flex-1 min-h-0 overflow-y-auto border border-[#f3f3f3] rounded-[16px] shadow-2xs bg-white">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-[#f0f0f0] bg-gray-50/50 text-[#828282] font-['Roboto'] font-semibold text-[13px] uppercase tracking-wider sticky top-0 bg-white z-10">
-                <th className="py-4 px-6">Order ID</th>
-                <th className="py-4 px-6">Client name</th>
-                <th className="py-4 px-6">Profile name</th>
-                <th className="py-4 px-6">Team</th>
-                <th className="py-4 px-6">Status</th>
-                <th className="py-4 px-6">Value</th>
-                <th className="py-4 px-6">Timeline</th>
-                <th className="py-4 px-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#f0f0f0] font-['Roboto'] text-[14px]">
-              {filteredProjects.map((row, index) => (
-                <tr key={index} className="hover:bg-gray-50/80 transition-colors">
-
-                  {/* Order ID */}
-                  <td className="py-4 px-6 font-bold text-[#3c3c3c]">
-                    {row.orderId}
-                  </td>
-
-                  {/* Client name */}
-                  <td className="py-4 px-6 font-medium text-[#3c3c3c]">
-                    {row.clientName}
-                  </td>
-
-                  {/* Profile name */}
-                  <td className="py-4 px-6 text-[#575757]">
-                    {row.profileName}
-                  </td>
-
-                  {/* Team */}
-                  <td className="py-4 px-6 font-semibold text-[#3c3c3c]">
-                    {row.team}
-                  </td>
-
-                  {/* Status Badge */}
-                  <td className="py-4 px-6">
-                    <span className={`inline-flex items-center justify-center px-3 py-1 rounded-[6px] text-[12px] font-medium shadow-2xs ${row.status === 'Urgent' ? 'bg-[#f5f5f5] text-[#575757] border border-gray-300 font-semibold' :
-                        row.status === 'WIP' ? 'bg-[#f5f5f5] text-[#575757] border border-gray-300 font-semibold' :
-                          row.status === 'Late' ? 'bg-[#f5f5f5] text-[#575757] border border-gray-300 font-semibold' :
-                            'bg-[#f5f5f5] text-[#575757] border border-gray-300 font-semibold'
-                      }`}>
-                      {row.status}
-                    </span>
-                  </td>
-
-                  {/* Value */}
-                  <td className="py-4 px-6 font-bold text-[#3c3c3c]">
-                    {row.value}
-                  </td>
-
-                  {/* Timeline Badge */}
-                  <td className="py-4 px-6">
-                    <span className="bg-[#06530b] text-white font-bold text-[13px] px-3.5 py-1.5 rounded-[8px] inline-flex items-center gap-1.5 shadow-2xs">
-                      {row.timeline}
-                    </span>
-                  </td>
-
-                  {/* Actions */}
-                  <td className="py-4 px-6 text-right">
-                    <button
-                      onClick={() => alert(`View order ${row.orderId}`)}
-                      className="inline-flex items-center gap-1.5 text-[#06530b] font-medium text-[14px] hover:underline cursor-pointer"
-                    >
-                      <Eye className="size-4" />
-                      <span>View</span>
-                    </button>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DashboardTable
+          data={filteredProjects}
+          getRowKey={(item) => item.orderId}
+          columns={[
+            { key: 'orderId', header: 'Order ID', render: (val) => <span className="font-bold text-[#1E293B]">{String(val)}</span> },
+            { key: 'clientName', header: 'Client name', render: (val) => <span className="font-semibold text-[#1E293B]">{String(val)}</span> },
+            { key: 'profileName', header: 'Profile name', render: (val) => <span className="text-[#475569]">{String(val)}</span> },
+            { key: 'team', header: 'Team', render: (val) => <span className="text-[#475569]">{String(val)}</span> },
+            { key: 'status', header: 'Status', render: (_, item) => <StatusBadge status={item.status} /> },
+            { key: 'value', header: 'Value', render: (val) => <span className="font-bold text-[#0F172A]">{String(val)}</span> },
+            { key: 'timeline', header: 'Timeline', render: () => <CountdownTimer initialSeconds={86400 * 3 + 3600 * 9 + 60 * 25 + 53} /> },
+            {
+              key: 'orderId',
+              header: 'Actions',
+              render: (val) => (
+                <Link href={`/team-leader/projects/${val}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer">
+                  <Eye className="w-4 h-4" /> View
+                </Link>
+              )
+            }
+          ]}
+          caption="Active Project orders and details"
+          emptyMessage="No projects found."
+        />
       )}
 
       {/* ========================================================================= */}
-      {/* TAB CONTENT: TEAM MEMBERS TABLE (Node 324-18549) */}
+      {/* TAB CONTENT: TEAM MEMBERS TABLE */}
       {/* ========================================================================= */}
       {activeTab === 'team-members' && (
-        <div className="flex-1 min-h-0 overflow-y-auto border border-[#f3f3f3] rounded-[16px] shadow-2xs bg-white">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-[#f0f0f0] bg-gray-50/50 text-[#828282] font-['Roboto'] font-semibold text-[13px] uppercase tracking-wider sticky top-0 bg-white z-10">
-                <th className="py-4 px-6">Profile</th>
-                <th className="py-4 px-6">Emp id</th>
-                <th className="py-4 px-6">Designation</th>
-                <th className="py-4 px-6">E-mail</th>
-                <th className="py-4 px-6">Status</th>
-                <th className="py-4 px-6">Joining Date</th>
-                <th className="py-4 px-6">Last login</th>
-                <th className="py-4 px-6 text-right">ACTION</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#f0f0f0] font-['Roboto'] text-[14px]">
-              {filteredTeamMembers.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50/80 transition-colors">
-
-                  {/* Profile (Avatar + Name + @handle) */}
-                  <td className="py-4 px-6">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={member.avatar}
-                        alt={member.name}
-                        className="size-10 rounded-full object-cover shrink-0 border border-gray-100 shadow-2xs"
-                      />
-                      <div className="flex flex-col">
-                        <span className="font-bold text-[#3c3c3c] leading-tight">
-                          {member.name}
-                        </span>
-                        <span className="text-[12px] text-[#a19791] mt-0.5">
-                          {member.handle}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Emp id */}
-                  <td className="py-4 px-6 font-medium text-[#575757]">
-                    {member.empId}
-                  </td>
-
-                  {/* Designation */}
-                  <td className="py-4 px-6 font-medium text-[#3c3c3c]">
-                    {member.designation}
-                  </td>
-
-                  {/* E-mail */}
-                  <td className="py-4 px-6 text-[#575757]">
-                    {member.email}
-                  </td>
-
-                  {/* Status Badge */}
-                  <td className="py-4 px-6">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold ${member.status === 'ACTIVE' ? 'bg-[#e6f4ea] text-[#06530b] border border-emerald-200' :
-                        member.status === 'SUSPENDED' ? 'bg-[#ffeded] text-[#ef4444] border border-red-200' :
-                          'bg-[#f0f0f0] text-[#747474] border border-gray-200'
-                      }`}>
-                      <span className={`size-1.5 rounded-full ${member.status === 'ACTIVE' ? 'bg-[#06530b]' :
-                          member.status === 'SUSPENDED' ? 'bg-[#ef4444]' :
-                            'bg-[#747474]'
-                        }`} />
-                      <span>{member.status}</span>
-                    </span>
-                  </td>
-
-                  {/* Joining Date */}
-                  <td className="py-4 px-6 text-[#575757]">
-                    {member.joiningDate}
-                  </td>
-
-                  {/* Last login */}
-                  <td className="py-4 px-6 text-[#575757]">
-                    {member.lastLogin}
-                  </td>
-
-                  {/* ACTION */}
-                  <td className="py-4 px-6 text-right">
-                    <button
-                      onClick={() => alert(`View member ${member.name}`)}
-                      className="inline-flex items-center gap-1.5 text-[#06530b] font-medium text-[14px] hover:underline cursor-pointer"
-                    >
-                      <Eye className="size-4" />
-                      <span>View</span>
-                    </button>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DashboardTable
+          data={filteredTeamMembers}
+          getRowKey={(item) => item.id}
+          columns={[
+            {
+              key: 'name',
+              header: 'Profile',
+              render: (_, item) => (
+                <div className="flex items-center gap-3">
+                  <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover" />
+                  <div>
+                    <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{item.name}</div>
+                    <div className="text-[11px] text-[#64748B]">{item.handle}</div>
+                  </div>
+                </div>
+              )
+            },
+            { key: 'empId', header: 'Emp ID', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+            { key: 'designation', header: 'Designation', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+            { key: 'email', header: 'E-mail', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+            { key: 'status', header: 'Status', render: (val) => <StatusBadge status={String(val)} /> },
+            { key: 'joiningDate', header: 'Joining Date', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+            { key: 'lastLogin', header: 'Last Active', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+            {
+              key: 'id',
+              header: 'Actions',
+              render: (val) => (
+                <Link href={`/team-leader/employees/${val}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer">
+                  <Eye className="w-4 h-4" /> View
+                </Link>
+              )
+            }
+          ]}
+          caption="Team Members list"
+          emptyMessage="No team members found."
+        />
       )}
-
     </div>
   );
 }

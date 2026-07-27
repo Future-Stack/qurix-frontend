@@ -22,46 +22,8 @@ import { Column } from '@/components/employee-team-leader/shared/DashboardTable/
 
 import { mockProjects, mockTeamMembers } from './mockData';
 
-import StatusBadge, {
-  ProjectStatus,
-} from './component/StatusBadge';
-
-type Project = (typeof mockProjects)[number];
-type TeamMember = (typeof mockTeamMembers)[number];
-// Countdown component for real-time tick
-function CountdownTimer({
-  initialSeconds,
-}: {
-  initialSeconds: number;
-}) {
-  const [timeLeft, setTimeLeft] = useState(initialSeconds);
-
-  useEffect(() => {
-    setTimeLeft(initialSeconds);
-  }, [initialSeconds]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => Math.max(prev - 1, 0));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const days = Math.floor(timeLeft / 86400);
-  const hours = Math.floor((timeLeft % 86400) / 3600);
-  const minutes = Math.floor((timeLeft % 3600) / 60);
-  const seconds = timeLeft % 60;
-
-  return (
-    <div className="flex w-[120px] items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white">
-  <span>{days}d</span>
-  <span>{String(hours).padStart(2, "0")}h</span>
-  <span>{String(minutes).padStart(2, "0")}m</span>
-  <span>{String(seconds).padStart(2, "0")}s</span>
-</div>
-  );
-}
+import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
 export default function SuperAdminDashboard({ params }: { params: { id: string, teamId: string } }) {
   const [activeTab, setActiveTab] = useState<'projects' | 'team' | 'refunds'>('projects');
@@ -91,7 +53,7 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
     return matchesSearch;
   });
 
- const projectColumns: Column<Project>[] = [
+ const projectColumns: Column<(typeof enrichedProjects)[0]>[] = [
   { key: 'id', header: 'Order ID' },
   { key: 'client', header: 'Client name' },
   { key: 'profile', header: 'Profile name' },
@@ -99,7 +61,7 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
   {
     key: 'status',
     header: 'Status',
-    render: (value) => <StatusBadge status={value as ProjectStatus} />,
+    render: (value) => <StatusBadge status={String(value)} />,
   },
   { key: 'value', header: 'Value' },
   {
@@ -192,7 +154,7 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
   ];
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-5">
+    <div className="flex flex-col h-full w-full min-h-0 overflow-y-auto no-scrollbar space-y-5">
       {/* Fixed Top Section */}
       <div className="shrink-0 space-y-5">
         {/* Title / Welcome Banner */}
@@ -214,7 +176,7 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
             </div>
           </div>
           <div className="flex gap-3">
-            <Link href={`/super-admin/service-line-management/${params.id}/teams/${params.teamId}/projects/create`} className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm">
+            <Link href="/super-admin/service-line-management/fsd/teams/1/projects/create" className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm">
               <Plus className="w-4 h-4" /> New Project
             </Link>
           </div>
@@ -334,11 +296,11 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
         )}
       </div>
 
-      {/* Scrollable Table Container */}
-      <div className="flex-1 min-h-0 overflow-y-auto rounded-[16px] shadow-2xs bg-white no-scrollbar">
+      {/* Table Container */}
+      <div className="w-full rounded-[16px] shadow-2xs bg-white">
         {activeTab === 'projects' && (
           <DashboardTable
-          data={mockProjects}
+          data={enrichedProjects}
           columns={projectColumns}
           caption="All Projects"
           emptyMessage="No projects found."

@@ -12,7 +12,8 @@ import { Menu, X,
   UserPlus, 
   Bookmark, 
   BookOpen, 
-  Settings 
+  Settings, 
+  MessageCircleMore
 } from 'lucide-react';
 
 import logo from '@/assets/logo-qurix.png'
@@ -24,8 +25,8 @@ export default function SuperAdminSidebar() {
 
   const navItems = [
     { icon: LayoutGrid, path: '/super-admin/dashboard', id: 'dashboard' },
-    { icon: MessageCircle, path: '/super-admin/messages', id: 'messages' },
-    { icon: Users, path: '/super-admin/all-users', id: 'users' },
+    { icon: MessageCircleMore, path: '/super-admin/messages', id: 'messages' },
+    { icon: Users, path: '/super-admin/contacts', id: 'contacts' },
     { icon: Phone, path: '/super-admin/calls', id: 'phone' },
     { icon: Target, path: '/super-admin/service-line-management', id: 'target' },
     { icon: UserPlus, path: '/super-admin/all-employee', id: 'userplus' },

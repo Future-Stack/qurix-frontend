@@ -5,11 +5,10 @@ import Link from 'next/link';
 import { 
   Search, Filter, Eye, Plus, Edit, Trash, Settings
 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import { CreateTeamModal } from '@/components/ui/Modal/CreateTeamModal';
 import { Column } from "@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types";
-import Image from "next/image";
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
-
 
 type Team = (typeof mockTeams)[number];
 
@@ -28,7 +27,9 @@ function StatCard({ title, value }: any) {
   );
 }
 
-export default function ServiceLineDetailsDashboard({ params }: { params: { id: string } }) {
+export default function ServiceLineDetailsDashboard() {
+  const params = useParams();
+  const serviceLineId = params?.id ? String(params.id) : 'fsd';
   const [activeTab, setActiveTab] = useState('Team');
   const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
 
@@ -107,7 +108,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
         </div>
       ) : (
         <Link
-          href={`/super-admin/service-line-management/${params.id}/teams/${team.id}`}
+          href={`/super-admin/service-line-management/${serviceLineId}/teams/${team.id}`}
           className="flex items-center gap-1 text-[#06530B] text-xs font-bold hover:underline"
         >
           <Eye className="w-4 h-4" />
@@ -118,8 +119,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
 ];
 
   return (
-    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full overflow-y-auto no-scrollbar">
+    <div className="w-full h-full min-h-0 overflow-y-auto no-scrollbar">
         <div className="max-w-full mx-auto">
 
           {/* Header */}
@@ -250,7 +250,7 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
                             <button className="hover:opacity-70"><Trash className="w-4 h-4" /></button>
                           </div>
                         ) : (
-                          <Link href={`/super-admin/service-line-management/${params.id}/teams/${team.id}`} className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
+                          <Link href={`/super-admin/service-line-management/${serviceLineId}/teams/${team.id}`} className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
                             <Eye className="w-4 h-4" /> View Team
                           </Link>
                         )}
@@ -277,7 +277,6 @@ export default function ServiceLineDetailsDashboard({ params }: { params: { id: 
             </div>
           </div>
         </div>
-      </div>
       <CreateTeamModal isOpen={isCreateTeamModalOpen} onClose={() => setIsCreateTeamModalOpen(false)} />
     </div>
   );

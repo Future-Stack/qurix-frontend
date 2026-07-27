@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   FolderOpen,
   AlertTriangle,
@@ -35,31 +36,8 @@ const mockTeamMembers = [
   { name: 'Punyasloka Megana', username: '@unitafaraji', empId: 'KNC-8821', designation: 'React JS Developer', email: 'alma.lawson@example.com', status: 'inactive', joined: '2021-01-01', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=5' },
 ];
 
-// Countdown component for real-time tick
-function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
-  const [timeLeft, setTimeLeft] = useState(initialSeconds);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const d = Math.floor(timeLeft / (24 * 3600));
-  const h = Math.floor((timeLeft % (24 * 3600)) / 3600);
-  const m = Math.floor((timeLeft % 3600) / 60);
-  const s = timeLeft % 60;
-
-  return (
-    <div className="font-['Roboto'] font-medium text-[13px] text-[#414141] bg-[#f8fafc] px-3 py-1.5 rounded-[8px] border border-[#e2e8f0] inline-flex items-center gap-1.5 shadow-2xs">
-      <span className="text-[#06530b] font-bold">{d}d</span> :
-      <span>{String(h).padStart(2, '0')}h</span> :
-      <span>{String(m).padStart(2, '0')}m</span> :
-      <span className="text-amber-600 font-bold">{String(s).padStart(2, '0')}s</span>
-    </div>
-  );
-}
+import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
 export default function ServiceLineDashboard() {
   const router = useRouter();
@@ -114,19 +92,7 @@ export default function ServiceLineDashboard() {
     {
       key: 'status',
       header: 'Status',
-      render: (_, item) => {
-        let badgeStyle = 'bg-slate-100 text-slate-700';
-        if (item.status === 'urgent') badgeStyle = 'bg-[#FEE2E2] text-[#EF4444]';
-        if (item.status === 'mp') badgeStyle = 'bg-[#FEF3C7] text-[#F59E0B]';
-        if (item.status === 'late') badgeStyle = 'bg-[#FFE4E6] text-[#F43F5E]';
-        if (item.status === 'delivered') badgeStyle = 'bg-[#DCFCE7] text-[#00AB0C]';
-
-        return (
-          <span className={`inline-flex items-center justify-center px-[9px] py-[3px] rounded-[8px] text-[12px] font-['Roboto'] font-bold shrink-0 uppercase ${badgeStyle}`}>
-            {item.status}
-          </span>
-        );
-      }
+      render: (_, item) => <StatusBadge status={item.status} />
     },
     {
       key: 'value',
@@ -142,13 +108,13 @@ export default function ServiceLineDashboard() {
       key: 'id',
       header: 'Actions',
       render: (_, item) => (
-        <button
-          onClick={() => alert(`Viewing details for Order ${item.id}`)}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530b] hover:text-[#05290b] transition-colors"
+        <Link
+          href={`/service-line/projects/${item.id}`}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530b] hover:text-[#00AB0C] transition-colors cursor-pointer"
         >
           <Eye className="size-4" />
           <span>View</span>
-        </button>
+        </Link>
       )
     }
   ];
@@ -185,15 +151,7 @@ export default function ServiceLineDashboard() {
     {
       key: 'status',
       header: 'Status',
-      render: (_, item) => {
-        const dotColor = item.status === 'active' ? 'bg-[#00AB0C]' : item.status === 'suspended' ? 'bg-[#EF4444]' : 'bg-[#475569]';
-        const textColor = item.status === 'active' ? 'text-[#00AB0C]' : item.status === 'suspended' ? 'text-[#EF4444]' : 'text-[#475569]';
-        return (
-          <div className={`flex items-center gap-1.5 font-bold text-[11px] uppercase ${textColor}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span> {item.status}
-          </div>
-        );
-      }
+      render: (_, item) => <StatusBadge status={item.status} />
     },
     {
       key: 'joined',
@@ -221,7 +179,7 @@ export default function ServiceLineDashboard() {
   ];
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-5">
+    <div className="flex flex-col h-full w-full min-h-0 overflow-y-auto no-scrollbar space-y-5">
       {/* Fixed Top Section */}
       <div className="shrink-0 space-y-5">
         {/* Title / Welcome Banner */}
@@ -243,9 +201,12 @@ export default function ServiceLineDashboard() {
             </div>
           </div>
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm">
+            <Link 
+              href="/service-line/projects/create"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer"
+            >
               <Plus className="w-4 h-4" /> New Project
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -363,8 +324,8 @@ export default function ServiceLineDashboard() {
         )}
       </div>
 
-      {/* Scrollable Table Container */}
-      <div className="flex-1 min-h-0 overflow-y-auto border border-[#f3f3f3] rounded-[16px] shadow-2xs bg-white">
+      {/* Table Container */}
+      <div className="w-full rounded-[16px] shadow-2xs bg-white">
         {activeTab === 'projects' && (
           <DashboardTable
             data={filteredProjects}

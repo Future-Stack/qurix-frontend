@@ -11,7 +11,8 @@ import {
   Target, 
   UserPlus, 
   Bookmark, 
-  BookOpen
+  BookOpen,
+  MessageCircleMore
 } from 'lucide-react';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import logo from '@/assets/logo-qurix.png';
@@ -39,8 +40,8 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
 
   const serviceLineMenuItems = [
     { icon: LayoutGrid, href: '/service-line/dashboard', label: 'Dashboard' },
-    { icon: MessageCircle, href: '/service-line/messages', label: 'Messages' },
-    { icon: Users, href: '/service-line/all-employee', label: 'Team' },
+    { icon: MessageCircleMore, href: '/service-line/messages', label: 'Messages' },
+    { icon: Users, href: '/service-line/contacts', label: 'Team' },
     { icon: Phone, href: '/service-line/calls', label: 'Calls' },
     { icon: Target, href: '/service-line/team-management', label: 'Management' },
     { icon: UserPlus, href: '/service-line/employees', label: 'Employees' },
@@ -63,7 +64,7 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
         onOpenSettings={() => setIsSettingsOpen(true)}
         isSettingsActive={isSettingsOpen}
       />
-      <main className="flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm p-6 lg:p-[30px] overflow-hidden flex flex-col">
+      <main className="flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm p-4 pb-28 md:p-6 lg:p-[30px] overflow-hidden flex flex-col">
         {children}
       </main>
       <SettingsModal

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import SettingsModal from '@/components/employee-team-leader/shared/Settings/SettingsModal';
+import logo from '@/assets/logo-qurix.png';
+import Image from 'next/image';
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -26,16 +28,22 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     }
   };
 
+  const customLogo = (
+    <div className="w-10 h-10 bg-[#06530B] rounded-xl flex items-center justify-center text-white font-bold text-xl">
+      <Image src={logo} alt="Qurix" width={40} height={40} />
+    </div>
+  );
   return (
     <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
       {/* Navigation Sidebar */}
       <Sidebar
+        customLogo={customLogo}
         onOpenSettings={() => setIsSettingsOpen(true)}
         isSettingsActive={isSettingsOpen}
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm p-6 lg:p-[30px] overflow-hidden flex flex-col">
+      <main className="flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm p-4 pb-28 md:p-6 lg:p-[30px] overflow-hidden flex flex-col">
         {children}
       </main>
 

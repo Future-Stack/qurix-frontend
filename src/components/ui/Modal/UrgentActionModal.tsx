@@ -25,7 +25,7 @@ export function UrgentActionModal({
         <h2 className="text-xl font-bold text-[#0F172A] mb-4">Mark Project as urgent</h2>
 
         {/* Warning Alert Box */}
-        <div className="flex gap-3 bg-[#FEF2F2] border border-[#FCA5A5] rounded-2xl p-4 mb-4">
+        <div className="flex gap-3 bg-[#FEF2F2] rounded-2xl p-4 mb-4">
           <AlertTriangle className="w-5 h-5 text-[#EF4444] shrink-0 mt-0.5" />
           <p className="text-sm font-medium text-[#EF4444] leading-relaxed">
             This action will move the project to the top of all members' chat lists and trigger an urgent notification to everyone.
@@ -68,7 +68,7 @@ export function UrgentActionModal({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 bg-white border border-[#E2E8F0] hover:bg-gray-50 text-[#64748B] rounded-xl text-sm font-bold transition-colors"
+            className="px-6 py-2.5 bg-gray-50 hover:bg-gray-100 text-[#64748B] rounded-xl text-sm font-bold transition-colors"
           >
             Cancel
           </button>

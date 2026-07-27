@@ -131,8 +131,7 @@ export default function ServiceLineManagementDashboard() {
     },
   ];
   return (
-    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full overflow-y-auto no-scrollbar">
+    <div className="w-full h-full min-h-0 overflow-y-auto no-scrollbar">
         {/* <div className="p-8 pb-12 max-w-full mx-auto"> */}
 
           {/* Header */}
@@ -211,56 +210,7 @@ export default function ServiceLineManagementDashboard() {
                      
                     />
                   </div>
-            
-            {/* <div className="w-full overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-max">
-                <thead>
-                  <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Service Line Name</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Service Line Lead</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Total Teams</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Total Employee</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Workload</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Active Projects</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Last Updated</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockServiceLines.map((sl, i) => (
-                    <tr key={i} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-full ${sl.iconBg} ${sl.iconColor} flex items-center justify-center font-bold text-xs`}>
-                            {sl.icon}
-                          </div>
-                          <span className="text-[13px] font-bold text-[#0F172A]">{sl.name}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <img src={sl.leadAvatar} alt={sl.leadName} className="w-6 h-6 rounded-full object-cover" />
-                          <span className="text-[13px] font-medium text-[#475569]">{sl.leadName}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.teams}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.employees}</td>
-                      <td className="px-6 py-4 text-[13px] font-bold text-[#0F172A]">{sl.workload}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.projects}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{sl.updated}</td>
-                      <td className="px-6 py-4">
-                        <Link href={`/super-admin/service-line-management/${sl.id}`} className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline">
-                          <Eye className="w-4 h-4" /> View
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div> */}
           </div>
-        {/* </div> */}
-      </div>
       <CreateServiceLineModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );

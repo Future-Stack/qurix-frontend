@@ -56,7 +56,7 @@ export default function EmployeeVerificationForm() {
             <input
               type="text"
               {...register('employeeId')}
-              className={`w-full px-3 py-2 lg:px-4 lg:py-3 text-xs lg:text-sm rounded-xl border focus:ring-1 outline-none transition-all pl-8 pr-11 bg-[#F0FDF4] text-[#0F172A] cursor-pointer ${
+              className={`w-full px-3 py-2 text-xs lg:text-sm rounded-xl border focus:ring-1 outline-none transition-all pl-10 pr-11 bg-[#F0FDF4] text-[#0F172A] cursor-pointer ${
                 errors.employeeId
                   ? 'border-red-500 focus:border-red-600 focus:ring-red-600'
                   : 'border-[#22C55E] focus:border-green-600 focus:ring-green-600'

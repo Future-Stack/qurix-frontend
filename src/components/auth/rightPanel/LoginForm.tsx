@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 
 const loginSchema = z.object({
   identifier: z.string().min(1, 'Username or Email is required'),
@@ -14,6 +15,7 @@ type LoginValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -25,6 +27,7 @@ export default function LoginForm() {
 
   const onSubmit = (data: LoginValues) => {
     console.log('Login attempt:', data);
+    router.push("/employee/dashboard")
     // Add logic for login here
   };
 
@@ -106,12 +109,13 @@ export default function LoginForm() {
           </div>
         </div>
 
+
         <button
           type="submit"
           className="w-full bg-[#06530B] hover:bg-[#05290b] text-white py-3 px-3 lg:py-3.5 lg:px-4 rounded-xl text-xs lg:text-[15px] font-bold flex items-center justify-center gap-2 transition-all mt-2 cursor-pointer"
         >
           Sign In to Workspace
-          <ArrowRight className="w-4 h-4" />
+           <ArrowRight className="w-4 h-4" />
         </button>
       </form>
 

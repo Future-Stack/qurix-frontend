@@ -1,10 +1,13 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Users, User, UserX, Briefcase, Clock, Activity, TrendingUp, Download, Plus, Search, ChevronDown, Eye
 } from 'lucide-react';
+import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
+import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
+import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 
 const mockEmployees = [
   { id: 1, name: 'Wrajakishore Loy', handle: '@julie_mutie', empId: 'KNC-8821', designation: 'Node JS Developer', email: 'tanya.hill@example.com', serviceLine: 'FSD', team: 'CM', status: 'ACTIVE', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=1' },
@@ -37,55 +40,97 @@ function StatCard({ icon: Icon, title, value, trend, hasDot }: any) {
 }
 
 export default function EmployeesPage() {
-  return (
-    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
-        <div className="p-8 pb-12 max-w-full mx-auto">
+  const [searchQuery, setSearchQuery] = useState('');
 
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                  <span className="z-10">C</span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
-                </div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-[#0F172A] mb-1">Full Stack Development (FSD)</h1>
-                <p className="text-sm text-[#64748B]">Monday, July 14, 2026 -</p>
+  const filteredEmployees = mockEmployees.filter(emp => 
+    emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.empId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.designation.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const columns: Column<(typeof mockEmployees)[0]>[] = [
+    {
+      key: 'name',
+      header: 'Profile',
+      render: (_, item) => (
+        <div className="flex items-center gap-3">
+          <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover" />
+          <div>
+            <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{item.name}</div>
+            <div className="text-[11px] text-[#64748B]">{item.handle}</div>
+          </div>
+        </div>
+      )
+    },
+    { key: 'empId', header: 'Emp ID', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    { key: 'designation', header: 'Designation', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    { key: 'email', header: 'E-mail', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    { key: 'serviceLine', header: 'Service Line', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    { key: 'team', header: 'Team', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    { key: 'status', header: 'Status', render: (_, item) => <StatusBadge status={item.status} /> },
+    { key: 'lastLogin', header: 'Last Login', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+    {
+      key: 'id',
+      header: 'Action',
+      render: (val) => (
+        <Link href={`/service-line/employees/${val}`} className="flex items-center gap-1 text-[#64748B] hover:text-[#0F172A] font-bold text-xs transition-colors">
+          <Eye className="w-4 h-4" /> View
+        </Link>
+      )
+    }
+  ];
+
+  return (
+    <div className="w-full h-full min-h-0 overflow-y-auto no-scrollbar">
+      <div className="max-w-full mx-auto">
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
+              <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                <span className="z-10">C</span>
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
               </div>
             </div>
-            <div className="flex gap-4">
-              <button className="flex items-center gap-2 px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm">
-                <Download className="w-4 h-4" /> Export
-              </button>
-              <Link 
-                href="/service-line/employees/create"
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
-              >
-                <Plus className="w-4 h-4" /> Create Employee
-              </Link>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-1">Full Stack Development (FSD)</h1>
+              <p className="text-xs md:text-sm text-[#64748B]">Monday, July 14, 2026 -</p>
             </div>
           </div>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-xs md:text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm">
+              <Download className="w-4 h-4" /> Export
+            </button>
+            <Link 
+              href="/service-line/employees/create"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
+            >
+              <Plus className="w-4 h-4" /> Create Employee
+            </Link>
+          </div>
+        </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-6 gap-4 mb-8">
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
             <StatCard icon={Users} title="Total Employees" value="1,248" trend="+2%" />
             <StatCard icon={User} title="Active" value="1,182" />
-            <StatCard icon={UserX} title="Inactive" value="66" />
-            <StatCard icon={Briefcase} title="Team Leaders" value="142" />
-            <StatCard icon={Clock} title="New (Month)" value="24" />
-            <StatCard icon={Activity} title="Online Now" value="856" hasDot />
+            <StatCard icon={UserX} title="Inactive" value="42" />
+            <StatCard icon={Briefcase} title="Suspended" value="24" />
+            <StatCard icon={Clock} title="On Leave" value="12" />
+            <StatCard icon={Activity} title="Online Now" value="856" hasDot={true} />
           </div>
 
           {/* Main Content Area */}
-          <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col">
+          <div className="overflow-hidden flex flex-col ">
             {/* Controls */}
-            <div className="p-5 flex items-center justify-between border-b border-[#E2E8F0]">
+            <div className="p-5 flex items-center justify-between border border-[#E2E8F0] p-5 rounded-xl mb-8">
               <div className="flex gap-3">
                 <button className="px-5 py-2 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm">
                   All Employees
+                </button>
+                <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+                  All Service Lines <ChevronDown className="w-4 h-4 text-gray-400" />
                 </button>
                 <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
                   All Departments <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -99,77 +144,25 @@ export default function EmployeesPage() {
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input 
                   type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by Name or ID..." 
                   className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
                 />
               </div>
             </div>
 
-            {/* Table */}
-            <div className="w-full overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-max">
-                <thead>
-                  <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0]">
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Profile</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Emp ID</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Designation</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">E-mail</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Service Line</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Team</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Last Login</th>
-                    <th className="px-6 py-4 text-[11px] font-bold text-[#64748B] uppercase tracking-wider">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockEmployees.map((emp) => (
-                    <tr key={emp.id} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <img src={emp.avatar} alt={emp.name} className="w-10 h-10 rounded-full object-cover" />
-                          <div>
-                            <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{emp.name}</div>
-                            <div className="text-[11px] text-[#64748B]">{emp.handle}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.empId}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.designation}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.email}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.serviceLine}</td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.team}</td>
-                      <td className="px-6 py-4">
-                        {emp.status === 'ACTIVE' && (
-                          <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#00AB0C]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00AB0C]"></span> ACTIVE
-                          </div>
-                        )}
-                        {emp.status === 'SUSPENDED' && (
-                          <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#EF4444]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> SUSPENDED
-                          </div>
-                        )}
-                        {emp.status === 'INACTIVE' && (
-                          <div className="flex items-center gap-1.5 font-bold text-[11px] text-[#475569]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#475569]"></span> INACTIVE
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-[13px] font-medium text-[#475569]">{emp.lastLogin}</td>
-                      <td className="px-6 py-4">
-                        <Link href={`/service-line/employees/${emp.id}`} className="flex items-center gap-1 text-[#64748B] hover:text-[#0F172A] font-bold text-xs transition-colors">
-                          <Eye className="w-4 h-4" /> View
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            {/* DashboardTable Component */}
+            <DashboardTable 
+              data={filteredEmployees}
+              columns={columns}
+              getRowKey={(item) => String(item.id)}
+              caption="Employees list"
+              emptyMessage="No employees found."
+            />
           </div>
 
         </div>
-      </div>
     </div>
   );
 }

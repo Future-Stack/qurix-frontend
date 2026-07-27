@@ -5,14 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X,
   LayoutGrid, 
-  MessageCircle, 
   Users, 
   Phone, 
   Target, 
   UserPlus, 
   Bookmark, 
   BookOpen, 
-  Settings 
+  Settings, 
+  MessageCircleMore
 } from 'lucide-react';
 import Image from 'next/image';
 import logo from '../../../assets/logo-qurix.png';
@@ -23,7 +23,7 @@ export default function Sidebar() {
 
   const navItems = [
     { icon: LayoutGrid, path: '/service-line/dashboard', id: 'dashboard' },
-    { icon: MessageCircle, path: '/service-line/messages', id: 'messages' },
+    { icon: MessageCircleMore, path: '/service-line/messages', id: 'messages' },
     { icon: Users, path: '/service-line/all-employee', id: 'team' },
     { icon: Phone, path: '/service-line/calls', id: 'phone' },
     { icon: Target, path: '/service-line/team-management', id: 'target' },

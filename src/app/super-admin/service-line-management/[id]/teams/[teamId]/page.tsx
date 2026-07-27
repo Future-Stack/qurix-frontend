@@ -60,10 +60,15 @@ function CountdownTimer({
 </div>
   );
 }
+import { useParams } from 'next/navigation';
+
 type Project = (typeof mockProjects)[number];
 type TeamMember = (typeof mockTeamMembers)[number];
 
-export default function TeamDetailsDashboard({ params }: { params: { id: string, teamId: string } }) {
+export default function TeamDetailsDashboard() {
+  const routeParams = useParams();
+  const serviceLineId = routeParams?.id ? String(routeParams.id) : 'fsd';
+  const teamId = routeParams?.teamId ? String(routeParams.teamId) : '1';
   const [activeTab, setActiveTab] = useState('All Project');
   const projectColumns: Column<Project>[] = [
   {
@@ -128,7 +133,7 @@ export default function TeamDetailsDashboard({ params }: { params: { id: string,
     header: "Actions",
     render: (_, project) => (
       <Link
-        href={`/super-admin/service-line-management/${params.id}/teams/${params.teamId}/projects/${project.id}`}
+        href={`/super-admin/service-line-management/${serviceLineId}/teams/${teamId}/projects/${project.id}`}
         className="flex items-center gap-1 text-xs font-bold text-[#06530B] hover:underline"
       >
         <Eye className="h-4 w-4" />
@@ -228,7 +233,7 @@ const teamMemberColumns: Column<TeamMember>[] = [
             </div>
             <div className="flex gap-3">
               <Link 
-                href={`/super-admin/service-line-management/${params.id}/teams/${params.teamId}/projects/create`}
+                href={`/super-admin/service-line-management/${serviceLineId}/teams/${teamId}/projects/create`}
                 className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" /> New Project

@@ -17,31 +17,8 @@ import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
 
-// Countdown component for real-time tick
-function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
-  const [timeLeft, setTimeLeft] = useState(initialSeconds);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const d = Math.floor(timeLeft / (24 * 3600));
-  const h = Math.floor((timeLeft % (24 * 3600)) / 3600);
-  const m = Math.floor((timeLeft % 3600) / 60);
-  const s = timeLeft % 60;
-
-  return (
-    <div className="font-['Roboto'] font-medium text-[13px] text-[#414141] bg-[#f8fafc] px-3 py-1.5 rounded-[8px] border border-[#e2e8f0] inline-flex items-center gap-1.5 shadow-2xs">
-      <span className="text-[#06530b] font-bold">{d}d</span> :
-      <span>{String(h).padStart(2, '0')}h</span> :
-      <span>{String(m).padStart(2, '0')}m</span> :
-      <span className="text-amber-600 font-bold">{String(s).padStart(2, '0')}s</span>
-    </div>
-  );
-}
+import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
 export default function EmployeeDashboardPage() {
   const router = useRouter();
@@ -131,7 +108,7 @@ export default function EmployeeDashboardPage() {
     {
       key: 'id',
       header: 'Order ID',
-      render: (val) => <span className="font-bold text-[#06530b] font-['Roboto']">{String(val)}</span>
+      render: (val) => <span className="font-bold text-[#1E293B] font-['Roboto']">{String(val)}</span>
     },
     {
       key: 'client',
@@ -146,19 +123,7 @@ export default function EmployeeDashboardPage() {
     {
       key: 'status',
       header: 'Status',
-      render: (_, item) => {
-        let badgeStyle = 'bg-slate-100 text-slate-700';
-        if (item.status === 'Urgent') badgeStyle = 'bg-rose-50 text-rose-700 border border-rose-200';
-        if (item.status === 'WIP') badgeStyle = 'bg-blue-50 text-blue-700 border border-blue-200';
-        if (item.status === 'Late') badgeStyle = 'bg-amber-50 text-amber-700 border border-amber-200';
-        if (item.status === 'Delivered') badgeStyle = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-
-        return (
-          <span className={`inline-flex items-center justify-center px-[9px] py-[3px] rounded-[8px] text-[12px] font-['Roboto'] font-medium shrink-0 shadow-2xs ${badgeStyle}`}>
-            {item.status}
-          </span>
-        );
-      }
+      render: (_, item) => <StatusBadge status={item.status} />
     },
     {
       key: 'value',
@@ -176,7 +141,7 @@ export default function EmployeeDashboardPage() {
       render: (_, item) => (
         <button
           onClick={() => alert(`Viewing details for Order ${item.id}`)}
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b]  px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
         >
           <Eye className="size-4 stroke-[2.5] transition-transform duration-200 group-hover/btn:scale-110" />
           <span>View</span>
@@ -186,7 +151,7 @@ export default function EmployeeDashboardPage() {
   ];
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-5">
+    <div className="flex flex-col h-full w-full min-h-0 overflow-y-auto no-scrollbar space-y-5">
 
       {/* Fixed Top Section (Welcome Banner + Stats Grid + Search Control Bar) */}
       <div className="shrink-0 space-y-5">
@@ -313,8 +278,8 @@ export default function EmployeeDashboardPage() {
 
       </div>
 
-      {/* Scrollable Table Container ONLY (overflow-y-auto on table wrapper) */}
-      <div className="flex-1 min-h-0 overflow-y-auto border border-[#f3f3f3] rounded-[16px] shadow-2xs bg-white">
+      {/* Table Container */}
+      <div className="w-full rounded-[16px] shadow-2xs bg-white">
         <DashboardTable
           data={filteredOrders}
           columns={columns}

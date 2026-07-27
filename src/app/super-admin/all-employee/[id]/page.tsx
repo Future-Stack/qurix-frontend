@@ -1,191 +1,201 @@
 "use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { 
+  Edit2, User, Hash, Mail, Phone, Briefcase, 
+  CheckCircle2, ArrowLeft, KeyRound, UserX
+} from 'lucide-react';
 import Link from 'next/link';
-import { Edit, Lock, Ban } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 
-export default function EmployeeDetailsPage({ params }: { params: { id: string } }) {
+export default function SuperAdminViewEmployeePage() {
+  const params = useParams();
   const router = useRouter();
+  const empIdParam = params?.id ? String(params.id) : 'E00123';
+
+  const [isActive, setIsActive] = useState(true);
+
+  const employeeData = {
+    fullName: 'John Doe',
+    employeeId: empIdParam,
+    username: '@johndoe',
+    workEmail: 'john.doe@collabcorp.com',
+    phoneNumber: '+880 123456789',
+    employmentType: 'Full-Time',
+    designation: 'UI/UX Designer',
+    serviceLine: 'CUSTOM-FSD',
+    team: 'Future Stack',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80',
+    assignedProjects: [
+      { id: '1', name: 'franchys || Innosight || FO822580...', role: 'Lead Designer', status: 'WIP' },
+      { id: '2', name: 'tprice34 || tech_omega || FO2228CA90708', role: 'UI/UX Specialist', status: 'PLANING' },
+    ]
+  };
 
   return (
-    <div className="h-full max-w-full overflow-hidden m-4 mr-4">
-      <div className="h-full bg-white rounded-[24px] shadow-sm border border-[#E2E8F0] overflow-y-auto no-scrollbar">
-        <div className="p-8 pb-12 max-w-5xl mx-auto">
-
-          {/* Header */}
-          <div className="flex justify-between items-center mb-10 border-b border-[#E2E8F0] pb-6">
+    <div className="h-full max-w-full overflow-hidden p-4 md:p-6">
+      <div className="h-full overflow-y-auto no-scrollbar">
+        <div className="pb-12 w-full ">
+          
+          {/* Top Page Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-[#E2E8F0] pb-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border border-[#E2E8F0] p-0.5 flex items-center justify-center shrink-0 bg-white shadow-sm">
-                <div className="text-xl font-bold italic tracking-tighter">dyson</div>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-[#E2E8F0] p-1 flex items-center justify-center shrink-0 bg-white shadow-sm">
+                <img 
+                  src={employeeData.avatar} 
+                  alt={employeeData.fullName} 
+                  className="w-full h-full rounded-full object-cover"
+                />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#0F172A] mb-0.5">Employee Information</h1>
-                <p className="text-[12px] text-[#64748B]">Admin Panel</p>
+                <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-0.5">Employee Profile ({employeeData.employeeId})</h1>
+                <p className="text-xs md:text-sm text-[#64748B]">Super Admin Panel</p>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
               <button 
+                type="button"
                 onClick={() => router.back()}
-                className="px-6 py-2.5 bg-white border border-[#E2E8F0] text-[#475569] rounded-xl text-[13px] font-bold transition-colors shadow-sm hover:bg-gray-50"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-xs md:text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm"
               >
-                Back
+                <ArrowLeft className="w-4 h-4" /> Back
               </button>
               <Link 
-                href={`/super-admin/all-employee/${params.id}/edit`}
-                className="flex items-center gap-2 px-6 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-[13px] font-bold transition-colors shadow-sm"
+                href={`/super-admin/employees/${employeeData.employeeId}`} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm cursor-pointer"
               >
-                <Edit className="w-4 h-4" /> Edit information
+                <Edit2 className="w-4 h-4" /> Edit information
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-[1fr_300px] gap-8">
+          {/* Main Layout Container - Responsive Split Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             
-            {/* Left Column - Information Panels */}
-            <div className="space-y-6">
+            {/* Left Column: Personal Information (2 Columns wide) */}
+            <div className="lg:col-span-2 space-y-6">
               
-              {/* Personal Information */}
-              <div className="border border-[#E2E8F0] rounded-2xl p-6 shadow-sm">
-                <h3 className="text-[15px] font-bold text-[#0F172A] mb-6">Personal information</h3>
-                
-                <div className="grid grid-cols-3 gap-6">
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Full Name</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">John Doe</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Employee ID</div>
-                    <div className="text-[13px] font-medium text-[#475569]">E00123</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Designation</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">UI/UX Designer</div>
-                  </div>
-                  
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Work Email</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">john.doe@solidcomp.com</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Phone Number</div>
-                    <div className="text-[13px] font-medium text-[#475569]">+1 (555) 123-3456</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Joining Date</div>
-                    <div className="text-[13px] font-medium text-[#475569]">Oct 12, 2021</div>
-                  </div>
+              {/* Personal Information Card */}
+              <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 md:p-8 shadow-sm">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E2E8F0]">
+                  <h3 className="text-base md:text-lg font-bold text-[#0F172A] uppercase tracking-wider">
+                    Personal Information
+                  </h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    isActive ? 'bg-[#ECFDF5] text-[#00AB0C] border border-[#DCFCE7]' : 'bg-red-50 text-red-600 border border-red-200'
+                  }`}>
+                    {isActive ? 'Active Employee' : 'Deactivated'}
+                  </span>
+                </div>
 
+                {/* Key Value Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Username</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">johndoe</div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Full Name</p>
+                    <p className="text-sm font-bold text-[#00AB0C] truncate">{employeeData.fullName}</p>
                   </div>
-                  <div className="col-span-2">
-                    <div className="text-[11px] text-[#64748B] mb-1">Employment Type</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">Full-time Permanent</div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Employee ID</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.employeeId}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Username</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.username}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Work Email</p>
+                    <p className="text-sm font-bold text-[#00AB0C] truncate">{employeeData.workEmail}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Phone Number</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.phoneNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Employment Type</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.employmentType}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Designation</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.designation}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Service Line</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.serviceLine}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-[#64748B] mb-1">Team</p>
+                    <p className="text-sm font-bold text-[#00AB0C]">{employeeData.team}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Organization & hierarchy */}
-              <div className="border border-[#E2E8F0] rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-6 text-[#00AB0C]">
-                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
-                    <span className="text-[16px]">🏢</span>
-                  </div>
-                  <h3 className="text-[15px] font-bold text-[#0F172A]">Organization & hierarchy</h3>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-6">
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Service Line</div>
-                    <div className="text-[13px] font-medium text-[#475569]">FSD</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Team</div>
-                    <div className="text-[13px] font-medium text-[#475569]">FS</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Team Leader</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">Sarah Jenkins</div>
-                  </div>
+              {/* Assigned Projects Card */}
+              <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 md:p-8 shadow-sm">
+                <h3 className="text-base font-bold text-[#0F172A] mb-4">Assigned Projects</h3>
+                <div className="space-y-3">
+                  {employeeData.assignedProjects.map(proj => (
+                    <div key={proj.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] gap-2">
+                      <div>
+                        <p className="text-sm font-bold text-[#0F172A]">{proj.name}</p>
+                        <p className="text-xs text-[#64748B]">Role: {proj.role}</p>
+                      </div>
+                      <span className="bg-[#06530B] text-white text-[10px] font-bold px-2.5 py-1 rounded-md">
+                        {proj.status}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Account security */}
-              <div className="border border-[#E2E8F0] rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-6 text-[#00AB0C]">
-                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                  <h3 className="text-[15px] font-bold text-[#0F172A]">Account security</h3>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-6">
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Login Email</div>
-                    <div className="text-[13px] font-semibold text-[#00AB0C]">john.doe@solidcomp.com</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Last Login</div>
-                    <div className="text-[13px] font-medium text-[#475569]">2 hours ago (San Jose...</div>
-                  </div>
-                  <div>
-                    <div className="text-[11px] text-[#64748B] mb-1">Password Status</div>
-                    <div className="text-[13px] font-medium text-[#475569]">Strong</div>
-                  </div>
-                </div>
-              </div>
-              
             </div>
 
-            {/* Right Column - Profile Card */}
-            <div>
-              <div className="border border-[#E2E8F0] rounded-[24px] overflow-hidden shadow-sm sticky top-0">
-                <div className="h-24 bg-[#06530B] relative"></div>
-                <div className="px-6 pb-6 text-center relative mt-[-40px]">
-                  <div className="w-20 h-20 mx-auto rounded-full border-4 border-white mb-3 bg-white shadow-sm overflow-hidden">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="Profile" className="w-full h-full object-cover" />
-                  </div>
-                  
-                  <h2 className="text-[17px] font-bold text-[#0F172A] mb-1 uppercase tracking-wider">MD SHAKIL</h2>
-                  <div className="text-[12px] text-[#64748B] mb-2">@uxshakil</div>
-                  <div className="text-[12px] font-bold text-[#00AB0C] flex items-center justify-center gap-1">
-                    <span className="w-3 h-3 bg-green-100 text-green-600 rounded flex items-center justify-center text-[8px]">⭐</span>
-                    15214
-                  </div>
+            {/* Right Column: Actions & Quick Status */}
+            <div className="space-y-6">
+              
+              {/* Account Quick Actions */}
+              <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 shadow-sm space-y-3">
+                <h3 className="text-sm font-bold text-[#0F172A] mb-2">Employee Actions</h3>
+                
+                <Link 
+                  href={`/super-admin/employees/${employeeData.employeeId}`}
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-xs font-bold text-[#0F172A] transition-colors"
+                >
+                  <Edit2 className="w-4 h-4 text-[#00AB0C]" /> Edit Information
+                </Link>
 
-                  <div className="w-full border-t border-dashed border-[#E2E8F0] my-6"></div>
+                <button 
+                  type="button"
+                  onClick={() => alert('Password reset email sent to employee!')}
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-xs font-bold text-[#0F172A] transition-colors"
+                >
+                  <KeyRound className="w-4 h-4 text-blue-600" /> Reset Password
+                </button>
 
-                  <div className="grid grid-cols-2 gap-4 text-left px-2 mb-6">
-                    <div>
-                      <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">ROLE</div>
-                      <div className="text-[13px] font-medium text-[#475569]">Employee</div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">STATUS</div>
-                      <div className="flex items-center gap-1.5 font-bold text-[13px] text-[#00AB0C]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00AB0C]"></span> Active
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">SERVICE LINE</div>
-                      <div className="text-[13px] font-medium text-[#475569]">FSD</div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">TEAM</div>
-                      <div className="text-[13px] font-medium text-[#00AB0C]">Future Stack</div>
-                    </div>
-                  </div>
-
-                  <button className="w-full py-2.5 flex items-center justify-center gap-2 text-[#EF4444] text-[13px] font-bold bg-red-50 hover:bg-red-100 rounded-xl transition-colors">
-                    <Ban className="w-4 h-4" /> Suspend Account
-                  </button>
-                </div>
+                <button 
+                  type="button"
+                  onClick={() => setIsActive(!isActive)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-colors ${
+                    isActive 
+                      ? 'bg-red-50 hover:bg-red-100 text-red-600' 
+                      : 'bg-green-50 hover:bg-green-100 text-[#00AB0C]'
+                  }`}
+                >
+                  {isActive ? (
+                    <>
+                      <UserX className="w-4 h-4" /> Deactivate Account
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" /> Reactivate Account
+                    </>
+                  )}
+                </button>
               </div>
+
             </div>
 
           </div>
+
         </div>
       </div>
     </div>

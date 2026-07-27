@@ -5,14 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutGrid, 
-  MessageSquare, 
   Users, 
   Phone, 
   Bookmark, 
   BookOpen, 
   Settings, 
-  MessageCircleDashed,
-  MessageCircle
+  MessageCircleMore
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -40,7 +38,7 @@ export default function Sidebar({
 
   const menuItems: SidebarItem[] = customMenuItems || [
     { icon: LayoutGrid, href: `${basePath}/dashboard`, label: 'Dashboard' },
-    { icon: MessageCircle, href: `${basePath}/messages`, label: 'Messages' },
+    { icon: MessageCircleMore, href: `${basePath}/messages`, label: 'Messages' },
     { icon: Users, href: `${basePath}/contacts`, label: 'Contacts' },
     { icon: Phone, href: `${basePath}/call-logs`, label: 'Recent Calls' },
     { icon: Bookmark, href: `${basePath}/favorites`, label: 'Favorites' },
