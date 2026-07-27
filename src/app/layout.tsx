@@ -30,7 +30,7 @@ const robotoCondensed = Roboto_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "Softvence.Agency",
+  title: "Qurix",
   description: "Connect. Collaborate. Deliver.",
 };
 
