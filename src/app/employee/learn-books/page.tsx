@@ -116,7 +116,7 @@ export function LearnBooksContent({
     <div className="flex flex-col h-full w-full overflow-hidden bg-white select-none">
       
       {/* Profile Header */}
-      <div className="px-6 lg:px-8 py-4 bg-white border-b border-[#E2E8F0] shrink-0 flex items-center gap-4 h-[110px]">
+      <div className="px-6 lg:px-8 bg-white border-b border-[#E2E8F0] shrink-0 flex items-center gap-4 h-[96px]">
         <div className="relative shrink-0 flex items-center justify-center size-[68px]">
           <div className="absolute inset-0 border-[3px] border-[#06530B] rounded-full scale-[0.94]" />
           <div className="absolute inset-0 border-2 border-white rounded-full scale-[0.91]" />
@@ -182,7 +182,7 @@ export default function EmployeeLearnBooksPage() {
   return (
     <LearnBooksContent 
       userName="UX-SHAKIL"
-      roleName="Employee Dashboard"
+      roleName="My Account"
       avatarUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
     />
   );

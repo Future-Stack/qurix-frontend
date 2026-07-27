@@ -7,7 +7,7 @@ import { mockChats, initialMockMessages } from '@/components/shared/Communicatio
 export default function EmployeeMessagesPage() {
   const profileInfo = {
     name: 'UX-SHAKIL',
-    role: 'Employee Dashboard',
+    role: 'My Account',
     avatar: 'https://i.pravatar.cc/150?u=30'
   };
 

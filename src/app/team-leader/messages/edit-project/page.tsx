@@ -231,7 +231,7 @@ export default function EditProjectPage() {
       <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
         {/* User Info Header */}
         <div className="flex items-center gap-4">
-          <div className="relative shrink-0 size-12 rounded-full overflow-hidden border-2 border-[#06530b] p-0.5 bg-white shadow-sm">
+          <div className="relative shrink-0 size-12 rounded-full border-2 border-[#06530b] p-0.5 bg-white shadow-sm">
             <img 
               src={avatars.shakil} 
               alt="UX-SHAKIL" 

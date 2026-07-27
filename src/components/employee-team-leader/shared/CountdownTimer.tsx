@@ -24,10 +24,10 @@ export default function CountdownTimer({ initialSeconds }: { initialSeconds: num
 
   return (
     <div className="flex w-[120px] items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white shadow-2xs">
-      <span>{days}d</span>
-      <span>{String(hours).padStart(2, '0')}h</span>
-      <span>{String(minutes).padStart(2, '0')}m</span>
-      <span>{String(seconds).padStart(2, '0')}s</span>
+      <span>{days}D</span>
+      <span>{String(hours).padStart(2, '0')}H</span>
+      <span>{String(minutes).padStart(2, '0')}M</span>
+      <span>{String(seconds).padStart(2, '0')}S</span>
     </div>
   );
 }

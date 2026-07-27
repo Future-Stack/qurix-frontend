@@ -17,7 +17,7 @@ export function DashboardTable<T>(props: DashboardTableProps<T>) {
               <th
                 key={column.header}
                 scope="col"
-                className="px-6 py-4 text-[12px] font-bold text-[#64748B] uppercase tracking-wider whitespace-nowrap"
+                className="px-6 py-4 text-[14px] font-medium text-[#282828] tracking-wider whitespace-nowrap font-condensed"
               >
                 {column.header}
               </th>

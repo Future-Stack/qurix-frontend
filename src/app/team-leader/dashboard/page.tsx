@@ -18,6 +18,8 @@ import { DashboardTable } from '@/components/employee-team-leader/shared/Dashboa
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
+import ProjectDetailsModal from '@/components/employee-team-leader/shared/ProjectDetailsModal';
+import TeamMemberDetailsModal from '@/components/employee-team-leader/shared/TeamMemberDetailsModal';
 
 // Sample team members data matching node 324-18549
 const teamMembers = [
@@ -28,6 +30,7 @@ const teamMembers = [
     empId: 'KNC-8821',
     designation: 'Node JS Developer',
     email: 'tanya.hill@example.com',
+    phone: '+1 (555) 012-3456',
     status: 'ACTIVE',
     joiningDate: '2020-08-08',
     lastLogin: '24 mins ago',
@@ -40,6 +43,7 @@ const teamMembers = [
     empId: 'KNC-8821',
     designation: 'ROR Developer',
     email: 'debbie.baker@example.com',
+    phone: '+1 (555) 234-5678',
     status: 'ACTIVE',
     joiningDate: '2022-10-10',
     lastLogin: '24 mins ago',
@@ -52,6 +56,7 @@ const teamMembers = [
     empId: 'KNC-8821',
     designation: 'React JS Developer',
     email: 'tim.jennings@example.com',
+    phone: '+1 (555) 345-6789',
     status: 'ACTIVE',
     joiningDate: '2025-12-12',
     lastLogin: '24 mins ago',
@@ -64,6 +69,7 @@ const teamMembers = [
     empId: 'KNC-8821',
     designation: 'Project Manager',
     email: 'bill.sanders@example.com',
+    phone: '+1 (555) 456-7890',
     status: 'SUSPENDED',
     joiningDate: '2022-10-10',
     lastLogin: '24 mins ago',
@@ -76,6 +82,7 @@ const teamMembers = [
     empId: 'KNC-8821',
     designation: 'React JS Developer',
     email: 'alma.lawson@example.com',
+    phone: '+1 (555) 567-8901',
     status: 'INACTIVE',
     joiningDate: '2021-01-01',
     lastLogin: '24 mins ago',
@@ -160,6 +167,8 @@ export default function TeamLeaderDashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [selectedMember, setSelectedMember] = useState<any | null>(null);
 
   // Filtered project list
   const filteredProjects = allProjectsData.filter((item) => {
@@ -374,10 +383,21 @@ export default function TeamLeaderDashboardPage() {
             {
               key: 'orderId',
               header: 'Actions',
-              render: (val) => (
-                <Link href={`/team-leader/projects/${val}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer">
+              render: (_, item) => (
+                <button
+                  onClick={() => setSelectedProject({
+                    id: item.orderId,
+                    client: item.clientName,
+                    profile: item.profileName,
+                    team: item.team,
+                    status: item.status,
+                    value: item.value,
+                    initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53
+                  })}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer"
+                >
                   <Eye className="w-4 h-4" /> View
-                </Link>
+                </button>
               )
             }
           ]}
@@ -416,15 +436,32 @@ export default function TeamLeaderDashboardPage() {
             {
               key: 'id',
               header: 'Actions',
-              render: (val) => (
-                <Link href={`/team-leader/employees/${val}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer">
+              render: (_, item) => (
+                <button
+                  onClick={() => setSelectedMember(item)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer"
+                >
                   <Eye className="w-4 h-4" /> View
-                </Link>
+                </button>
               )
             }
           ]}
           caption="Team Members list"
           emptyMessage="No team members found."
+        />
+      )}
+
+      {selectedProject && (
+        <ProjectDetailsModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
+
+      {selectedMember && (
+        <TeamMemberDetailsModal
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
         />
       )}
     </div>

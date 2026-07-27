@@ -19,6 +19,17 @@ import { Column } from '@/components/employee-team-leader/shared/DashboardTable/
 
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
+import ProjectDetailsModal from '@/components/employee-team-leader/shared/ProjectDetailsModal';
+
+interface ProjectData {
+  id: string;
+  client: string;
+  profile: string;
+  team: string;
+  status: string;
+  value: string;
+  initialSeconds: number;
+}
 
 export default function EmployeeDashboardPage() {
   const router = useRouter();
@@ -26,65 +37,73 @@ export default function EmployeeDashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
-  const formattedDate = 'Saturday, July 25, 2026';
+  const formattedDate = 'Saturday, July 25, 2026 · ';
 
   const orderData = [
     {
-      id: 'QUR-9841',
-      client: 'Theresa Webb',
-      service: 'UI/UX Design Concept & Prototype',
+      id: 'FO2D9BC6E142',
+      client: 'lawalx',
+      profile: 'bits_wise',
+      team: 'FS',
       status: 'Urgent',
-      value: '$1,200',
-      initialSeconds: 86400 * 2 + 3600 * 5,
+      value: '$3,615',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
     },
     {
-      id: 'QUR-9842',
+      id: 'FO2D9BC6E142',
+      client: 'Wade Warren',
+      profile: 'bits_wise',
+      team: 'CM',
+      status: 'WIP',
+      value: '$4,640',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+    },
+    {
+      id: 'FO2D9BC6E142',
       client: 'Dianne Russell',
-      service: 'Figma Dev Mode Handoff Package',
-      status: 'WIP',
-      value: '$850',
-      initialSeconds: 86400 * 4 + 3600 * 12,
-    },
-    {
-      id: 'QUR-9843',
-      client: 'Courtney Henry',
-      service: 'Next.js App Router Refactoring',
+      profile: 'bits_wise',
+      team: 'FS',
       status: 'Late',
-      value: '$2,400',
-      initialSeconds: 1800,
+      value: '$6,461',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
     },
     {
-      id: 'QUR-9844',
-      client: 'Albert Flores',
-      service: 'Tailwind CSS Design System Implementation',
+      id: 'FO2D9BC6E142',
+      client: 'Ronald Richards',
+      profile: 'bits_wise',
+      team: 'FS',
       status: 'Delivered',
-      value: '$600',
+      value: '$10,176',
       initialSeconds: 0,
     },
     {
-      id: 'QUR-9845',
-      client: 'Marvin McKinney',
-      service: 'Full-Stack Dashboard Development',
-      status: 'WIP',
-      value: '$3,100',
-      initialSeconds: 86400 * 6,
-    },
-    {
-      id: 'QUR-9846',
-      client: 'Kathryn Murphy',
-      service: 'Mobile Responsive Audit & Fixes',
+      id: 'FO2D9BC6E142',
+      client: 'Leslie Alexander',
+      profile: 'bits_wise',
+      team: 'FS',
       status: 'Urgent',
-      value: '$950',
-      initialSeconds: 86400 * 1 + 3600 * 8,
+      value: '$5,969',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
     },
     {
-      id: 'QUR-9847',
-      client: 'Eleanor Pena',
-      service: 'Custom Component Library Creation',
-      status: 'Delivered',
-      value: '$1,500',
-      initialSeconds: 0,
+      id: 'FO2D9BC6E142',
+      client: 'Guy Hawkins',
+      profile: 'bits_wise',
+      team: 'FS',
+      status: 'Urgent',
+      value: '$7,188',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+    },
+    {
+      id: 'FO2D9BC6E142',
+      client: 'Jenny Wilson',
+      profile: 'bits_wise',
+      team: 'FS',
+      status: 'Urgent',
+      value: '$5,860',
+      initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
     },
   ];
 
@@ -93,7 +112,8 @@ export default function EmployeeDashboardPage() {
     const matchesSearch =
       item.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.service.toLowerCase().includes(searchQuery.toLowerCase());
+      item.profile.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.team.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesStatus = selectedStatusFilter === 'All' || item.status === selectedStatusFilter;
 
@@ -108,17 +128,22 @@ export default function EmployeeDashboardPage() {
     {
       key: 'id',
       header: 'Order ID',
-      render: (val) => <span className="font-bold text-[#1E293B] font-['Roboto']">{String(val)}</span>
+      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
       key: 'client',
-      header: 'Client Name',
-      render: (val) => <span className="font-semibold text-[#1e293b] font-['Roboto']">{String(val)}</span>
+      header: 'Client name',
+      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
-      key: 'service',
-      header: 'Service Requirements',
-      render: (val) => <span className="text-[#475569] font-['Roboto'] text-sm line-clamp-1">{String(val)}</span>
+      key: 'profile',
+      header: 'Profile name',
+      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
+    },
+    {
+      key: 'team',
+      header: 'Team',
+      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
       key: 'status',
@@ -128,7 +153,7 @@ export default function EmployeeDashboardPage() {
     {
       key: 'value',
       header: 'Value',
-      render: (val) => <span className="font-medium text-[#101828] font-['Inter']">{String(val)}</span>
+      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
       key: 'initialSeconds',
@@ -140,8 +165,8 @@ export default function EmployeeDashboardPage() {
       header: 'Actions',
       render: (_, item) => (
         <button
-          onClick={() => alert(`Viewing details for Order ${item.id}`)}
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b]  px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
+          onClick={() => setSelectedProject(item)}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b] px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
         >
           <Eye className="size-4 stroke-[2.5] transition-transform duration-200 group-hover/btn:scale-110" />
           <span>View</span>
@@ -159,10 +184,10 @@ export default function EmployeeDashboardPage() {
         {/* Title / Welcome Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
           <div>
-            <h1 className="font-['Roboto'] font-medium text-[22px] md:text-[24px] text-[#414141] tracking-tight">
+            <h1 className="font-sans font-medium text-[20px] text-[#414141] tracking-[-0.5px]">
               Good morning, UX-SHAKIL👋
             </h1>
-            <p className="font-['Roboto'] text-[14px] text-[#64748b] mt-0.5">
+            <p className="font-condensed text-[14px] text-[#64748b] mt-0.5">
               {formattedDate}
             </p>
           </div>
@@ -210,21 +235,21 @@ export default function EmployeeDashboardPage() {
         {/* Filter and Tab Options Control Bar */}
         <div className="bg-white border border-[#f3f3f3] rounded-[16px] p-3 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
           {/* Project Tabs */}
-          <div className="flex gap-2 p-1 bg-gray-50 rounded-xl max-w-fit">
+          <div className="flex gap-[7px] items-center">
             <button
               onClick={() => setActiveTab('my-project')}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'my-project'
+              className={`px-[8px] py-[4px] h-[36px] rounded-[8px] text-[14px] font-medium font-condensed transition-all duration-200 cursor-pointer flex items-center justify-center ${activeTab === 'my-project'
                   ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               My Project
             </button>
             <button
               onClick={() => setActiveTab('refunds')}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'refunds'
+              className={`px-[8px] py-[4px] h-[36px] rounded-[8px] text-[14px] font-medium font-condensed transition-all duration-200 cursor-pointer flex items-center justify-center ${activeTab === 'refunds'
                   ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Refunds and Cancellations
@@ -288,6 +313,13 @@ export default function EmployeeDashboardPage() {
           emptyMessage={`No ${activeTab === 'refunds' ? 'refunds or cancellations' : 'active projects'} found.`}
         />
       </div>
+
+      {selectedProject && (
+        <ProjectDetailsModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
 
     </div>
   );

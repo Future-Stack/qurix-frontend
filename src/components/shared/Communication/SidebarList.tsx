@@ -44,7 +44,7 @@ export default function SidebarList({ title, type, searchQuery, setSearchQuery, 
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
-            placeholder="Search" 
+            placeholder={type === 'calls' ? 'Search user name or number' : 'Search'} 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
