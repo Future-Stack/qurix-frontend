@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarList from './SidebarList';
 import MessageArea from './MessageArea';
 import DetailsSidebar from './DetailsSidebar';
@@ -29,8 +29,8 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
   const [isListOpen, setIsListOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Local state for messages to allow sending new ones
-  const [messages, setMessages] = useState(initialMessages);
+  // Local state for isolated message feeds per activeId
+  const [conversations, setConversations] = useState<Record<number, any[]>>({});
 
   // Modal States
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -39,6 +39,45 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
   const [isUrgentModalOpen, setIsUrgentModalOpen] = useState(false);
 
   const activeData = items.find(i => i.id === activeId);
+
+  // Handle URL query parameter ?select=Name to select that item
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const selectName = params.get('select');
+      if (selectName) {
+        const found = items.find(i => i.name.toLowerCase() === selectName.toLowerCase());
+        if (found) {
+          setActiveId(found.id);
+          // Clear query parameter from the browser URL address bar to avoid locking switches
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, '', newUrl);
+          return;
+        }
+      }
+    }
+    // Default fallback to first item
+    if (activeId === null && items.length > 0) {
+      setActiveId(items[0].id);
+    }
+  }, [items]);
+
+  const currentMessages = activeId !== null
+    ? (conversations[activeId] || (
+        (type === 'messages' && activeId === 2)
+          ? initialMessages
+          : [
+              {
+                id: 1,
+                sender: activeData?.name ?? 'User',
+                time: '10:00 am',
+                text: `Hello! I'm ${activeData?.name ?? 'User'}. How can I assist you today?`,
+                avatar: activeData?.avatar ?? 'https://i.pravatar.cc/150',
+                date: 'Today'
+              }
+            ]
+      ))
+    : [];
 
   const filteredItems = items.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -51,14 +90,14 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
     if (window.innerWidth < 1024) {
       setIsListOpen(false);
     }
-    // Automatically open right panel for calls/contacts if needed, but for messages usually closed initially
-    if (type !== 'messages') {
+    // Automatically open right panel for calls if needed, but keep the current state for messages/contacts
+    if (type === 'calls') {
       setIsRightPanelOpen(true);
     }
   };
 
   const handleSendMessage = (text: string) => {
-    if (!activeData) return;
+    if (activeId === null) return;
     
     const newMessage = {
       id: Date.now(),
@@ -69,7 +108,10 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
       isMe: true
     };
     
-    setMessages(prev => [...prev, newMessage]);
+    setConversations(prev => ({
+      ...prev,
+      [activeId]: [...(prev[activeId] || currentMessages), newMessage]
+    }));
   };
 
   const handleAction = (action: string) => {
@@ -132,16 +174,16 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
   const listTitle = title ?? (type === 'messages' ? 'Messages' : type === 'calls' ? 'Recent Call' : type === 'favorites' ? 'Favorites' : 'Contacts');
 
   return (
-    <div className="flex h-full max-w-full overflow-hidden my-1 mx-2">
+    <div className="flex h-full max-w-full overflow-hidden w-full">
       {/* Left Sidebar */}
       <div className={`w-full lg:w-[380px] border-r border-[#E2E8F0] flex-col h-full bg-white shrink-0 ${isListOpen ? 'flex' : 'hidden lg:flex'}`}>
-        <div className="p-5 flex items-center gap-3 border-b border-[#E2E8F0]">
+        <div className="h-[96px] px-5 flex items-center gap-3 border-b border-[#E2E8F0] shrink-0">
           <div className="w-12 h-12 rounded-full border-2 border-green-500 p-0.5 shrink-0">
             <img src={profileInfo.avatar} alt="Me" className="w-full h-full rounded-full object-cover" />
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-[#0F172A] text-lg truncate">{profileInfo.name}</h2>
-            <p className="text-xs text-[#64748B] truncate">{profileInfo.role}</p>
+            <h2 className="font-bold text-[#0F172A] text-lg break-words">{profileInfo.name}</h2>
+            <p className="text-xs text-[#64748B]">{profileInfo.role}</p>
           </div>
         </div>
 
@@ -183,7 +225,7 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
             <div className={`flex-1 ${isRightPanelOpen ? 'hidden xl:flex' : 'flex'}`}>
               <MessageArea 
                 activeData={activeData}
-                messages={messages}
+                messages={currentMessages}
                 onSendMessage={handleSendMessage}
                 onOpenDetails={() => setIsRightPanelOpen(true)}
                 options={getHeaderOptions()}
@@ -197,6 +239,7 @@ export default function CommunicationLayout({ type, panel = 'employee', title, p
                 activeData={activeData}
                 onClose={() => setIsRightPanelOpen(false)}
                 onAction={handleAction}
+                panel={panel}
               />
             )}
           </>

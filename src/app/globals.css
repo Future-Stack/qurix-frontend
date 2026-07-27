@@ -62,6 +62,8 @@
   --color-background: var(--color-surface);
   --color-foreground: var(--color-text-primary);
   --font-sans: var(--font-body);
+  --font-condensed: var(--font-roboto-condensed);
+  --font-inter: var(--font-inter);
   --color-text2: #828282;
 }
 

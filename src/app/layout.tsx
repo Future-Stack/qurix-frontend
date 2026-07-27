@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Roboto } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Roboto, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +23,12 @@ const roboto = Roboto({
   subsets: ["latin"],
 });
 
+const robotoCondensed = Roboto_Condensed({
+  variable: "--font-roboto-condensed",
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Softvence.Agency",
   description: "Connect. Collaborate. Deliver.",
@@ -37,7 +43,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto.variable} ${robotoCondensed.variable} h-full antialiased`}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col">{children}</body>
     </html>

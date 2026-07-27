@@ -43,7 +43,7 @@ export default function CallDetailsArea({ activeData, options }: CallDetailsArea
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="px-6 py-4 flex justify-between items-center bg-white border-b border-[#E2E8F0]">
+      <div className="h-[96px] px-6 flex justify-between items-center bg-white border-b border-[#E2E8F0] shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full border-2 border-green-500 p-0.5 relative shrink-0">
             <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />

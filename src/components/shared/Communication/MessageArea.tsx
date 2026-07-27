@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Smile, Mic, Video, Phone, ChevronDown, MoreVertical, AlertTriangle, Send } from 'lucide-react';
+import { Paperclip, Smile, Mic, Video, Phone, ChevronDown, MoreVertical, AlertTriangle, Send, Eye } from 'lucide-react';
 import { Dropdown, DropdownItem } from '@/components/ui/Dropdown/Dropdown';
 import { PanelType } from './CommunicationLayout';
 import { useCountdown } from './useCountdown';
@@ -17,7 +17,21 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
   const [inputText, setInputText] = useState('');
   const [isUrgent, setIsUrgent] = useState<boolean>(activeData?.badges || false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const countdown = useCountdown(activeData?.deadline);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeStr = file.size > 1024 * 1024 
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+        : `${(file.size / 1024).toFixed(1)} KB`;
+      onSendMessage(`📎 Attachment: ${file.name} (${sizeStr})`);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,13 +71,13 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="px-6 py-4 flex justify-between items-center border-b border-[#E2E8F0]">
-        <div className="flex items-center gap-4 cursor-pointer" onClick={onOpenDetails}>
+      <div className="h-[96px] px-6 flex justify-between items-center border-b border-[#E2E8F0] bg-white shrink-0">
+        <div className="flex items-center gap-4 cursor-pointer min-w-0 flex-1" onClick={onOpenDetails}>
           <div className="w-12 h-12 rounded-full border-2 border-green-500 p-0.5 relative shrink-0">
             <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
           </div>
-          <div>
-            <h2 className="font-bold text-[#0F172A] text-lg mb-1">{activeData.name}</h2>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-bold text-[#0F172A] text-lg mb-1 break-words">{activeData.name}</h2>
             {activeData.type === 'group' ? (
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2 hidden sm:flex">
@@ -80,8 +94,8 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
                     <Dropdown
                       align="left"
                       trigger={
-                        <div className="flex items-center gap-1 bg-[#475569] text-white text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer">
-                          WIP <ChevronDown className="w-3 h-3" />
+                        <div className="flex items-center gap-1 bg-[#ECEEF2] text-[#282828] text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer">
+                          WIP <ChevronDown className="w-3 h-3 text-[#282828]" />
                         </div>
                       }
                       items={[
@@ -91,10 +105,10 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
                     />
                     {/* Panel-specific URGENT badge */}
                     {panel === 'employee' && (
-                      // Employee: static badge with orange active dot (view-only)
-                      <div className="flex items-center gap-1 bg-[#FEE2E2] text-[#EF4444] border border-[#FCA5A5] text-[10px] font-bold px-2 py-0.5 rounded">
-                        <AlertTriangle className="w-3 h-3" /> URGENT
-                        <span className="w-2 h-2 rounded-full bg-orange-500 ml-0.5"></span>
+                      // Employee: static badge with solid red background, white text, and eye icon
+                      <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
+                        <AlertTriangle className="w-3 h-3 text-white" /> URGENT
+                        <Eye className="w-3 h-3 text-white ml-0.5" />
                       </div>
                     )}
                     {(panel === 'team-leader' || panel === 'service-line') && (
@@ -116,8 +130,9 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
                     )}
                     {panel === 'super-admin' && (
                       // Super-admin: plain static badge (action is in the ⋮ dropdown menu)
-                      <div className="flex items-center gap-1 bg-[#FEE2E2] text-[#EF4444] border border-[#FCA5A5] text-[10px] font-bold px-2 py-0.5 rounded">
-                        <AlertTriangle className="w-3 h-3" /> URGENT
+                      <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
+                        <AlertTriangle className="w-3 h-3 text-white" /> URGENT
+                        <Eye className="w-3 h-3 text-white ml-0.5" />
                       </div>
                     )}
                   </>
@@ -224,11 +239,19 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
         <div className="flex gap-3.5 items-center flex-1">
           <button 
             type="button"
+            onClick={() => fileInputRef.current?.click()}
             className="p-1 text-[#a19791] hover:text-slate-800 rounded-lg cursor-pointer shrink-0 transition-colors"
             title="Attach file"
           >
             <Paperclip className="w-5 h-5" />
           </button>
+
+          <input 
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+          />
 
           <input 
             type="text"
