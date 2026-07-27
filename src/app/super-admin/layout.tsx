@@ -55,6 +55,16 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
     </div>
   );
 
+  const isCommunicationRoute = pathname?.includes('/messages') ||
+                               pathname?.includes('/calls') ||
+                               pathname?.includes('/contacts') ||
+                               pathname?.includes('/favorites') ||
+                               pathname?.includes('/call-logs');
+
+  const mainPadding = isCommunicationRoute
+    ? 'p-0'
+    : 'p-4 pb-28 md:p-6 lg:p-[30px]';
+
   return (
     <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
       <Sidebar
@@ -64,7 +74,7 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
         onOpenSettings={() => setIsSettingsOpen(true)}
         isSettingsActive={isSettingsOpen}
       />
-      <main className="flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm p-4 pb-28 md:p-6 lg:p-[30px] overflow-hidden flex flex-col">
+      <main className={`flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm overflow-hidden flex flex-col ${mainPadding}`}>
         {children}
       </main>
       <SettingsModal

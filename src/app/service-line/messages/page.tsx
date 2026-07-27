@@ -14,7 +14,7 @@ export default function ServiceLineMessagesPage() {
   return (
     <CommunicationLayout 
       type="messages"
-      panel="service-line"
+      panel="employee"
       profileInfo={profileInfo}
       items={mockChats}
       initialMessages={initialMockMessages}

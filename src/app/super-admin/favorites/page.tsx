@@ -8,8 +8,8 @@ export default function SuperAdminFavoritesPage() {
   const [activeTab, setActiveTab] = useState<'messages' | 'contacts'>('messages');
 
   const profileInfo = {
-    name: 'Omega Force',
-    role: 'Admin Panel',
+    name: 'UX-SHAKIL',
+    role: 'My Account',
     avatar: 'https://i.pravatar.cc/150?u=30'
   };
 
@@ -55,7 +55,7 @@ export default function SuperAdminFavoritesPage() {
         <CommunicationLayout 
           type={activeTab === 'messages' ? 'favorites' : 'contacts'}
           title={activeTab === 'messages' ? 'Favorite Groups' : 'Favorite Contacts'}
-          panel="super-admin"
+          panel="employee"
           profileInfo={profileInfo}
           items={activeTab === 'messages' ? favoriteGroups : favoriteContacts}
           initialMessages={initialMockMessages}

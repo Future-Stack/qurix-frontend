@@ -6,8 +6,8 @@ import { mockCalls } from '@/components/shared/Communication/mockData';
 
 export default function SuperAdminCallsPage() {
   const profileInfo = {
-    name: 'Omega Force',
-    role: 'Admin Panel',
+    name: 'UX-SHAKIL',
+    role: 'My Account',
     avatar: 'https://i.pravatar.cc/150?u=30'
   };
 
