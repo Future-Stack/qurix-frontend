@@ -55,7 +55,7 @@ export default function ServiceLineFavoritesPage() {
         <CommunicationLayout 
           type={activeTab === 'messages' ? 'favorites' : 'contacts'}
           title={activeTab === 'messages' ? 'Favorite Groups' : 'Favorite Contacts'}
-          panel="service-line"
+          panel="employee"
           profileInfo={profileInfo}
           items={activeTab === 'messages' ? favoriteGroups : favoriteContacts}
           initialMessages={initialMockMessages}

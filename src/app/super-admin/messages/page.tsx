@@ -6,15 +6,15 @@ import { mockChats, initialMockMessages } from '@/components/shared/Communicatio
 
 export default function SuperAdminMessagesPage() {
   const profileInfo = {
-    name: 'Omega Force',
-    role: 'Admin Panel',
+    name: 'UX-SHAKIL',
+    role: 'My Account',
     avatar: 'https://i.pravatar.cc/150?u=30'
   };
 
   return (
     <CommunicationLayout 
       type="messages"
-      panel="super-admin"
+      panel="employee"
       profileInfo={profileInfo}
       items={mockChats}
       initialMessages={initialMockMessages}

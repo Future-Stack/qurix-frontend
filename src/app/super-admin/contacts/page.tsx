@@ -6,8 +6,8 @@ import { mockContacts, initialMockMessages } from '@/components/shared/Communica
 
 export default function SuperAdminContactsPage() {
   const profileInfo = {
-    name: 'Omega Force',
-    role: 'Admin Panel',
+    name: 'UX-SHAKIL',
+    role: 'My Account',
     avatar: 'https://i.pravatar.cc/150?u=30'
   };
 
