@@ -61,7 +61,7 @@ export default function Sidebar({
   return (
     <>
       {/* Desktop Navigation Sidebar */}
-      <aside className="hidden md:flex flex-col items-center justify-between w-[82px] h-full max-h-full bg-white rounded-[25px] py-6 px-[17px] border border-[#eaecf0] shadow-sm shrink-0 select-none overflow-hidden">
+      <aside className="hidden md:flex flex-col items-center justify-between w-[82px] h-full max-h-full bg-white rounded-[25px] py-6 px-[17px] border border-[#eaecf0] shadow-sm shrink-0 select-none overflow-visible z-20">
         
         {/* Top Section */}
         <div className="flex flex-col gap-8 items-center w-full">
@@ -98,7 +98,8 @@ export default function Sidebar({
                   </div>
                   
                   {/* Tooltip on hover */}
-                  <span className="absolute left-16 bg-slate-800 text-white text-xs font-medium px-2.5 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-md">
+                  <span className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap z-[100] shadow-xl scale-95 group-hover:scale-100 origin-left flex items-center">
+                    <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-slate-900" />
                     {item.label}
                   </span>
                 </Link>
@@ -126,7 +127,8 @@ export default function Sidebar({
               <Settings className="size-6 stroke-[2] animate-[spin_10s_linear_infinite] hover:animate-[spin_2s_linear_infinite]" />
             </div>
             
-            <span className="absolute left-16 bg-slate-800 text-white text-xs font-medium px-2.5 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-md">
+            <span className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap z-[100] shadow-xl scale-95 group-hover:scale-100 origin-left flex items-center">
+              <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-slate-900" />
               Settings
             </span>
           </button>
