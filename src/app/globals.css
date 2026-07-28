@@ -92,3 +92,12 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+
+button{
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

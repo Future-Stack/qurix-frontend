@@ -22,14 +22,14 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { icon: LayoutGrid, path: '/service-line/dashboard', id: 'dashboard' },
-    { icon: MessageCircleMore, path: '/service-line/messages', id: 'messages' },
-    { icon: Users, path: '/service-line/all-employee', id: 'team' },
-    { icon: Phone, path: '/service-line/calls', id: 'phone' },
-    { icon: Target, path: '/service-line/team-management', id: 'target' },
-    { icon: UserPlus, path: '/service-line/employees', id: 'userplus' },
-    { icon: Bookmark, path: '#', id: 'bookmark' },
-    { icon: BookOpen, path: '#', id: 'book' },
+    { icon: LayoutGrid, path: '/service-line/dashboard', id: 'dashboard', label: 'Dashboard' },
+    { icon: MessageCircleMore, path: '/service-line/messages', id: 'messages', label: 'Messages' },
+    { icon: Users, path: '/service-line/all-employee', id: 'team', label: 'Team' },
+    { icon: Phone, path: '/service-line/calls', id: 'phone', label: 'Calls' },
+    { icon: Target, path: '/service-line/team-management', id: 'target', label: 'Management' },
+    { icon: UserPlus, path: '/service-line/employees', id: 'userplus', label: 'Employees' },
+    { icon: Bookmark, path: '#', id: 'bookmark', label: 'Favorites' },
+    { icon: BookOpen, path: '#', id: 'book', label: 'Learn Books' },
   ];
 
   return (
@@ -51,7 +51,7 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar Container */}
-      <div className={`fixed md:static inset-y-0 left-0 z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 w-[88px] h-[calc(100vh-32px)] bg-white rounded-3xl flex flex-col items-center py-6 shadow-sm shrink-0 mt-4 ml-4 md:mr-0 mr-4`}>
+      <div className={`fixed md:static inset-y-0 left-0 z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 w-[88px] h-[calc(100vh-32px)] bg-white rounded-3xl flex flex-col items-center py-6 shadow-sm shrink-0 mt-4 ml-4 md:mr-0 mr-4 overflow-visible`}>
         {/* Logo */}
       <div className="mb-8">
         <div className="w-10 h-10  rounded-xl flex items-center justify-center text-white font-bold text-xl">
@@ -65,21 +65,27 @@ export default function Sidebar() {
       </div>
 
       {/* Nav Items */}
-      <div className="flex-1 w-full flex flex-col items-center gap-2 overflow-y-auto no-scrollbar px-3">
+      <div className="flex-1 w-full flex flex-col items-center gap-2 overflow-visible px-3">
         {navItems.map((item) => {
           const isActive = pathname?.startsWith(item.path) && item.path !== '#';
           return (
             <Link 
               key={item.id} 
               href={item.path}
+              title={item.label}
               onClick={() => setIsOpen(false)}
-              className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
+              className={`relative group w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
                 isActive 
                   ? 'bg-[#E6F4EA] text-[#06530B]' 
                   : 'text-[#64748B] hover:bg-gray-50'
               }`}
             >
               <item.icon className="w-5 h-5" strokeWidth={isActive ? 2 : 1.5} />
+
+              <span className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap z-[100] shadow-xl scale-95 group-hover:scale-100 origin-left flex items-center">
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-slate-900" />
+                {item.label}
+              </span>
             </Link>
           );
         })}
@@ -90,14 +96,20 @@ export default function Sidebar() {
         <div className="w-8 h-[2px] bg-gradient-to-r from-transparent via-[#00AB0C] to-transparent opacity-80 mb-4 shadow-[0_0_6px_rgba(0,171,12,0.8)]"></div>
         <Link 
           href="/service-line/settings"
+          title="Settings"
           onClick={() => setIsOpen(false)}
-          className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
+          className={`relative group w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
             pathname?.startsWith('/service-line/settings')
               ? 'bg-[#E6F4EA] text-[#06530B]' 
               : 'text-[#64748B] hover:bg-gray-50'
           }`}
         >
           <Settings className="w-5 h-5" strokeWidth={pathname?.startsWith('/service-line/settings') ? 2 : 1.5} />
+
+          <span className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 bg-slate-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none whitespace-nowrap z-[100] shadow-xl scale-95 group-hover:scale-100 origin-left flex items-center">
+            <span className="absolute -left-1 top-1/2 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-slate-900" />
+            Settings
+          </span>
         </Link>
       </div>
     </div>
