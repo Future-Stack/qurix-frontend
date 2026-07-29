@@ -77,6 +77,10 @@ export function proxy(request: NextRequest) {
     if (role !== 'EMPLOYEE' && role !== 'SUPER_ADMIN') return NextResponse.redirect(new URL('/unauthorized', request.url));
   }
 
+  if (pathname.startsWith('/sales')) {
+    if (role !== 'SUPER_ADMIN') return NextResponse.redirect(new URL('/unauthorized', request.url));
+  }
+
   return NextResponse.next();
 }
 
