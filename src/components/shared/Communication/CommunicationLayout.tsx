@@ -6,7 +6,7 @@ import CallDetailsArea from './CallDetailsArea';
 import { ConfirmationModal } from '@/components/ui/Modal/ConfirmationModal';
 import { UrgentActionModal } from '@/components/ui/Modal/UrgentActionModal';
 
-export type PanelType = 'employee' | 'team-leader' | 'service-line' | 'super-admin';
+export type PanelType = 'employee' | 'team-leader' | 'service-line' | 'super-admin' | 'sales';
 
 interface ProfileInfo {
   name: string;

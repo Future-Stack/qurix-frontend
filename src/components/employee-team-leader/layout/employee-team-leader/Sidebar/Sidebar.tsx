@@ -10,7 +10,8 @@ import {
   Bookmark, 
   BookOpen, 
   Settings, 
-  MessageCircleMore
+  MessageCircleMore,
+  AlertTriangle
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -41,6 +42,7 @@ export default function Sidebar({
     { icon: MessageCircleMore, href: `${basePath}/messages`, label: 'Messages' },
     { icon: Users, href: `${basePath}/contacts`, label: 'Contacts' },
     { icon: Phone, href: `${basePath}/call-logs`, label: 'Recent Calls' },
+    { icon: AlertTriangle, href: `${basePath}/issue-projects`, label: 'Issue Projects' },
     { icon: Bookmark, href: `${basePath}/favorites`, label: 'Favorites' },
     { icon: BookOpen, href: `${basePath}/learn-books`, label: 'Learn Books' },
   ];

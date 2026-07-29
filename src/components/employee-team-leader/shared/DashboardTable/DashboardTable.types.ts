@@ -32,6 +32,7 @@ export type Column<T> = {
   [K in keyof T]: {
     key: K;
     header: string;
+    align?: 'left' | 'center' | 'right';
     render?: (value: T[K], row: T) => React.ReactNode;
   };
 }[keyof T];
