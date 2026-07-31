@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { 
+import {
   Search, Filter, Eye, Plus, FolderOpen, AlertTriangle, CheckCircle2, Calendar, MessageSquare
 } from 'lucide-react';
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
@@ -53,11 +53,11 @@ function CountdownTimer({
 
   return (
     <div className="flex w-[120px] items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white">
-  <span>{days}d</span>
-  <span>{String(hours).padStart(2, "0")}h</span>
-  <span>{String(minutes).padStart(2, "0")}m</span>
-  <span>{String(seconds).padStart(2, "0")}s</span>
-</div>
+      <span>{days}d</span>
+      <span>{String(hours).padStart(2, "0")}h</span>
+      <span>{String(minutes).padStart(2, "0")}m</span>
+      <span>{String(seconds).padStart(2, "0")}s</span>
+    </div>
   );
 }
 import { useParams } from 'next/navigation';
@@ -71,146 +71,146 @@ export default function TeamDetailsDashboard() {
   const teamId = routeParams?.teamId ? String(routeParams.teamId) : '1';
   const [activeTab, setActiveTab] = useState('All Project');
   const projectColumns: Column<Project>[] = [
-  {
-    key: "id",
-    header: "Order ID",
-    render: (value) => (
-      <span className="text-[13px] font-semibold text-[#0F172A]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "id",
+      header: "Order ID",
+      render: (value) => (
+        <span className="text-[13px] font-semibold text-[#0F172A]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "client",
-    header: "Client Name",
-  },
+    {
+      key: "client",
+      header: "Client Name",
+    },
 
-  {
-    key: "profile",
-    header: "Profile Name",
-  },
+    {
+      key: "profile",
+      header: "Profile Name",
+    },
 
-  {
-    key: "team",
-    header: "Team",
-  },
+    {
+      key: "team",
+      header: "Team",
+    },
 
-  {
-    key: "status",
-    header: "Status",
-    render: (value) => (
-      <StatusBadge status={value as ProjectStatus} />
-    ),
-  },
+    {
+      key: "status",
+      header: "Status",
+      render: (value) => (
+        <StatusBadge status={value as ProjectStatus} />
+      ),
+    },
 
-  {
-    key: "value",
-    header: "Value",
-    render: (value) => (
-      <span className="font-semibold text-[#0F172A]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "value",
+      header: "Value",
+      render: (value) => (
+        <span className="font-semibold text-[#0F172A]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: 'timeline',
-    header: 'Timeline',
-   render: (_, project) => (
-  <CountdownTimer
-    initialSeconds={
-      project.timeline === "24:00:00"
-        ? 86400
-        : 5 * 3600
-    }
-  />
-  )
-  },
-
-  {
-    key: "id",
-    header: "Actions",
-    render: (_, project) => (
-      <Link
-        href={`/super-admin/service-line-management/${serviceLineId}/teams/${teamId}/projects/${project.id}`}
-        className="flex items-center gap-1 text-xs font-bold text-[#06530B] hover:underline"
-      >
-        <Eye className="h-4 w-4" />
-        View
-      </Link>
-    ),
-  },
-];
-const teamMemberColumns: Column<TeamMember>[] = [
-  {
-    key: "name",
-    header: "Profile",
-    render: (_, member) => (
-      <div className="flex items-center gap-3">
-        <img
-          src={member.avatar}
-          alt={member.name}
-          className="h-10 w-10 rounded-full object-cover"
+    {
+      key: 'timeline',
+      header: 'Timeline',
+      render: (_, project) => (
+        <CountdownTimer
+          initialSeconds={
+            project.timeline === "24:00:00"
+              ? 86400
+              : 5 * 3600
+          }
         />
+      )
+    },
 
-        <div>
-          <p className="text-[13px] font-bold text-[#0F172A]">
-            {member.name}
-          </p>
+    {
+      key: "id",
+      header: "Actions",
+      render: (_, project) => (
+        <Link
+          href={`/super-admin/service-line-management/${serviceLineId}/teams/${teamId}/projects/${project.id}`}
+          className="flex items-center gap-1 text-xs font-bold text-[#06530B] hover:underline"
+        >
+          <Eye className="h-4 w-4" />
+          View
+        </Link>
+      ),
+    },
+  ];
+  const teamMemberColumns: Column<TeamMember>[] = [
+    {
+      key: "name",
+      header: "Profile",
+      render: (_, member) => (
+        <div className="flex items-center gap-3">
+          <img
+            src={member.avatar}
+            alt={member.name}
+            className="h-10 w-10 rounded-full object-cover"
+          />
 
-          <p className="text-[11px] text-[#64748B]">
-            {member.username}
-          </p>
+          <div>
+            <p className="text-[13px] font-bold text-[#0F172A]">
+              {member.name}
+            </p>
+
+            <p className="text-[11px] text-[#64748B]">
+              {member.username}
+            </p>
+          </div>
         </div>
-      </div>
-    ),
-  },
+      ),
+    },
 
-  {
-    key: "empId",
-    header: "Emp ID",
-  },
+    {
+      key: "empId",
+      header: "Emp ID",
+    },
 
-  {
-    key: "designation",
-    header: "Designation",
-  },
+    {
+      key: "designation",
+      header: "Designation",
+    },
 
-  {
-    key: "email",
-    header: "E-mail",
-  },
+    {
+      key: "email",
+      header: "E-mail",
+    },
 
-  {
-    key: "status",
-    header: "Status",
-    render: (value) => (
-      <StatusBadge status={value as ProjectStatus} />
-    ),
-  },
+    {
+      key: "status",
+      header: "Status",
+      render: (value) => (
+        <StatusBadge status={value as ProjectStatus} />
+      ),
+    },
 
-  {
-    key: "joined",
-    header: "Joining Date",
-  },
+    {
+      key: "joined",
+      header: "Joining Date",
+    },
 
-  {
-    key: "lastLogin",
-    header: "Last Login",
-  },
+    {
+      key: "lastLogin",
+      header: "Last Login",
+    },
 
-  {
-    key: "name",
-    header: "Action",
-    render: (_, member) => (
-      <button className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]">
-        <Eye className="h-4 w-4" />
-        View
-      </button>
-    ),
-  },
-];
+    {
+      key: "name",
+      header: "Action",
+      render: (_, member) => (
+        <button className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]">
+          <Eye className="h-4 w-4" />
+          View
+        </button>
+      ),
+    },
+  ];
 
   return (
     <div className="h-full max-w-full overflow-hidden m-4 mr-4">
@@ -220,10 +220,12 @@ const teamMemberColumns: Column<TeamMember>[] = [
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                  <span className="z-10">C</span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+              <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+                <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                    <span className="z-10">C</span>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                  </div>
                 </div>
               </div>
               <div>
@@ -232,7 +234,7 @@ const teamMemberColumns: Column<TeamMember>[] = [
               </div>
             </div>
             <div className="flex gap-3">
-              <Link 
+              <Link
                 href={`/super-admin/service-line-management/${serviceLineId}/teams/${teamId}/projects/create`}
                 className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
               >
@@ -255,44 +257,41 @@ const teamMemberColumns: Column<TeamMember>[] = [
             {/* Controls */}
             <div className="pb-4 flex flex-col lg:flex-row items-end lg:items-center gap-4 justify-between border border-[#E2E8F0] rounded-[16px] p-4 mb-8">
               <div className="flex gap-2">
-                <button 
+                <button
                   onClick={() => setActiveTab('All Project')}
-                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${
-                    activeTab === 'All Project' 
-                      ? 'bg-[#06530B] text-white' 
+                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${activeTab === 'All Project'
+                      ? 'bg-[#06530B] text-white'
                       : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   All Project
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('Team Member')}
-                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${
-                    activeTab === 'Team Member' 
-                      ? 'bg-[#06530B] text-white' 
+                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${activeTab === 'Team Member'
+                      ? 'bg-[#06530B] text-white'
                       : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   Team Member
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('Refunds and Cancellations')}
-                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${
-                    activeTab === 'Refunds and Cancellations' 
-                      ? 'bg-[#06530B] text-white' 
+                  className={`px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors ${activeTab === 'Refunds and Cancellations'
+                      ? 'bg-[#06530B] text-white'
                       : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   Refunds and Cancellations
                 </button>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search by Name or Order ID..." 
+                  <input
+                    type="text"
+                    placeholder="Search by Name or Order ID..."
                     className="pl-9 pr-4 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
                   />
                 </div>
@@ -312,7 +311,7 @@ const teamMemberColumns: Column<TeamMember>[] = [
                   emptyMessage="No projects found."
                   getRowKey={(row) => row.id}
                 />
-                
+
               )}
 
               {activeTab === 'Team Member' && (

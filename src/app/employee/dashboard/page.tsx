@@ -239,8 +239,8 @@ export default function EmployeeDashboardPage() {
             <button
               onClick={() => setActiveTab('my-project')}
               className={`px-[8px] py-[4px] h-[36px] rounded-[8px] text-[14px] font-medium font-condensed transition-all duration-200 cursor-pointer flex items-center justify-center ${activeTab === 'my-project'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               My Project
@@ -248,8 +248,8 @@ export default function EmployeeDashboardPage() {
             <button
               onClick={() => setActiveTab('refunds')}
               className={`px-[8px] py-[4px] h-[36px] rounded-[8px] text-[14px] font-medium font-condensed transition-all duration-200 cursor-pointer flex items-center justify-center ${activeTab === 'refunds'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Refunds and Cancellations
@@ -291,8 +291,8 @@ export default function EmployeeDashboardPage() {
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
-                    ? 'bg-[#06530b] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {status}

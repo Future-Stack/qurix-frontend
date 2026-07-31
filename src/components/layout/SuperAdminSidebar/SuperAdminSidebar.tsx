@@ -13,7 +13,8 @@ import { Menu, X,
   Bookmark, 
   BookOpen, 
   Settings, 
-  MessageCircleMore
+  MessageCircleMore,
+  Headphones
 } from 'lucide-react';
 
 import logo from '@/assets/logo-qurix.png'
@@ -30,8 +31,8 @@ export default function SuperAdminSidebar() {
     { icon: Phone, path: '/super-admin/calls', id: 'phone', label: 'Calls' },
     { icon: Target, path: '/super-admin/service-line-management', id: 'target', label: 'Management' },
     { icon: UserPlus, path: '/super-admin/employees', id: 'userplus', label: 'Employees' },
-    { icon: Bookmark, path: '#', id: 'bookmark', label: 'Favorites' },
-    { icon: BookOpen, path: '#', id: 'book', label: 'Learn Books' },
+    { icon: Bookmark, path: '/super-admin/favorites', id: 'bookmark', label: 'Favorites' },
+    { icon: BookOpen, path: '/super-admin/learn-books', id: 'book', label: 'Learn Books' },
   ];
 
   return (
@@ -78,7 +79,7 @@ export default function SuperAdminSidebar() {
               onClick={() => setIsOpen(false)}
               className={`relative group w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
                 isActive 
-                  ? 'bg-[#E6F4EA] text-[#06530B]' 
+                  ? 'bg-[#06530B1A] text-[#06530B]' 
                   : 'text-[#64748B] hover:bg-gray-50'
               }`}
             >
@@ -102,7 +103,7 @@ export default function SuperAdminSidebar() {
           onClick={() => setIsOpen(false)}
           className={`relative group w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
             pathname?.startsWith('/super-admin/settings')
-              ? 'bg-[#E6F4EA] text-[#06530B]' 
+              ? 'bg-[#06530B1A] text-[#06530B]' 
               : 'text-[#64748B] hover:bg-gray-50'
           }`}
         >

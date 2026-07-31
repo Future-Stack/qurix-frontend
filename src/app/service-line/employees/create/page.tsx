@@ -61,10 +61,12 @@ export default function CreateEmployeePage() {
           {/* Top Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E2E8F0] p-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-4 border-[#00AB0C] p-0.5 flex items-center justify-center shrink-0">
-                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-lg md:text-xl overflow-hidden relative">
-                  <span className="z-10">C</span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+                <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-lg md:text-xl overflow-hidden relative">
+                    <span className="z-10">C</span>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                  </div>
                 </div>
               </div>
               <div>
@@ -100,12 +102,14 @@ export default function CreateEmployeePage() {
             {/* Avatar Upload Container */}
             <div className="flex flex-col items-center justify-center pb-4">
               <div className="relative group">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#00AB0C] bg-gray-100 flex items-center justify-center shadow-md">
-                  {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-10 h-10 text-gray-400" />
-                  )}
+                <div className="w-24 h-24 rounded-full p-[3px] figma-avatar-ring shadow-md">
+                  <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
+                    {avatarPreview ? (
+                      <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-10 h-10 text-gray-400" />
+                    )}
+                  </div>
                 </div>
                 <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#06530B] hover:bg-[#05290b] text-white flex items-center justify-center cursor-pointer shadow-md transition-transform group-hover:scale-110">
                   <Camera className="w-4 h-4" />

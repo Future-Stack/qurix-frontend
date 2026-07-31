@@ -45,8 +45,10 @@ export default function CallDetailsArea({ activeData, options }: CallDetailsArea
       {/* Header */}
       <div className="h-[96px] px-6 flex justify-between items-center bg-white border-b border-[#E2E8F0] shrink-0">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-2 border-green-500 p-0.5 relative shrink-0">
-            <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+          <div className="w-12 h-12 rounded-full p-[2.5px] figma-avatar-ring relative shrink-0">
+            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
+              <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+            </div>
           </div>
           <div>
             <h2 className="font-bold text-[#0F172A] text-lg mb-0.5">{activeData.name}</h2>

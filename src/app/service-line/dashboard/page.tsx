@@ -167,14 +167,14 @@ export default function ServiceLineDashboard() {
       key: 'empId',
       header: 'Action',
       render: (_, item) => (
-              <button
-                onClick={() => alert(`Viewing details for Order ${item.name}`)}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
-              >
-                <Eye className="size-4 stroke-[2.5] transition-transform duration-200 group-hover/btn:scale-110" />
-                <span>View</span>
-              </button>
-           )
+        <button
+          onClick={() => alert(`Viewing details for Order ${item.name}`)}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#06530b] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer group/btn"
+        >
+          <Eye className="size-4 stroke-[2.5] transition-transform duration-200 group-hover/btn:scale-110" />
+          <span>View</span>
+        </button>
+      )
     }
   ];
 
@@ -185,10 +185,12 @@ export default function ServiceLineDashboard() {
         {/* Title / Welcome Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full border-4 border-emerald-500 p-0.5 flex items-center justify-center shrink-0">
-              <div className="w-full h-full rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                <span className="z-10">C</span>
-                <div className="absolute inset-0 bg-gradient-to-tr from-emerald-400 to-transparent opacity-60"></div>
+            <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+              <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                  <span className="z-10">C</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-emerald-400 to-transparent opacity-60"></div>
+                </div>
               </div>
             </div>
             <div>
@@ -201,7 +203,7 @@ export default function ServiceLineDashboard() {
             </div>
           </div>
           <div className="flex gap-3">
-            <Link 
+            <Link
               href="/service-line/projects/create"
               className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer"
             >
@@ -256,8 +258,8 @@ export default function ServiceLineDashboard() {
             <button
               onClick={() => setActiveTab('projects')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'projects'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               All Project
@@ -265,8 +267,8 @@ export default function ServiceLineDashboard() {
             <button
               onClick={() => setActiveTab('team')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'team'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Team Member
@@ -274,8 +276,8 @@ export default function ServiceLineDashboard() {
             <button
               onClick={() => setActiveTab('refunds')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'refunds'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Refunds and Cancellations
@@ -313,8 +315,8 @@ export default function ServiceLineDashboard() {
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
-                    ? 'bg-[#06530b] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {status}

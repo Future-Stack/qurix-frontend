@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { 
+import {
   Users, User, UserX, Briefcase, Clock, Activity, Download, Plus, Search, ChevronDown, Eye
 } from 'lucide-react';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
@@ -20,7 +20,7 @@ const mockEmployees = [
 export default function SuperAdminAllEmployeesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredEmployees = mockEmployees.filter(emp => 
+  const filteredEmployees = mockEmployees.filter(emp =>
     emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     emp.empId.toLowerCase().includes(searchQuery.toLowerCase()) ||
     emp.designation.toLowerCase().includes(searchQuery.toLowerCase())
@@ -69,48 +69,48 @@ export default function SuperAdminAllEmployeesPage() {
             <p className="text-xs md:text-sm text-[#64748B]">Super Admin Panel</p>
           </div>
           <div className="flex items-center gap-4 w-full sm:w-auto">
-            <Link 
+            <Link
               href="/super-admin/all-employee/create"
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
-              >
-                <Plus className="w-4 h-4" /> Create Employee
-              </Link>
-            </div>
+            >
+              <Plus className="w-4 h-4" /> Create Employee
+            </Link>
           </div>
-
-          {/* Main Content Area */}
-          <div className="overflow-hidden flex flex-col bg-white border border-[#E2E8F0] rounded-2xl shadow-sm">
-            {/* Controls */}
-            <div className="p-5 flex items-center justify-between border-b border-[#E2E8F0]">
-              <div className="flex gap-3">
-                <button className="px-5 py-2 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm">
-                  All Employees
-                </button>
-              </div>
-              
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input 
-                  type="text" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by Name or ID..." 
-                  className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
-                />
-              </div>
-            </div>
-
-            {/* DashboardTable Component */}
-            <DashboardTable 
-              data={filteredEmployees}
-              columns={columns}
-              getRowKey={(item) => item.id}
-              caption="All Employees list"
-              emptyMessage="No employees found."
-            />
-          </div>
-
         </div>
+
+        {/* Main Content Area */}
+        <div className="overflow-hidden flex flex-col bg-white border border-[#E2E8F0] rounded-2xl shadow-sm">
+          {/* Controls */}
+          <div className="p-5 flex items-center justify-between border-b border-[#E2E8F0]">
+            <div className="flex gap-3">
+              <button className="px-5 py-2 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm">
+                All Employees
+              </button>
+            </div>
+
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by Name or ID..."
+                className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
+              />
+            </div>
+          </div>
+
+          {/* DashboardTable Component */}
+          <DashboardTable
+            data={filteredEmployees}
+            columns={columns}
+            getRowKey={(item) => item.id}
+            caption="All Employees list"
+            emptyMessage="No employees found."
+          />
+        </div>
+
+      </div>
     </div>
   );
 }

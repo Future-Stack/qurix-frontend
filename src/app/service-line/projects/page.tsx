@@ -39,7 +39,7 @@ export default function ServiceLineProjectsPage() {
       key: 'id',
       header: 'Actions',
       render: (val) => (
-        <Link 
+        <Link
           href={`/service-line/projects/${val}`}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer"
         >
@@ -53,7 +53,7 @@ export default function ServiceLineProjectsPage() {
     <div className="h-full max-w-full overflow-hidden p-4 md:p-6">
       <div className="h-full overflow-y-auto no-scrollbar">
         <div className="pb-12 w-full max-w-7xl mx-auto">
-          
+
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#E2E8F0] pb-4 mb-6">
             <div>
@@ -61,7 +61,7 @@ export default function ServiceLineProjectsPage() {
               <p className="text-xs md:text-sm text-[#64748B]">Service Line Panel</p>
             </div>
             <div>
-              <Link 
+              <Link
                 href="/service-line/projects/create"
                 className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm cursor-pointer"
               >
@@ -73,15 +73,15 @@ export default function ServiceLineProjectsPage() {
           {/* Controls & Filters */}
           <div className="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col">
             <div className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-[#E2E8F0]">
-              
+
               {/* Search */}
               <div className="relative w-full sm:w-80">
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search projects..." 
+                  placeholder="Search projects..."
                   className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-[#E2E8F0] rounded-xl text-xs focus:bg-white focus:border-[#00AB0C] focus:outline-none"
                 />
               </div>
@@ -92,11 +92,10 @@ export default function ServiceLineProjectsPage() {
                   <button
                     key={status}
                     onClick={() => setStatusFilter(status)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      statusFilter === status 
-                        ? 'bg-[#06530B] text-white shadow-xs' 
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${statusFilter === status
+                        ? 'bg-[#06530B] text-white shadow-xs'
                         : 'bg-gray-50 text-[#64748B] hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     {status}
                   </button>
@@ -106,7 +105,7 @@ export default function ServiceLineProjectsPage() {
             </div>
 
             {/* DashboardTable Component */}
-            <DashboardTable 
+            <DashboardTable
               data={filteredProjects}
               columns={columns}
               getRowKey={(item) => item.id}

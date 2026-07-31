@@ -82,7 +82,7 @@ export default function IssueDetailsModal({
               <select
                 value={issue.status}
                 onChange={(e) => onStatusChange(issue.id, e.target.value as any)}
-                className="bg-[#ebebeb] border border-[#d6d6d6] text-[12px] font-semibold text-[#06530b] px-2 py-1 rounded-[6px] focus:outline-none cursor-pointer"
+                className="bg-white border border-[#E2E8F0] text-xs font-bold text-[#06530B] px-3 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer shadow-2xs hover:bg-gray-50 transition-colors"
               >
                 <option value="Pending">Set Pending</option>
                 <option value="WIP">Set WIP</option>

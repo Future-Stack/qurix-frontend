@@ -12,7 +12,9 @@ import {
   UserPlus, 
   Bookmark, 
   BookOpen,
-  MessageCircleMore
+  MessageCircleMore,
+  AlertTriangle,
+  Headphones
 } from 'lucide-react';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import logo from '@/assets/logo-qurix.png';
@@ -43,9 +45,11 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
     { icon: MessageCircleMore, href: '/service-line/messages', label: 'Messages' },
     { icon: Users, href: '/service-line/contacts', label: 'Team' },
     { icon: Phone, href: '/service-line/calls', label: 'Calls' },
-    { icon: Target, href: '/service-line/team-management', label: 'Management' },
+    { icon: Target, href: '/service-line/team-management', label: 'Management', activePaths: ['/service-line/projects'] },
     { icon: UserPlus, href: '/service-line/employees', label: 'Employees' },
+    { icon: AlertTriangle, href: '/service-line/issue-projects', label: 'Issue Projects' },
     { icon: Bookmark, href: '/service-line/favorites', label: 'Favorites' },
+    { icon: Headphones, href: '/service-line/station', label: 'Station' },
     { icon: BookOpen, href: '/service-line/learn-books', label: 'Learn Books' },
   ];
 

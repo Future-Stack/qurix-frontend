@@ -81,10 +81,12 @@ export default function SuperAdminTeamProjectDetailsPage() {
           {/* Top Header with Badges */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#E2E8F0] pb-4 ">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-4 border-[#00AB0C] p-0.5 flex items-center justify-center shrink-0">
-                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-lg md:text-xl overflow-hidden relative">
-                  <span className="z-10">S</span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+                <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-lg md:text-xl overflow-hidden relative">
+                    <span className="z-10">S</span>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                  </div>
                 </div>
               </div>
               <div>

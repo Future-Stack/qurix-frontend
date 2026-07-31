@@ -19,7 +19,32 @@ interface DropdownProps {
 
 export function Dropdown({ trigger, items, align = 'left' }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleOpen = () => {
+    if (!isOpen && dropdownRef.current) {
+      const el = dropdownRef.current;
+      const rect = el.getBoundingClientRect();
+      let spaceBelow = window.innerHeight - rect.bottom;
+
+      // Check space relative to parent scroll/overflow containers
+      let parent = el.parentElement;
+      while (parent && parent !== document.body) {
+        const style = window.getComputedStyle(parent);
+        const overflowY = style.overflowY;
+        if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'hidden') {
+          const parentRect = parent.getBoundingClientRect();
+          const spaceInParent = parentRect.bottom - rect.bottom;
+          spaceBelow = Math.min(spaceBelow, spaceInParent);
+        }
+        parent = parent.parentElement;
+      }
+
+      setOpenUpward(spaceBelow < 220);
+    }
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,14 +58,16 @@ export function Dropdown({ trigger, items, align = 'left' }: DropdownProps) {
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
+      <div onClick={toggleOpen} className="cursor-pointer">
         {trigger}
       </div>
 
       {isOpen && (
         <div 
-          className={`absolute z-50 mt-2 w-48 rounded-xl bg-white shadow-lg focus:outline-none ${
+          className={`absolute z-[100] w-48 rounded-xl bg-white shadow-xl border border-[#EAECF0] focus:outline-none animate-in fade-in zoom-in-95 duration-150 ${
             align === 'right' ? 'right-0' : 'left-0'
+          } ${
+            openUpward ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'
           }`}
         >
           <div className="py-1">

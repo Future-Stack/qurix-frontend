@@ -206,9 +206,11 @@ export default function TeamLeaderDashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
           <div className="flex items-center gap-4">
             {/* Presence Avatar Ring */}
-            <div className="relative shrink-0 size-14 rounded-full border-2 border-[#06530b] p-0.5 bg-white shadow-sm">
-              <div className="size-full rounded-full bg-[#06530b] text-white font-bold flex items-center justify-center text-lg overflow-hidden">
-                <span className="text-2xl">⚡</span>
+            <div className="relative shrink-0 size-14 rounded-full p-[2.5px] figma-avatar-ring shadow-sm">
+              <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                <div className="size-full rounded-full bg-[#06530b] text-white font-bold flex items-center justify-center text-lg overflow-hidden">
+                  <span className="text-2xl">⚡</span>
+                </div>
               </div>
               <span className="absolute bottom-0 right-0 size-3.5 bg-emerald-500 border-2 border-white rounded-full" />
             </div>
@@ -282,8 +284,8 @@ export default function TeamLeaderDashboardPage() {
             <button
               onClick={() => setActiveTab('all-projects')}
               className={`px-4 py-2 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'all-projects'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               All Project
@@ -293,8 +295,8 @@ export default function TeamLeaderDashboardPage() {
             <button
               onClick={() => setActiveTab('team-members')}
               className={`px-4 py-2 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'team-members'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Team Member
@@ -304,8 +306,8 @@ export default function TeamLeaderDashboardPage() {
             <button
               onClick={() => setActiveTab('refunds')}
               className={`px-4 py-2 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'refunds'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Refunds and Cancellations
@@ -350,8 +352,8 @@ export default function TeamLeaderDashboardPage() {
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
-                    ? 'bg-[#06530b] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {status}

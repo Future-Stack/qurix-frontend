@@ -34,8 +34,10 @@ export default function DetailsSidebar({ activeData, onClose, onAction, panel }:
           {/* Row 1: avatar left, close button right */}
           <div className="flex justify-between items-center w-full">
             <div className="relative w-[90px] h-[90px] shrink-0">
-              <div className="absolute inset-0 rounded-full border-2 border-green-500 p-0.5">
-                <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+              <div className="absolute inset-0 rounded-full p-[3px] figma-avatar-ring">
+                <div className="w-full h-full rounded-full p-1 bg-white flex items-center justify-center overflow-hidden">
+                  <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+                </div>
               </div>
             </div>
             <button

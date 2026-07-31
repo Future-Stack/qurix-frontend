@@ -117,15 +117,12 @@ export function LearnBooksContent({
       
       {/* Profile Header */}
       <div className="px-6 lg:px-8 bg-white border-b border-[#E2E8F0] shrink-0 flex items-center gap-4 h-[96px]">
-        <div className="relative shrink-0 flex items-center justify-center size-[68px]">
-          <div className="absolute inset-0 border-[3px] border-[#06530B] rounded-full scale-[0.94]" />
-          <div className="absolute inset-0 border-2 border-white rounded-full scale-[0.91]" />
-          
-          <div className="size-[50px] rounded-full overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center shadow-sm">
+        <div className="w-[64px] h-[64px] rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+          <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
             <img 
               src={avatarUrl} 
               alt={userName} 
-              className="size-full object-cover pointer-events-none" 
+              className="w-full h-full rounded-full object-cover pointer-events-none" 
             />
           </div>
         </div>
