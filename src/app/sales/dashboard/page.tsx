@@ -23,6 +23,7 @@ import ProjectDetailsModal from '@/components/employee-team-leader/shared/Projec
 import TeamMemberDetailsModal from '@/components/employee-team-leader/shared/TeamMemberDetailsModal';
 import AddIssueModal from '@/components/sales/AddIssueModal';
 import IssueDetailsModal from '@/components/sales/IssueDetailsModal';
+import IssueStatusDropdown from '@/components/shared/IssueProjects/IssueStatusDropdown';
 import { useRouter } from 'next/navigation';
 
 // Sample team members data matching team leader panel
@@ -326,9 +327,11 @@ export default function SalesDashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
           <div className="flex items-center gap-4">
             {/* Presence Avatar Ring */}
-            <div className="relative shrink-0 size-14 rounded-full border-2 border-[#06530b] p-0.5 bg-white shadow-sm">
-              <div className="size-full rounded-full bg-[#06530b] text-white font-bold flex items-center justify-center text-lg overflow-hidden">
-                <span className="text-2xl">⚡</span>
+            <div className="relative shrink-0 size-14 rounded-full p-[2.5px] figma-avatar-ring shadow-sm">
+              <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                <div className="size-full rounded-full bg-[#06530b] text-white font-bold flex items-center justify-center text-lg overflow-hidden">
+                  <span className="text-2xl">⚡</span>
+                </div>
               </div>
               <span className="absolute bottom-0 right-0 size-3.5 bg-emerald-500 border-2 border-white rounded-full" />
             </div>
@@ -402,8 +405,8 @@ export default function SalesDashboardPage() {
             <button
               onClick={() => setActiveTab('all-projects')}
               className={`px-4 py-2 rounded-[8px] text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'all-projects'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               All Project
@@ -413,8 +416,8 @@ export default function SalesDashboardPage() {
             <button
               onClick={() => setActiveTab('mention-group')}
               className={`px-4 py-2 rounded-[8px] text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'mention-group'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Mention Group
@@ -424,8 +427,8 @@ export default function SalesDashboardPage() {
             <button
               onClick={() => setActiveTab('issue-project')}
               className={`px-4 py-2 rounded-[8px] text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'issue-project'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Issue Project
@@ -435,8 +438,8 @@ export default function SalesDashboardPage() {
             <button
               onClick={() => setActiveTab('issue-resolved')}
               className={`px-4 py-2 rounded-[8px] text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer whitespace-nowrap ${activeTab === 'issue-resolved'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'bg-[#f3f3f5] text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Issue Resolved
@@ -479,8 +482,8 @@ export default function SalesDashboardPage() {
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
-                    ? 'bg-[#06530b] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {status}
@@ -510,7 +513,7 @@ export default function SalesDashboardPage() {
                   <div className="flex items-center justify-end w-full">
                     <button
                       onClick={() => setAddIssueTargetProject({ id: item.id, orderId: item.orderId })}
-                      className="bg-[#06530b] hover:bg-emerald-900 text-white font-['Roboto'] font-semibold text-[14px] h-[29px] w-[89px] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center shadow-2xs"
+                      className="bg-[#06530b] hover:bg-[#05290b] text-white font-['Roboto'] font-semibold text-xs h-[29px] w-[89px] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center shadow-2xs"
                     >
                       <span>Add Issue</span>
                     </button>
@@ -518,19 +521,9 @@ export default function SalesDashboardPage() {
                 );
               }
 
-              const issueStatus = item.issue.status;
-              const isPending = issueStatus === 'Pending';
-              const isWIP = issueStatus === 'WIP';
-
-              const badgeBgClass = isPending 
-                ? 'bg-[#e07700]' 
-                : isWIP 
-                ? 'bg-[#001f75]' 
-                : 'bg-[#06530b]';
-
               return (
-                <div className="inline-flex items-center justify-end gap-[10px] w-full">
-                  {/* Green Eye Icon */}
+                <div className="inline-flex items-center justify-end gap-2.5 w-full">
+                  {/* View Issue Eye Icon */}
                   <button
                     onClick={() => setViewingIssue({
                       id: item.id,
@@ -547,26 +540,11 @@ export default function SalesDashboardPage() {
                     <Eye className="size-[20px] stroke-[2]" />
                   </button>
 
-                  {/* Status Badge Dropdown Pill (fixed w-[89px] so Eye icons line up vertically) */}
-                  <div className="relative inline-flex items-center rounded-[6px] overflow-hidden shadow-2xs cursor-pointer group shrink-0">
-                    <div className={`${badgeBgClass} text-white font-['Roboto'] font-semibold text-[14px] h-[29px] w-[89px] px-[6px] flex items-center justify-between`}>
-                      <span className="leading-[16.5px] text-center flex-1">{issueStatus}</span>
-                      <div className="h-full border-l border-white/80 pl-1.5 flex items-center justify-center shrink-0">
-                        <ChevronDown className="size-[15px] stroke-[2.5] text-white" />
-                      </div>
-                    </div>
-
-                    <select
-                      value={issueStatus}
-                      onChange={(e) => handleIssueStatusChange(item.id, e.target.value as any)}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full text-black font-sans"
-                      title="Change issue status"
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="WIP">WIP</option>
-                      <option value="Resolved">Resolved</option>
-                    </select>
-                  </div>
+                  {/* Custom Styled Open Dropdown */}
+                  <IssueStatusDropdown
+                    status={item.issue.status}
+                    onStatusChange={(newStatus) => handleIssueStatusChange(item.id, newStatus)}
+                  />
                 </div>
               );
             }

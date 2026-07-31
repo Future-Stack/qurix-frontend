@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { 
-  FolderOpen, AlertTriangle, CheckCircle2, Calendar, MessageSquare, 
+import {
+  FolderOpen, AlertTriangle, CheckCircle2, Calendar, MessageSquare,
   Search, Filter, Eye, Plus, ChevronDown, Monitor, Clock, Users, Briefcase
 } from 'lucide-react';
 import { CreateServiceLineModal } from '@/components/ui/Modal/CreateServiceLineModal';
@@ -44,7 +44,7 @@ export default function ServiceLineManagementDashboard() {
   const filteredServiceLines = mockServiceLines.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
-  
+
   const serviceLineColumns: Column<ServiceLine>[] = [
     {
       key: "name",
@@ -56,45 +56,45 @@ export default function ServiceLineManagementDashboard() {
           >
             {sl.icon}
           </div>
-  
+
           <span className="text-[13px] font-bold text-[#0F172A]">
             {sl.name}
           </span>
         </div>
       ),
     },
-  
+
     {
       key: "leadName",
       header: "Service Line Lead",
       render: (_, sl) => (
         <div className="flex items-center gap-2">
-         <Image
-          src={sl.leadAvatar}
-          alt={sl.leadName}
-          width={24}
-          height={24}
-          unoptimized
-          className="rounded-full object-cover"
-        />
-  
+          <Image
+            src={sl.leadAvatar}
+            alt={sl.leadName}
+            width={24}
+            height={24}
+            unoptimized
+            className="rounded-full object-cover"
+          />
+
           <span className="text-[13px] font-medium text-[#475569]">
             {sl.leadName}
           </span>
         </div>
       ),
     },
-  
+
     {
       key: "teams",
       header: "Total Teams",
     },
-  
+
     {
       key: "employees",
       header: "Total Employee",
     },
-  
+
     {
       key: "workload",
       header: "Workload",
@@ -104,17 +104,17 @@ export default function ServiceLineManagementDashboard() {
         </span>
       ),
     },
-  
+
     {
       key: "projects",
       header: "Active Projects",
     },
-  
+
     {
       key: "updated",
       header: "Last Updated",
     },
-  
+
     {
       key: "id",
       header: "Actions",
@@ -124,7 +124,7 @@ export default function ServiceLineManagementDashboard() {
           className="flex items-center gap-1 text-[#06530B] font-bold text-xs hover:underline"
         >
           <Eye className="w-4 h-4" aria-label="View service line"
-/>
+          />
           View
         </Link>
       ),
@@ -132,85 +132,87 @@ export default function ServiceLineManagementDashboard() {
   ];
   return (
     <div className="w-full h-full min-h-0 overflow-y-auto no-scrollbar">
-        {/* <div className="p-8 pb-12 max-w-full mx-auto"> */}
+      {/* <div className="p-8 pb-12 max-w-full mx-auto"> */}
 
-          {/* Header */}
-          <div className="flex flex-col md:flex-row gap-3 justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                  <span className="z-10">A</span>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
-                </div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-[#0F172A] mb-1">Welcome back, Admin</h1>
-                <p className="text-sm text-[#64748B]">Monday, July 14, 2026</p>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row gap-3 justify-between items-center mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                <span className="z-10">A</span>
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button 
-                onClick={() => setIsCreateModalOpen(true)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
-              >
-                <Plus className="w-4 h-4" /> Create Service Line
-              </button>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-[#0F172A] mb-1">Welcome back, Admin</h1>
+            <p className="text-sm text-[#64748B]">Monday, July 14, 2026</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
+          >
+            <Plus className="w-4 h-4" /> Create Service Line
+          </button>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <StatsCard icon={Monitor} title="Total Service lines" value="240" iconColor="#4F46E5" iconBgColor="#EEF2FF" />
+        <StatsCard icon={Users} title="Total Teams" value="70" iconBgColor="#FEF2F2" iconColor="#EF4444" />
+        <StatsCard icon={CheckCircle2} title="Running Projects" value="12" iconBgColor="#F0FDF4" iconColor="#06530B" />
+        <StatsCard icon={Briefcase} title="Omega Force Total Workload" value="8" iconBgColor="#FFFBEB" iconColor="#F59E0B" />
+        <StatsCard
+          title="Omega Force Total Cancellations"
+          value={43}
+          icon={MessageSquare}
+          iconBgColor="#f5f3ff"
+          iconColor="#a855f7"
+        />
+      </div>
+
+      {/* Main Content Area */}
+      <div className=" overflow-hidden">
+        {/* Controls */}
+        <div className="p-4 flex flex-col md:flex-row gap-3 items-center justify-between rounded-[16px] border border-[#E2E8F0] mb-5">
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
+              All Service line <ChevronDown className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-3 items-center">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by Service Name..."
+                className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
+              />
             </div>
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm font-semibold text-[#475569] hover:bg-gray-100 transition-colors">
+              <Filter className="w-4 h-4" /> Service line Filter
+            </button>
           </div>
+        </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-            <StatsCard icon={Monitor} title="Total Service lines" value="240" iconColor="#4F46E5" iconBgColor="#EEF2FF"/>
-            <StatsCard icon={Users} title="Total Teams" value="70" iconBgColor="#FEF2F2" iconColor="#EF4444"/>
-            <StatsCard icon={CheckCircle2} title="Running Projects" value="12" iconBgColor="#F0FDF4" iconColor="#06530B"/>
-            <StatsCard icon={Briefcase} title="Omega Force Total Workload" value="8" iconBgColor="#FFFBEB" iconColor="#F59E0B"/>
-            <StatsCard
-                        title="Omega Force Total Cancellations"
-                        value={43}
-                        icon={MessageSquare}
-                        iconBgColor="#f5f3ff"
-                        iconColor="#a855f7"
-                      />
-          </div>
+        {/* Table */}
+        <div className="flex-1 min-h-0 overflow-y-auto rounded-[16px] shadow-2xs bg-white no-scrollbar mb-8">
+          <DashboardTable
+            data={filteredServiceLines}
+            columns={serviceLineColumns}
+            caption="All Service Lines"
+            emptyMessage="No service line found."
+            getRowKey={(row) => row.id}
 
-          {/* Main Content Area */}
-          <div className=" overflow-hidden">
-            {/* Controls */}
-            <div className="p-4 flex flex-col md:flex-row gap-3 items-center justify-between rounded-[16px] border border-[#E2E8F0] mb-5">
-              <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm transition-colors">
-                  All Service line <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
-              
-              <div className="flex flex-col md:flex-row gap-3 items-center">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search by Service Name..."
-                    className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
-                  />
-                </div>
-                <button className="flex items-center gap-2 px-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm font-semibold text-[#475569] hover:bg-gray-100 transition-colors">
-                  <Filter className="w-4 h-4" /> Service line Filter
-                </button>
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className="flex-1 min-h-0 overflow-y-auto rounded-[16px] shadow-2xs bg-white no-scrollbar mb-8">
-                     <DashboardTable
-                      data={filteredServiceLines}
-                      columns={serviceLineColumns}
-                      caption="All Service Lines"
-                      emptyMessage="No service line found."
-                      getRowKey={(row) => row.id}
-                     
-                    />
-                  </div>
-          </div>
+          />
+        </div>
+      </div>
       <CreateServiceLineModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );

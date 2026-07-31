@@ -29,20 +29,20 @@
 
 // DashboardTable.types.ts
 export type Column<T> = {
-  [K in keyof T]: {
-    key: K;
-    header: string;
-    align?: 'left' | 'center' | 'right';
-    render?: (value: T[K], row: T) => React.ReactNode;
-  };
+    [K in keyof T]: {
+        key: K;
+        header: string;
+        align?: 'left' | 'center' | 'right';
+        render?: (value: T[K], row: T) => React.ReactNode;
+    };
 }[keyof T];
 
 export interface DashboardTableProps<T> {
-  data: T[];
-  columns: Column<T>[];
-  caption: string;
-  isLoading?: boolean;
-  emptyMessage?: string;
-  getRowKey: (row: T, index: number) => string | number; // required, no fallback
-  
+    data: T[];
+    columns: Column<T>[];
+    caption: string;
+    isLoading?: boolean;
+    emptyMessage?: string;
+    getRowKey: (row: T, index: number) => string | number; // required, no fallback
+
 }

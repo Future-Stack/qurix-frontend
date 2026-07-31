@@ -12,7 +12,9 @@ import {
   UserPlus, 
   Bookmark, 
   BookOpen,
-  MessageCircleMore
+  MessageCircleMore,
+  AlertTriangle,
+  Headphones
 } from 'lucide-react';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import logo from '@/assets/logo-qurix.png';
@@ -45,7 +47,9 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
     { icon: Phone, href: '/super-admin/calls', label: 'Calls' },
     { icon: Target, href: '/super-admin/service-line-management', label: 'Management' },
     { icon: UserPlus, href: '/super-admin/employees', label: 'Employees' },
+    { icon: AlertTriangle, href: '/super-admin/issue-projects', label: 'Issue Projects' },
     { icon: Bookmark, href: '/super-admin/favorites', label: 'Favorites' },
+    { icon: Headphones, href: '/super-admin/station', label: 'Station' },
     { icon: BookOpen, href: '/super-admin/learn-books', label: 'Learn Books' },
   ];
 

@@ -17,6 +17,7 @@
   --color-primary-hover: #05290b;
   --color-primary-light: #E6F4EA;
   --color-primary-muted: #00AB0C1A;
+  --color-green-500:     #06530B;
 
   /* Brand — Accent Green (buttons / links) */
   --color-accent:        #00AB0C;
@@ -65,6 +66,7 @@
   --font-condensed: var(--font-roboto-condensed);
   --font-inter: var(--font-inter);
   --color-text2: #828282;
+  --color-green-500: #06530B;
 }
 
 /* ============================================================
@@ -93,6 +95,19 @@ body {
   scrollbar-width: none;
 }
 
+/* ============================================================
+   UTILITY: Segmented Avatar Ring (Figma Design)
+   ============================================================ */
+.figma-avatar-ring {
+  background: conic-gradient(
+    from 0deg,
+    #ffffff 0deg 3deg,
+    #E2E8F0 3deg 87deg,
+    #ffffff 87deg 93deg,
+    var(--color-green-500) 93deg 357deg,
+    #ffffff 357deg 360deg
+  );
+}
 
 button{
   cursor: pointer;

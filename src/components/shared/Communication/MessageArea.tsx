@@ -73,8 +73,10 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
       {/* Header */}
       <div className="h-[96px] px-6 flex justify-between items-center border-b border-[#E2E8F0] bg-white shrink-0">
         <div className="flex items-center gap-4 cursor-pointer min-w-0 flex-1" onClick={onOpenDetails}>
-          <div className="w-12 h-12 rounded-full border-2 border-green-500 p-0.5 relative shrink-0">
-            <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+          <div className="w-12 h-12 rounded-full p-[2.5px] figma-avatar-ring relative shrink-0">
+            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
+              <img src={activeData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+            </div>
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="font-bold text-[#0F172A] text-lg mb-1 break-words">{activeData.name}</h2>

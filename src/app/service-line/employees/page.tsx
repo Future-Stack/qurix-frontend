@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { 
+import {
   Users, User, UserX, Briefcase, Clock, Activity, TrendingUp, Download, Plus, Search, ChevronDown, Eye
 } from 'lucide-react';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
@@ -42,7 +42,7 @@ function StatCard({ icon: Icon, title, value, trend, hasDot }: any) {
 export default function EmployeesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredEmployees = mockEmployees.filter(emp => 
+  const filteredEmployees = mockEmployees.filter(emp =>
     emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     emp.empId.toLowerCase().includes(searchQuery.toLowerCase()) ||
     emp.designation.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,10 +87,12 @@ export default function EmployeesPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-              <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                <span className="z-10">C</span>
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+            <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+              <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                  <span className="z-10">C</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                </div>
               </div>
             </div>
             <div>
@@ -102,7 +104,7 @@ export default function EmployeesPage() {
             <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-xs md:text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm">
               <Download className="w-4 h-4" /> Export
             </button>
-            <Link 
+            <Link
               href="/service-line/employees/create"
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
             >
@@ -113,56 +115,56 @@ export default function EmployeesPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-            <StatCard icon={Users} title="Total Employees" value="1,248" trend="+2%" />
-            <StatCard icon={User} title="Active" value="1,182" />
-            <StatCard icon={UserX} title="Inactive" value="42" />
-            <StatCard icon={Briefcase} title="Suspended" value="24" />
-            <StatCard icon={Clock} title="On Leave" value="12" />
-            <StatCard icon={Activity} title="Online Now" value="856" hasDot={true} />
-          </div>
+          <StatCard icon={Users} title="Total Employees" value="1,248" trend="+2%" />
+          <StatCard icon={User} title="Active" value="1,182" />
+          <StatCard icon={UserX} title="Inactive" value="42" />
+          <StatCard icon={Briefcase} title="Suspended" value="24" />
+          <StatCard icon={Clock} title="On Leave" value="12" />
+          <StatCard icon={Activity} title="Online Now" value="856" hasDot={true} />
+        </div>
 
-          {/* Main Content Area */}
-          <div className="overflow-hidden flex flex-col ">
-            {/* Controls */}
-            <div className="p-5 flex items-center justify-between border border-[#E2E8F0] p-5 rounded-xl mb-8">
-              <div className="flex gap-3">
-                <button className="px-5 py-2 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm">
-                  All Employees
-                </button>
-                <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
-                  All Service Lines <ChevronDown className="w-4 h-4 text-gray-400" />
-                </button>
-                <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
-                  All Departments <ChevronDown className="w-4 h-4 text-gray-400" />
-                </button>
-                <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
-                  All Teams <ChevronDown className="w-4 h-4 text-gray-400" />
-                </button>
-              </div>
-              
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input 
-                  type="text" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by Name or ID..." 
-                  className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
-                />
-              </div>
+        {/* Main Content Area */}
+        <div className="overflow-hidden flex flex-col ">
+          {/* Controls */}
+          <div className="p-5 flex items-center justify-between border border-[#E2E8F0] p-5 rounded-xl mb-8">
+            <div className="flex gap-3">
+              <button className="px-5 py-2 bg-[#06530B] text-white rounded-xl text-sm font-bold shadow-sm">
+                All Employees
+              </button>
+              <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+                All Service Lines <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+              <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+                All Departments <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+              <button className="px-5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-sm">
+                All Teams <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
             </div>
 
-            {/* DashboardTable Component */}
-            <DashboardTable 
-              data={filteredEmployees}
-              columns={columns}
-              getRowKey={(item) => String(item.id)}
-              caption="Employees list"
-              emptyMessage="No employees found."
-            />
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by Name or ID..."
+                className="pl-9 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-64"
+              />
+            </div>
           </div>
 
+          {/* DashboardTable Component */}
+          <DashboardTable
+            data={filteredEmployees}
+            columns={columns}
+            getRowKey={(item) => String(item.id)}
+            caption="Employees list"
+            emptyMessage="No employees found."
+          />
         </div>
+
+      </div>
     </div>
   );
 }

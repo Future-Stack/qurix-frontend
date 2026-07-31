@@ -53,42 +53,42 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
     return matchesSearch;
   });
 
- const projectColumns: Column<(typeof enrichedProjects)[0]>[] = [
-  { key: 'id', header: 'Order ID' },
-  { key: 'client', header: 'Client name' },
-  { key: 'profile', header: 'Profile name' },
-  { key: 'team', header: 'Team' },
-  {
-    key: 'status',
-    header: 'Status',
-    render: (value) => <StatusBadge status={String(value)} />,
-  },
-  { key: 'value', header: 'Value' },
-  {
-    key: 'timeline',
-    header: 'Timeline',
-   render: (_, project) => (
-  <CountdownTimer
-    initialSeconds={
-      project.timeline === "24:00:00"
-        ? 86400
-        : 5 * 3600
-    }
-  />
-  )
-  },
-  {
-    key: 'id',
-    header: 'Actions',
-    render: (val) => (
-<Link
-    href={`/super-admin/projects/${val}`}
-    className="flex items-center gap-1 text-[#06530B] font-bold text-xs"
->        <Eye className="w-4 h-4" /> View
-      </Link>
-    ),
-  },
-];
+  const projectColumns: Column<(typeof enrichedProjects)[0]>[] = [
+    { key: 'id', header: 'Order ID' },
+    { key: 'client', header: 'Client name' },
+    { key: 'profile', header: 'Profile name' },
+    { key: 'team', header: 'Team' },
+    {
+      key: 'status',
+      header: 'Status',
+      render: (value) => <StatusBadge status={String(value)} />,
+    },
+    { key: 'value', header: 'Value' },
+    {
+      key: 'timeline',
+      header: 'Timeline',
+      render: (_, project) => (
+        <CountdownTimer
+          initialSeconds={
+            project.timeline === "24:00:00"
+              ? 86400
+              : 5 * 3600
+          }
+        />
+      )
+    },
+    {
+      key: 'id',
+      header: 'Actions',
+      render: (val) => (
+        <Link
+          href={`/super-admin/projects/${val}`}
+          className="flex items-center gap-1 text-[#06530B] font-bold text-xs"
+        >        <Eye className="w-4 h-4" /> View
+        </Link>
+      ),
+    },
+  ];
 
   const columnsTeam: Column<(typeof mockTeamMembers)[0]>[] = [
     {
@@ -160,10 +160,12 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
         {/* Title / Welcome Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-              <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                <span className="z-10">A</span>
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+            <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+              <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                  <span className="z-10">A</span>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                </div>
               </div>
             </div>
             <div>
@@ -228,8 +230,8 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
             <button
               onClick={() => setActiveTab('projects')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'projects'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               All Project
@@ -237,8 +239,8 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
             <button
               onClick={() => setActiveTab('team')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'team'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               All Service Line
@@ -246,8 +248,8 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
             <button
               onClick={() => setActiveTab('refunds')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'refunds'
-                  ? 'bg-[#06530b] text-white shadow-2xs'
-                  : 'text-[#282828] hover:bg-gray-200'
+                ? 'bg-[#06530b] text-white shadow-2xs'
+                : 'text-[#282828] hover:bg-gray-200'
                 }`}
             >
               Refunds and Cancellations
@@ -285,8 +287,8 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
-                    ? 'bg-[#06530b] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {status}
@@ -300,12 +302,12 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
       <div className="w-full rounded-[16px] shadow-2xs bg-white">
         {activeTab === 'projects' && (
           <DashboardTable
-          data={enrichedProjects}
-          columns={projectColumns}
-          caption="All Projects"
-          emptyMessage="No projects found."
-          getRowKey={(row) => row.id}
-        />
+            data={enrichedProjects}
+            columns={projectColumns}
+            caption="All Projects"
+            emptyMessage="No projects found."
+            getRowKey={(row) => row.id}
+          />
         )}
         {activeTab === 'team' && (
           <DashboardTable

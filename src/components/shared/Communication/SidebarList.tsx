@@ -54,7 +54,7 @@ export default function SidebarList({ title, type, searchQuery, setSearchQuery, 
 
       {type === 'messages' && (
         <div className="px-5 pb-2">
-          <div className="w-full flex justify-between items-center bg-[#F0FDF4] border border-[#DCFCE7] rounded-xl px-4 py-3 cursor-pointer hover:bg-[#DCFCE7] transition-colors">
+          <div className="w-full flex justify-between items-center bg-[#06530B1A] border border-[#DCFCE7] rounded-xl px-4 py-3 cursor-pointer hover:bg-[#DCFCE7] transition-colors">
             <span className="text-sm font-bold text-green-700">Archived Chats</span>
             <Archive className="w-4 h-4 text-green-600" />
           </div>
@@ -66,7 +66,7 @@ export default function SidebarList({ title, type, searchQuery, setSearchQuery, 
           <div 
             key={item.id} 
             onClick={() => onSelect(item.id)}
-            className={`flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-colors hover:bg-[#F8FAFC] ${activeId === item.id ? 'bg-[#F0FDF4]' : ''}`}
+            className={`flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-colors hover:bg-[#F8FAFC] ${activeId === item.id ? 'bg-[#06530B1A]' : ''}`}
           >
             <div className="relative shrink-0">
               <img src={item.avatar} alt={item.name} className="w-12 h-12 rounded-full object-cover" />

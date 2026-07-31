@@ -17,7 +17,7 @@ const mockEmployees = [
 function StatusBadge({ status }: { status: string }) {
   const dotColor = status === 'active' ? 'bg-[#00AB0C]' : status === 'suspended' ? 'bg-[#EF4444]' : 'bg-[#475569]';
   const textColor = status === 'active' ? 'text-[#00AB0C]' : status === 'suspended' ? 'text-[#EF4444]' : 'text-[#475569]';
-  
+
   return (
     <div className={`flex items-center gap-1.5 font-bold text-[11px] ${textColor}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span> {status.toUpperCase()}
@@ -52,126 +52,128 @@ function StatCard({ icon: Icon, title, value, trend, isOnline }: any) {
 export default function AllEmployeePage() {
 
   const employeeColumns: Column<Employee>[] = [
-  {
-    key: "name",
-    header: "Profile",
-    render: (_, emp) => (
-      <div className="flex items-center gap-3">
-        <img
-          src={emp.avatar}
-          alt={emp.name}
-          className="h-10 w-10 rounded-full object-cover"
-        />
+    {
+      key: "name",
+      header: "Profile",
+      render: (_, emp) => (
+        <div className="flex items-center gap-3">
+          <img
+            src={emp.avatar}
+            alt={emp.name}
+            className="h-10 w-10 rounded-full object-cover"
+          />
 
-        <div>
-          <p className="text-[13px] font-bold text-[#0F172A]">
-            {emp.name}
-          </p>
+          <div>
+            <p className="text-[13px] font-bold text-[#0F172A]">
+              {emp.name}
+            </p>
 
-          <p className="text-[11px] text-[#64748B]">
-            {emp.username}
-          </p>
+            <p className="text-[11px] text-[#64748B]">
+              {emp.username}
+            </p>
+          </div>
         </div>
-      </div>
-    ),
-  },
+      ),
+    },
 
-  {
-    key: "empId",
-    header: "Emp ID",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "empId",
+      header: "Emp ID",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "designation",
-    header: "Designation",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "designation",
+      header: "Designation",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "email",
-    header: "E-mail",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "email",
+      header: "E-mail",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "serviceLine",
-    header: "Service Line",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "serviceLine",
+      header: "Service Line",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "team",
-    header: "Team",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "team",
+      header: "Team",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "status",
-    header: "Status",
-    render: (value) => (
-      <StatusBadge status={String(value)} />
-    ),
-  },
+    {
+      key: "status",
+      header: "Status",
+      render: (value) => (
+        <StatusBadge status={String(value)} />
+      ),
+    },
 
-  {
-    key: "lastLogin",
-    header: "Last Login",
-    render: (value) => (
-      <span className="text-[13px] font-medium text-[#475569]">
-        {String(value)}
-      </span>
-    ),
-  },
+    {
+      key: "lastLogin",
+      header: "Last Login",
+      render: (value) => (
+        <span className="text-[13px] font-medium text-[#475569]">
+          {String(value)}
+        </span>
+      ),
+    },
 
-  {
-    key: "id",
-    header: "Action",
-    render: (_, emp) => (
-      <Link
-        href={`/super-admin/all-employee/${emp.id}`}
-        className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]"
-      >
-        <Eye className="h-4 w-4" />
-        View
-      </Link>
-    ),
-  },
-];
+    {
+      key: "id",
+      header: "Action",
+      render: (_, emp) => (
+        <Link
+          href={`/super-admin/all-employee/${emp.id}`}
+          className="flex items-center gap-1 text-xs font-bold text-[#64748B] transition-colors hover:text-[#0F172A]"
+        >
+          <Eye className="h-4 w-4" />
+          View
+        </Link>
+      ),
+    },
+  ];
   return (
     <div className="h-full max-w-full overflow-hidden m-2 md:m-4 md:mr-4">
       <div className="h-full flex flex-col">
-        
+
         <div className="flex-1 overflow-y-auto no-scrollbar">
           <div className="max-w-full mx-auto">
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full border-4 border-green-500 p-0.5 flex items-center justify-center shrink-0">
-                  <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                    <span className="z-10">C</span>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                <div className="w-14 h-14 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+                  <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+                    <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                      <span className="z-10">C</span>
+                      <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -183,7 +185,7 @@ export default function AllEmployeePage() {
                 <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E2E8F0] text-[#64748B] rounded-xl text-sm font-bold transition-colors shadow-sm hover:bg-gray-50">
                   <FileDown className="w-4 h-4" /> Export
                 </button>
-                <Link 
+                <Link
                   href="/super-admin/all-employee/create"
                   className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm"
                 >
@@ -220,12 +222,12 @@ export default function AllEmployeePage() {
                     All Service Line <ChevronDown className="w-4 h-4" />
                   </button>
                 </div>
-                
+
                 <div className="relative w-full xl:w-auto">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search by Name or ID..." 
+                  <input
+                    type="text"
+                    placeholder="Search by Name or ID..."
                     className="pl-9 pr-4 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-green-500 w-full sm:w-64"
                   />
                 </div>
