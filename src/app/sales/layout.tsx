@@ -40,7 +40,11 @@ export default function SalesLayout({ children }: { children: React.ReactNode })
                                pathname?.includes('/favorites') ||
                                pathname?.includes('/call-logs');
 
-  const mainPadding = isCommunicationRoute
+  const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.startsWith('/sales/employees') ||
+                           pathname?.startsWith('/sales/learn-books');
+
+  const mainPadding = isNoPaddingRoute
     ? 'p-0'
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 

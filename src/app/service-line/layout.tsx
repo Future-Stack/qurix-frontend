@@ -65,7 +65,11 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
                                pathname?.includes('/favorites') ||
                                pathname?.includes('/call-logs');
 
-  const mainPadding = isCommunicationRoute
+  const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.startsWith('/service-line/employees') ||
+                           pathname?.startsWith('/service-line/learn-books');
+
+  const mainPadding = isNoPaddingRoute
     ? 'p-0'
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 

@@ -1,194 +1,281 @@
 "use client";
 
-import React from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { use, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Edit, Lock, Ban, ArrowLeft } from 'lucide-react';
+import { Edit2, Building2, ShieldCheck } from 'lucide-react';
 
-export default function EmployeeDetailsPage() {
+const mockEmployeeData: Record<string, {
+  fullName: string;
+  username: string;
+  employeeId: string;
+  phoneNumber: string;
+  officialEmail: string;
+  designation: string;
+  joiningDate: string;
+  employmentType: string;
+  serviceLine: string;
+  team: string;
+  teamLeader: string;
+  loginEmail: string;
+  lastLogin: string;
+  passwordStatus: string;
+  role: string;
+  status: string;
+  avatar: string;
+}> = {
+  '1': {
+    fullName: 'Hossain Mishu',
+    username: '@hossain_mishu',
+    employeeId: '16056',
+    phoneNumber: '+880 123 456 789',
+    officialEmail: 'hossain@softvence.com',
+    designation: 'Senior UI/UX Designer',
+    joiningDate: 'Oct 12, 2020',
+    employmentType: 'Full-time Permanent',
+    serviceLine: 'FSD',
+    team: 'Future Stack',
+    teamLeader: 'Imran',
+    loginEmail: 'hossain@softvence.com',
+    lastLogin: 'Thu Jul 30, 3:52 PM',
+    passwordStatus: 'Strong',
+    role: 'Employee',
+    status: 'Active',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+  },
+  '2': {
+    fullName: 'Sofia Ahmed',
+    username: '@sofia_ahmed',
+    employeeId: '16057',
+    phoneNumber: '+880 123 456 790',
+    officialEmail: 'sofia@softvence.com',
+    designation: 'Lead Frontend Developer',
+    joiningDate: 'Jan 15, 2021',
+    employmentType: 'Full-time Permanent',
+    serviceLine: 'FSD',
+    team: 'Future Stack',
+    teamLeader: 'Imran',
+    loginEmail: 'sofia@softvence.com',
+    lastLogin: 'Thu Jul 30, 2:10 PM',
+    passwordStatus: 'Strong',
+    role: 'Employee',
+    status: 'Active',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+  },
+};
+
+function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
-  const routeParams = useParams();
-  const empId = routeParams?.id ? String(routeParams.id) : 'E00123';
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
+
+  const employee = mockEmployeeData[id] ?? {
+    fullName: 'Hossain Mishu',
+    username: '@hossain_mishu',
+    employeeId: '16056',
+    phoneNumber: '+880 123 456 789',
+    officialEmail: 'hossain@softvence.com',
+    designation: 'Senior UI/UX Designer',
+    joiningDate: 'Oct 12, 2020',
+    employmentType: 'Full-time Permanent',
+    serviceLine: 'FSD',
+    team: 'Future Stack',
+    teamLeader: 'Imran',
+    loginEmail: 'hossain@softvence.com',
+    lastLogin: 'Thu Jul 30, 3:52 PM',
+    passwordStatus: 'Strong',
+    role: 'Employee',
+    status: 'Active',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+  };
+
+  const editHref = `/super-admin/employees/${id}/edit${returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : ''}`;
 
   return (
-    <div className="w-full h-full min-h-0 overflow-y-auto no-scrollbar p-2 sm:p-4 md:p-6">
-      <div className="pb-12 w-full">
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-[#E2E8F0] pb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full border border-[#E2E8F0] p-0.5 flex items-center justify-center shrink-0 bg-white shadow-sm">
-              <div className="text-xl font-bold italic tracking-tighter">dyson</div>
-            </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-0.5">Employee Information</h1>
-              <p className="text-xs md:text-sm text-[#64748B]">Admin Panel</p>
+    <div className="w-full h-full min-h-0 flex flex-col overflow-y-auto no-scrollbar bg-white">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
+            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
+                <span className="z-10">C</span>
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button 
-              onClick={() => router.back()}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-[#E2E8F0] text-[#475569] rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm hover:bg-gray-50"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back
-            </button>
-            <Link 
-              href={`/super-admin/all-employee/${empId}`}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
-            >
-              <Edit className="w-4 h-4" /> Edit information
-            </Link>
+          <div>
+            <h1 className="text-xl font-semibold text-black tracking-tight mb-1">
+              Employee Information
+            </h1>
+            <p className="text-sm text-[#A19791]">Admin Panel</p>
           </div>
         </div>
 
-        {/* Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-          
-          {/* Left Column - Information Panels */}
-          <div className="lg:col-span-2 space-y-6">
-            
-            {/* Personal Information */}
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 sm:p-6 shadow-sm">
-              <h3 className="text-base font-bold text-[#0F172A] mb-6">Personal information</h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Full Name</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C]">John Doe</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Employee ID</div>
-                  <div className="text-[13px] font-medium text-[#475569]">E00123</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Designation</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C]">UI/UX Designer</div>
-                </div>
-                
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Work Email</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C] truncate">john.doe@solidcomp.com</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Phone Number</div>
-                  <div className="text-[13px] font-medium text-[#475569]">+1 (555) 123-3456</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Joining Date</div>
-                  <div className="text-[13px] font-medium text-[#475569]">Oct 12, 2021</div>
-                </div>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => returnTo ? router.push(returnTo) : router.back()}
+            className="flex-1 sm:flex-none px-4 py-2 border border-[#E8EAF0] bg-white rounded-[12px] text-sm font-medium text-[#64748B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
+          >
+            Back
+          </button>
+          <Link
+            href={editHref}
+            className="flex-1 sm:flex-none px-4 py-2 bg-[#06530B] hover:bg-[#05290b] text-white rounded-[10px] text-sm font-medium transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-2"
+          >
+            <Edit2 className="w-4 h-4" /> Edit information
+          </Link>
+        </div>
+      </div>
 
+      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1">
+        <div className="flex flex-col md:flex-row gap-6 items-start justify-center">
+          <div className="flex-1 w-full space-y-6">
+            <div className="bg-white border border-[#E8E8E8] rounded-[15px] p-5 space-y-4">
+              <h2 className="text-[16px] font-bold text-[#414141] uppercase tracking-wide">
+                PERSONAL INFORMATION
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
                 <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Username</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C]">johndoe</div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Full Name</p>
+                  <p className="text-sm font-medium text-[#06530B] truncate">{employee.fullName}</p>
                 </div>
-                <div className="sm:col-span-2">
-                  <div className="text-[11px] text-[#64748B] mb-1">Employment Type</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C]">Full-time Permanent</div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Employee ID</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.employeeId}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Designation</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.designation}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Work Email</p>
+                  <p className="text-sm font-medium text-[#06530B] truncate">{employee.officialEmail}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Phone Number</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.phoneNumber}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Joining Date</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.joiningDate}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Username</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.username}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Employment Type</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.employmentType}</p>
                 </div>
               </div>
             </div>
 
-            {/* Organization & hierarchy */}
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 sm:p-6 shadow-sm">
-              <div className="flex items-center gap-2 mb-6 text-[#00AB0C]">
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
-                  <span className="text-[16px]">🏢</span>
+            <div className="bg-white border border-[#E8E8E8] rounded-[18px] p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-[16px] bg-[#06530B]/8 flex items-center justify-center text-[#06530B]">
+                  <Building2 className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-bold text-[#0F172A]">Organization & hierarchy</h3>
+                <h2 className="text-[16px] font-bold text-[#414141] uppercase tracking-wide">
+                  ORGANIZATION & HIERARCHY
+                </h2>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Service Line</div>
-                  <div className="text-[13px] font-medium text-[#475569]">FSD</div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Service Line</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.serviceLine}</p>
                 </div>
                 <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Team</div>
-                  <div className="text-[13px] font-medium text-[#475569]">FS</div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Team</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.team}</p>
                 </div>
                 <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Team Leader</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C]">Sarah Jenkins</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Account security */}
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 sm:p-6 shadow-sm">
-              <div className="flex items-center gap-2 mb-6 text-[#00AB0C]">
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <h3 className="text-base font-bold text-[#0F172A]">Account security</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Login Email</div>
-                  <div className="text-[13px] font-semibold text-[#00AB0C] truncate">john.doe@solidcomp.com</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Last Login</div>
-                  <div className="text-[13px] font-medium text-[#475569]">2 hours ago</div>
-                </div>
-                <div>
-                  <div className="text-[11px] text-[#64748B] mb-1">Password Status</div>
-                  <div className="text-[13px] font-medium text-[#475569]">Strong</div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Team Leader</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.teamLeader}</p>
                 </div>
               </div>
             </div>
-            
-          </div>
 
-          {/* Right Column - Profile Card */}
-          <div>
-            <div className="bg-white border border-[#E2E8F0] rounded-[24px] overflow-hidden shadow-sm lg:sticky lg:top-0">
-              <div className="h-24 bg-[#06530B] relative"></div>
-              <div className="px-6 pb-6 text-center relative mt-[-40px]">
-                <div className="w-20 h-20 mx-auto rounded-full border-4 border-white mb-3 bg-white shadow-sm overflow-hidden">
-                  <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="Profile" className="w-full h-full object-cover" />
+            <div className="bg-white border border-[#E8E8E8] rounded-[18px] p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-[16px] bg-[#06530B]/8 flex items-center justify-center text-[#06530B]">
+                  <ShieldCheck className="w-4 h-4" />
                 </div>
-                
-                <h2 className="text-[17px] font-bold text-[#0F172A] mb-1 uppercase tracking-wider">MD SHAKIL</h2>
-                <div className="text-[12px] text-[#64748B] mb-2">@uxshakil</div>
-                <div className="text-[12px] font-bold text-[#00AB0C] flex items-center justify-center gap-1">
-                  <span className="w-3 h-3 bg-green-100 text-green-600 rounded flex items-center justify-center text-[8px]">⭐</span>
-                  15214
+                <h2 className="text-[16px] font-bold text-[#414141] uppercase tracking-wide">
+                  ACCOUNT SECURITY
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Login Email</p>
+                  <p className="text-sm font-medium text-[#06530B] truncate">{employee.loginEmail}</p>
                 </div>
-
-                <div className="w-full border-t border-dashed border-[#E2E8F0] my-6"></div>
-
-                <div className="grid grid-cols-2 gap-4 text-left px-2 mb-6">
-                  <div>
-                    <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">ROLE</div>
-                    <div className="text-[13px] font-medium text-[#475569]">Employee</div>
-                  </div>
-                  <div>
-                    <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">STATUS</div>
-                    <div className="flex items-center gap-1.5 font-bold text-[13px] text-[#00AB0C]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00AB0C]"></span> Active
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">SERVICE LINE</div>
-                    <div className="text-[13px] font-medium text-[#475569]">FSD</div>
-                  </div>
-                  <div>
-                    <div className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mb-1">TEAM</div>
-                    <div className="text-[13px] font-medium text-[#00AB0C]">Future Stack</div>
-                  </div>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Last Login</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.lastLogin}</p>
                 </div>
-
-                <button className="w-full py-2.5 flex items-center justify-center gap-2 text-[#EF4444] text-[13px] font-bold bg-red-50 hover:bg-red-100 rounded-xl transition-colors cursor-pointer">
-                  <Ban className="w-4 h-4" /> Suspend Account
-                </button>
+                <div>
+                  <p className="text-xs font-bold text-[#616161] mb-1">Password Status</p>
+                  <p className="text-sm font-medium text-[#06530B]">{employee.passwordStatus}</p>
+                </div>
               </div>
             </div>
           </div>
 
+          <div className="w-full md:w-[297px] shrink-0 bg-white border border-[#E8E8E8] rounded-[17px] overflow-hidden flex flex-col items-center">
+            <div className="bg-[#06530B] h-[80px] w-full" />
+            <div className="w-full px-5 pb-6 flex flex-col items-center space-y-3.5 -mt-10">
+              <div className="w-20 h-20 rounded-full border-4 border-white shadow-md overflow-hidden bg-white shrink-0">
+                <img
+                  src={employee.avatar}
+                  alt={employee.fullName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="text-center space-y-0.5">
+                <h3 className="text-[16px] font-bold text-[#414141] uppercase tracking-tight">
+                  {employee.fullName}
+                </h3>
+                <p className="text-[11px] text-[#414141]">{employee.username}</p>
+              </div>
+              <p className="text-[14px] font-medium text-[#06530B]">
+                ID {employee.employeeId}
+              </p>
+              <div className="w-full border-t border-dashed border-[#CCCCCC] my-1" />
+              <div className="w-full grid grid-cols-2 gap-y-4 gap-x-2 text-left">
+                <div>
+                  <span className="block text-[10px] font-bold text-[#777587] uppercase tracking-wider mb-0.5">ROLE</span>
+                  <span className="text-[14px] text-[#06530B] font-medium block">{employee.role}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-[#777587] uppercase tracking-wider mb-0.5">STATUS</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
+                    <span className="text-[14px] text-[#06530B] font-medium">{employee.status}</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-[#777587] uppercase tracking-wider mb-0.5">SERVICE LINE</span>
+                  <span className="text-[14px] text-[#06530B] font-medium block">{employee.serviceLine}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-bold text-[#777587] uppercase tracking-wider mb-0.5">TEAM</span>
+                  <span className="text-[14px] text-[#06530B] font-medium block">{employee.team}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ViewEmployeePage({ params }: { params: Promise<{ id: string }> }) {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+      <ViewEmployeeContent params={params} />
+    </Suspense>
   );
 }

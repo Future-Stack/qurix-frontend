@@ -40,7 +40,11 @@ export default function TeamLeaderLayout({ children }: { children: React.ReactNo
                                pathname?.includes('/favorites') ||
                                pathname?.includes('/call-logs');
 
-  const mainPadding = isCommunicationRoute
+  const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.startsWith('/team-leader/employees') ||
+                           pathname?.startsWith('/team-leader/learn-books');
+
+  const mainPadding = isNoPaddingRoute
     ? 'p-0'
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 

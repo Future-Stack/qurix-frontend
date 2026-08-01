@@ -65,7 +65,11 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
                                pathname?.includes('/favorites') ||
                                pathname?.includes('/call-logs');
 
-  const mainPadding = isCommunicationRoute
+  const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.startsWith('/super-admin/employees') ||
+                           pathname?.startsWith('/super-admin/learn-books');
+
+  const mainPadding = isNoPaddingRoute
     ? 'p-0'
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 

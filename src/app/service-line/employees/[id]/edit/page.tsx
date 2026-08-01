@@ -72,7 +72,7 @@ function EditEmployeeForm({ params }: { params: Promise<{ id: string }> }) {
       if (returnTo) {
         router.push(returnTo);
       } else {
-        router.push('/super-admin/service-line-management/1?tab=Employee');
+        router.push('/service-line/team-management?tab=Employee');
       }
     }, 1200);
   };
