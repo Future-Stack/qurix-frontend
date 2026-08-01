@@ -224,10 +224,10 @@ export default function EditProjectPage() {
   };
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-6 select-none relative">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
       
-      {/* Top Header */}
-      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
+      {/* Top Header Bar (Sticky / Fixed at top) */}
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white z-10">
         {/* User Info Header */}
         <div className="flex items-center gap-4">
           <div className="relative shrink-0 size-12 rounded-full p-[2.5px] figma-avatar-ring shadow-sm">
@@ -271,8 +271,8 @@ export default function EditProjectPage() {
         </div>
       </div>
 
-      {/* Main Form Scrollable Container */}
-      <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-2">
+      {/* Central Layout Container (Scrollable Form Content) */}
+      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1 min-h-0 overflow-y-auto no-scrollbar space-y-6">
         
         {/* SECTION 1: PROJECT INFORMATION */}
         <div className="bg-white border border-[#e5e7eb] rounded-[24px] p-6 space-y-6 shadow-2xs">

@@ -41,6 +41,10 @@ export default function SalesLayout({ children }: { children: React.ReactNode })
                                pathname?.includes('/call-logs');
 
   const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.includes('/projects') ||
+                           pathname?.includes('/create-new-project') ||
+                           pathname?.includes('/create-project') ||
+                           pathname?.includes('/edit-project') ||
                            pathname?.startsWith('/sales/employees') ||
                            pathname?.startsWith('/sales/learn-books');
 

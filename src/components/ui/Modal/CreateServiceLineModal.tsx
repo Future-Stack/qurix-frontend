@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Search, ChevronLeft, ChevronDown } from 'lucide-react';
+import CustomSelect from '@/components/ui/Dropdown/CustomSelect';
 
 export interface ServiceLineData {
   id?: number | string;
@@ -158,20 +159,16 @@ export function CreateServiceLineModal({ isOpen, onClose, serviceLineData }: Cre
 
           {/* Select Agency */}
           <div>
-            <label className="block text-[11px] font-bold text-[#64748B] mb-2">
-              Select Agency <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <select
-                value={agency}
-                onChange={(e) => setAgency(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm font-semibold text-[#06530B] appearance-none focus:outline-none focus:ring-1 focus:ring-green-500 cursor-pointer"
-              >
-                <option value="Softvence Omega Force">Softvence Omega Force</option>
-                <option value="Softvence Alpha Force">Softvence Alpha Force</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8] pointer-events-none" />
-            </div>
+            <CustomSelect
+              label="Select Agency *"
+              options={[
+                { label: 'Softvence Omega Force', value: 'Softvence Omega Force' },
+                { label: 'Softvence Alpha Force', value: 'Softvence Alpha Force' },
+              ]}
+              value={agency}
+              onChange={setAgency}
+              variant="form"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-6 pb-2">

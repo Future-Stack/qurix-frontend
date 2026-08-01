@@ -204,7 +204,7 @@ export default function ServiceLineDashboard() {
           </div>
           <div className="flex gap-3">
             <Link
-              href="/service-line/projects/create"
+              href="/service-line/dashboard/create-new-project"
               className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer"
             >
               <Plus className="w-4 h-4" /> New Project

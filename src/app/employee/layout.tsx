@@ -40,6 +40,10 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
                                pathname?.includes('/call-logs');
 
   const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.includes('/projects') ||
+                           pathname?.includes('/create-new-project') ||
+                           pathname?.includes('/create-project') ||
+                           pathname?.includes('/edit-project') ||
                            pathname?.startsWith('/employee/employees') ||
                            pathname?.startsWith('/employee/learn-books');
 
