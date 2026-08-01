@@ -178,7 +178,7 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
             </div>
           </div>
           <div className="flex gap-3">
-            <Link href="/super-admin/service-line-management/fsd/teams/1/projects/create" className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm">
+            <Link href="/super-admin/dashboard/create-new-project" className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer">
               <Plus className="w-4 h-4" /> New Project
             </Link>
           </div>

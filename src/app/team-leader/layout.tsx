@@ -41,6 +41,10 @@ export default function TeamLeaderLayout({ children }: { children: React.ReactNo
                                pathname?.includes('/call-logs');
 
   const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.includes('/projects') ||
+                           pathname?.includes('/create-new-project') ||
+                           pathname?.includes('/create-project') ||
+                           pathname?.includes('/edit-project') ||
                            pathname?.startsWith('/team-leader/employees') ||
                            pathname?.startsWith('/team-leader/learn-books');
 

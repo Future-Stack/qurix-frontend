@@ -8,6 +8,7 @@ import {
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+import CustomSelect from '@/components/ui/Dropdown/CustomSelect';
 
 const mockEmployees = [
   { id: 1, name: 'Wrajakishore Loy', handle: '@julie_mutie', empId: 'KNC-8821', designation: 'Node JS Developer', email: 'tanya.hill@example.com', serviceLine: 'FSD', team: 'CM', status: 'ACTIVE', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=1' },
@@ -177,65 +178,35 @@ export default function EmployeesPage() {
                 All Employees
               </button>
 
-              {/* Service Line Dropdown Filter */}
-              <div className="relative">
-                <select
-                  value={selectedServiceLine}
-                  onChange={(e) => setSelectedServiceLine(e.target.value)}
-                  className={`pl-4 pr-9 py-2.5 border text-sm font-bold rounded-xl appearance-none cursor-pointer transition-colors shadow-sm focus:outline-none focus:ring-1 focus:ring-[#06530B] ${
-                    selectedServiceLine !== 'All'
-                      ? 'bg-green-50 border-[#06530B] text-[#06530B]'
-                      : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
-                >
-                  {serviceLines.map((sl) => (
-                    <option key={sl} value={sl}>
-                      {sl === 'All' ? 'All Service Lines' : sl}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              {/* Service Line CustomSelect Filter */}
+              <CustomSelect
+                options={serviceLines.map(sl => ({ label: sl === 'All' ? 'All Service Lines' : sl, value: sl }))}
+                value={selectedServiceLine}
+                onChange={setSelectedServiceLine}
+                variant="filter"
+                fullWidth={false}
+                buttonClassName="min-w-[160px]"
+              />
 
-              {/* Department / Designation Dropdown Filter */}
-              <div className="relative">
-                <select
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                  className={`pl-4 pr-9 py-2.5 border text-sm font-bold rounded-xl appearance-none cursor-pointer transition-colors shadow-sm focus:outline-none focus:ring-1 focus:ring-[#06530B] ${
-                    selectedDepartment !== 'All'
-                      ? 'bg-green-50 border-[#06530B] text-[#06530B]'
-                      : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
-                >
-                  {departments.map((dept) => (
-                    <option key={dept} value={dept}>
-                      {dept === 'All' ? 'All Departments' : dept}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              {/* Department / Designation CustomSelect Filter */}
+              <CustomSelect
+                options={departments.map(dept => ({ label: dept === 'All' ? 'All Departments' : dept, value: dept }))}
+                value={selectedDepartment}
+                onChange={setSelectedDepartment}
+                variant="filter"
+                fullWidth={false}
+                buttonClassName="min-w-[160px]"
+              />
 
-              {/* Team Dropdown Filter */}
-              <div className="relative">
-                <select
-                  value={selectedTeam}
-                  onChange={(e) => setSelectedTeam(e.target.value)}
-                  className={`pl-4 pr-9 py-2.5 border text-sm font-bold rounded-xl appearance-none cursor-pointer transition-colors shadow-sm focus:outline-none focus:ring-1 focus:ring-[#06530B] ${
-                    selectedTeam !== 'All'
-                      ? 'bg-green-50 border-[#06530B] text-[#06530B]'
-                      : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#475569] hover:bg-gray-50'
-                  }`}
-                >
-                  {teams.map((t) => (
-                    <option key={t} value={t}>
-                      {t === 'All' ? 'All Teams' : `Team: ${t}`}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              {/* Team CustomSelect Filter */}
+              <CustomSelect
+                options={teams.map(t => ({ label: t === 'All' ? 'All Teams' : `Team: ${t}`, value: t }))}
+                value={selectedTeam}
+                onChange={setSelectedTeam}
+                variant="filter"
+                fullWidth={false}
+                buttonClassName="min-w-[140px]"
+              />
 
               {/* Active Filter Clear Tag */}
               {hasActiveFilters && (

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Search, ChevronLeft, ChevronDown } from 'lucide-react';
+import CustomSelect from '@/components/ui/Dropdown/CustomSelect';
 
 export interface TeamData {
   id?: number | string;
@@ -156,22 +157,18 @@ export function CreateTeamModal({ isOpen, onClose, teamData }: CreateTeamModalPr
 
           {/* Service Line */}
           <div>
-            <label className="block text-[11px] font-bold text-[#64748B] mb-2">
-              Service Line <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <select
-                value={serviceLine}
-                onChange={(e) => setServiceLine(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm font-semibold text-[#06530B] appearance-none focus:outline-none focus:ring-1 focus:ring-green-500 cursor-pointer"
-              >
-                <option value="Custom FSD">Custom FSD</option>
-                <option value="Shopify">Shopify</option>
-                <option value="Framer">Framer</option>
-                <option value="Squarespace">Squarespace</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8] pointer-events-none" />
-            </div>
+            <CustomSelect
+              label="Service Line *"
+              options={[
+                { label: 'Custom FSD', value: 'Custom FSD' },
+                { label: 'Shopify', value: 'Shopify' },
+                { label: 'Framer', value: 'Framer' },
+                { label: 'Squarespace', value: 'Squarespace' },
+              ]}
+              value={serviceLine}
+              onChange={setServiceLine}
+              variant="form"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-6 pb-2">

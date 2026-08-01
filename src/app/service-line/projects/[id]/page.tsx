@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import CustomSelect from '@/components/ui/Dropdown/CustomSelect';
 import {
   Folder,
   User,
@@ -165,10 +166,10 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-6 select-none relative">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
 
-      {/* Top Header */}
-      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
+      {/* Top Header Bar (Sticky / Fixed at top) */}
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white z-10">
         {/* User Info Header */}
         <div className="flex items-center gap-4">
           <div className="relative shrink-0 size-12 rounded-full p-[2.5px] figma-avatar-ring shadow-sm">
@@ -216,8 +217,8 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      {/* Main Form Scrollable Container */}
-      <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-2">
+      {/* Central Layout Container (Scrollable Form Content) */}
+      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1 min-h-0 overflow-y-auto no-scrollbar space-y-6">
 
         {/* SECTION 1: PROJECT INFORMATION */}
         <div className="bg-white border border-[#e5e7eb] rounded-[24px] p-6 space-y-6 shadow-2xs">
@@ -255,64 +256,59 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Profile Name */}
-            <div className="space-y-1.5">
-              <label className="font-['Roboto'] font-medium text-[13px] text-[#3c3c3c]">Profile Name <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <select value={profileName} onChange={e => setProfileName(e.target.value)}
-                  className="w-full bg-[#fcfcfc] border border-[#e5e7eb] rounded-[12px] px-4 py-2.5 text-[14px] text-[#06530b] font-medium appearance-none focus:outline-none focus:border-[#06530b] cursor-pointer">
-                  <option value="code_tribe_Fiverr">code_tribe_Fiverr</option>
-                  <option value="softvence_agency">softvence_agency</option>
-                  <option value="qurix_official">qurix_official</option>
-                </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
+            <CustomSelect
+              label="Profile Name *"
+              options={[
+                { label: 'code_tribe_Fiverr', value: 'code_tribe_Fiverr' },
+                { label: 'softvence_agency', value: 'softvence_agency' },
+                { label: 'qurix_official', value: 'qurix_official' },
+              ]}
+              value={profileName}
+              onChange={setProfileName}
+              variant="form"
+            />
 
             {/* Service Line */}
-            <div className="space-y-1.5">
-              <label className="font-['Roboto'] font-medium text-[13px] text-[#3c3c3c]">Service Line <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <select value={serviceLine} onChange={e => setServiceLine(e.target.value)}
-                  className="w-full bg-[#fcfcfc] border border-[#e5e7eb] rounded-[12px] px-4 py-2.5 text-[14px] text-[#06530b] font-bold appearance-none focus:outline-none focus:border-[#06530b] cursor-pointer">
-                  <option value="CUSTOM-FSD">CUSTOM-FSD</option>
-                  <option value="UI-UX-DESIGN">UI-UX-DESIGN</option>
-                  <option value="FULLSTACK-DEV">FULLSTACK-DEV</option>
-                </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
+            <CustomSelect
+              label="Service Line *"
+              options={[
+                { label: 'CUSTOM-FSD', value: 'CUSTOM-FSD' },
+                { label: 'UI-UX-DESIGN', value: 'UI-UX-DESIGN' },
+                { label: 'FULLSTACK-DEV', value: 'FULLSTACK-DEV' },
+              ]}
+              value={serviceLine}
+              onChange={setServiceLine}
+              variant="form"
+            />
 
             {/* Team */}
-            <div className="space-y-1.5">
-              <label className="font-['Roboto'] font-medium text-[13px] text-[#3c3c3c]">Team <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <select value={team} onChange={e => setTeam(e.target.value)}
-                  className="w-full bg-[#fcfcfc] border border-[#e5e7eb] rounded-[12px] px-4 py-2.5 text-[14px] text-[#06530b] font-medium appearance-none focus:outline-none focus:border-[#06530b] cursor-pointer">
-                  <option value="Future Stack">Future Stack</option>
-                  <option value="Core Tech">Core Tech</option>
-                  <option value="Creative Studio">Creative Studio</option>
-                </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
+            <CustomSelect
+              label="Team *"
+              options={[
+                { label: 'Future Stack', value: 'Future Stack' },
+                { label: 'Core Tech', value: 'Core Tech' },
+                { label: 'Creative Studio', value: 'Creative Studio' },
+              ]}
+              value={team}
+              onChange={setTeam}
+              variant="form"
+            />
 
             {/* Project Status */}
-            <div className="space-y-1.5">
-              <label className="font-['Roboto'] font-medium text-[13px] text-[#3c3c3c]">Project Status <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <select value={projectStatus} onChange={e => setProjectStatus(e.target.value)}
-                  className="w-full bg-[#fcfcfc] border border-[#e5e7eb] rounded-[12px] px-4 py-2.5 text-[14px] text-[#06530b] font-medium appearance-none focus:outline-none focus:border-[#06530b] cursor-pointer">
-                  <option value="Planing">Planing</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Urgent">Urgent</option>
-                  <option value="WIP">WIP</option>
-                  <option value="Late">Late</option>
-                  <option value="Delivered">Delivered</option>
-                </select>
-                <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
+            <CustomSelect
+              label="Project Status *"
+              options={[
+                { label: 'Planing', value: 'Planing' },
+                { label: 'In Progress', value: 'In Progress' },
+                { label: 'Under Review', value: 'Under Review' },
+                { label: 'Urgent', value: 'Urgent' },
+                { label: 'WIP', value: 'WIP' },
+                { label: 'Late', value: 'Late' },
+              ]}
+              value={projectStatus}
+              onChange={setProjectStatus}
+              variant="form"
+            />
 
             {/* Start Date */}
             <div className="space-y-1.5">

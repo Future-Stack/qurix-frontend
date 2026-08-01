@@ -66,6 +66,10 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
                                pathname?.includes('/call-logs');
 
   const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.includes('/projects') ||
+                           pathname?.includes('/create-new-project') ||
+                           pathname?.includes('/create-project') ||
+                           pathname?.includes('/edit-project') ||
                            pathname?.startsWith('/service-line/employees') ||
                            pathname?.startsWith('/service-line/learn-books');
 

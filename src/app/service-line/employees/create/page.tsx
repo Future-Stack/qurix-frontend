@@ -50,9 +50,9 @@ function CreateEmployeeForm() {
   };
 
   return (
-    <div className="w-full h-full min-h-0 flex flex-col overflow-y-auto no-scrollbar bg-white">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
       {/* Top Header Bar */}
-      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white z-10">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
             <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
@@ -94,7 +94,7 @@ function CreateEmployeeForm() {
       </div>
 
       {/* Central Form Container */}
-      <form onSubmit={handleSubmit} className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-6 py-6 md:px-12 md:py-8 space-y-10 flex-1">
+      <form onSubmit={handleSubmit} className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-6 py-6 md:px-12 md:py-8 space-y-10 flex-1 min-h-0 overflow-y-auto no-scrollbar">
         {/* Section 1: Personal & Position Info */}
         <div className="space-y-6">
           <div className="flex flex-col items-start gap-4">

@@ -93,8 +93,8 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
   const editHref = `/super-admin/employees/${id}/edit${returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : ''}`;
 
   return (
-    <div className="w-full h-full min-h-0 flex flex-col overflow-y-auto no-scrollbar bg-white">
-      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white z-10">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
             <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
@@ -129,7 +129,7 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
         </div>
       </div>
 
-      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1">
+      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1 min-h-0 overflow-y-auto no-scrollbar">
         <div className="flex flex-col md:flex-row gap-6 items-start justify-center">
           <div className="flex-1 w-full space-y-6">
             <div className="bg-white border border-[#E8E8E8] rounded-[15px] p-5 space-y-4">
