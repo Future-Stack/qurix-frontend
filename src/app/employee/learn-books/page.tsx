@@ -116,7 +116,7 @@ export function LearnBooksContent({
     <div className="flex flex-col h-full w-full overflow-hidden bg-white select-none">
       
       {/* Profile Header */}
-      <div className="px-6 lg:px-8 bg-white border-b border-[#E2E8F0] shrink-0 flex items-center gap-4 h-[96px]">
+      <div className="w-full flex items-center gap-4 border-b border-[#E2E8F0] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white">
         <div className="w-[64px] h-[64px] rounded-full p-[2.5px] figma-avatar-ring shrink-0">
           <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
             <img 
@@ -138,8 +138,8 @@ export function LearnBooksContent({
       </div>
 
       {/* Grid Container */}
-      <div className="flex-1 overflow-y-auto flex justify-center bg-white px-6 lg:px-8">
-        <div className="w-full max-w-[1000px] border-x border-[#E2E8F0] min-h-full px-6 py-6 flex flex-col">
+      <div className="flex-1 overflow-y-auto flex justify-center bg-white">
+        <div className="w-full max-w-[1000px] border-x border-[#E2E8F0] min-h-full flex-1 px-6 py-6 flex flex-col">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
             {learningItems.map((item) => (

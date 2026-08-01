@@ -39,7 +39,11 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
                                pathname?.includes('/favorites') ||
                                pathname?.includes('/call-logs');
 
-  const mainPadding = isCommunicationRoute
+  const isNoPaddingRoute = isCommunicationRoute || 
+                           pathname?.startsWith('/employee/employees') ||
+                           pathname?.startsWith('/employee/learn-books');
+
+  const mainPadding = isNoPaddingRoute
     ? 'p-0'
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 
