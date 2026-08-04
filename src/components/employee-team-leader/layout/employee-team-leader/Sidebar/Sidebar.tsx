@@ -15,6 +15,8 @@ import {
   Headphones
 } from 'lucide-react';
 
+import ContactBubbleIcon from '@/components/icons/ContactBubbleIcon';
+
 interface SidebarItem {
   icon: React.ComponentType<any>;
   href: string;
@@ -43,7 +45,7 @@ export default function Sidebar({
   const menuItems: SidebarItem[] = customMenuItems || [
     { icon: LayoutGrid, href: `${basePath}/dashboard`, label: 'Dashboard' },
     { icon: MessageCircleMore, href: `${basePath}/messages`, label: 'Messages' },
-    { icon: Users, href: `${basePath}/contacts`, label: 'Contacts' },
+    { icon: ContactBubbleIcon, href: `${basePath}/contacts`, label: 'Contacts' },
     { icon: Phone, href: `${basePath}/call-logs`, label: 'Recent Calls' },
     { icon: AlertTriangle, href: `${basePath}/issue-projects`, label: 'Issue Projects' },
     { icon: Bookmark, href: `${basePath}/favorites`, label: 'Favorites' },
@@ -118,7 +120,7 @@ export default function Sidebar({
                     ? 'text-[#06530b] bg-[#06530B1A] shadow-sm'
                     : 'text-[#828282] hover:text-slate-800 hover:bg-gray-50'
                   }`}>
-                  <Icon className="size-[20px] stroke-[2]" />
+                  <Icon className={item.icon === ContactBubbleIcon ? "size-[22px] stroke-[2]" : "size-[20px] stroke-[2]"} />
                 </div>
               </Link>
             );

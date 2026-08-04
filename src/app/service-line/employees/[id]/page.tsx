@@ -3,7 +3,7 @@
 import React, { use, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Edit2, Building2, ShieldCheck } from 'lucide-react';
+import { Edit2, Building2, ShieldCheck, Ban } from 'lucide-react';
 
 const mockEmployeeData: Record<string, {
   fullName: string;
@@ -69,6 +69,7 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get('returnTo');
+  const [isMemberClosed, setIsMemberClosed] = React.useState(false);
 
   const employee = mockEmployeeData[id] ?? {
     fullName: 'Hossain Mishu',
@@ -264,6 +265,20 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
                   <span className="text-[14px] text-[#06530B] font-medium block">{employee.team}</span>
                 </div>
               </div>
+
+              {/* Close this member button matching design */}
+              <button
+                type="button"
+                onClick={() => setIsMemberClosed(!isMemberClosed)}
+                className={`w-full mt-4 py-2.5 px-4 rounded-[12px] text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none ${
+                  isMemberClosed
+                    ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                    : 'bg-[#FEE2E2] hover:bg-red-200/80 text-[#EF4444] border border-[#FCA5A5]/40'
+                }`}
+              >
+                <Ban className="w-4 h-4 text-[#EF4444] shrink-0" />
+                <span>{isMemberClosed ? 'Member Closed' : 'Close this member'}</span>
+              </button>
             </div>
           </div>
         </div>

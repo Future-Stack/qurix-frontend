@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  Users, User, UserX, Briefcase, Clock, Activity, TrendingUp, Download, Plus, Search, ChevronDown, Eye, LayoutGrid, List, Edit2, RotateCcw
+  Users, User, UserX, Briefcase, Clock, Activity, TrendingUp, Download, Plus, Search, ChevronDown, Eye, LayoutGrid, List, Edit2, RotateCcw, Calendar
 } from 'lucide-react';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
@@ -43,12 +43,18 @@ function StatCard({ icon: Icon, title, value, trend, hasDot }: any) {
   );
 }
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function EmployeesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [selectedServiceLine, setSelectedServiceLine] = useState('All');
   const [selectedDepartment, setSelectedDepartment] = useState('All');
   const [selectedTeam, setSelectedTeam] = useState('All');
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   // Extract unique values dynamically for dropdowns
   const serviceLines = ['All', ...Array.from(new Set(mockEmployees.map(e => e.serviceLine)))];
@@ -140,6 +146,23 @@ export default function EmployeesPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-xl text-xs md:text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-4 h-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
             <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 border border-[#E2E8F0] bg-white rounded-xl text-xs md:text-sm font-bold text-[#475569] hover:bg-gray-50 transition-colors shadow-sm cursor-pointer">
               <Download className="w-4 h-4" /> Export
             </button>
@@ -363,6 +386,14 @@ export default function EmployeesPage() {
         </div>
 
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

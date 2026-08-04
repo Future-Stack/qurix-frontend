@@ -29,9 +29,15 @@ const mockDeletedServiceLines = [
 
 type ServiceLine = (typeof mockServiceLines)[number];
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function ServiceLineManagementDashboard() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [serviceLineToEdit, setServiceLineToEdit] = useState<any>(null);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<'All Service line' | 'Deleted Items'>('All Service line');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
@@ -156,8 +162,20 @@ export default function ServiceLineManagementDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button className="bg-[#747474] hover:bg-[#5c5c5c] text-white px-4 py-2.5 rounded-[6px] text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer">
-              <Calendar className="w-4 h-4" /> Calendar
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="bg-[#747474] hover:bg-[#5c5c5c] text-white px-4 py-2.5 rounded-[6px] text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
             </button>
             <button
               onClick={handleCreateServiceLine}
@@ -379,6 +397,14 @@ export default function ServiceLineManagementDashboard() {
           setServiceLineToEdit(null);
         }}
         serviceLineData={serviceLineToEdit}
+      />
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
       />
     </div>
   );

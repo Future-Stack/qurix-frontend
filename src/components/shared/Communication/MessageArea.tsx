@@ -13,9 +13,14 @@ interface MessageAreaProps {
   panel: PanelType;
 }
 
+import MarkUrgentModal from './MarkUrgentModal';
+
 export default function MessageArea({ activeData, messages, onSendMessage, onOpenDetails, options, panel }: MessageAreaProps) {
   const [inputText, setInputText] = useState('');
   const [isUrgent, setIsUrgent] = useState<boolean>(activeData?.badges || false);
+  const [activeStatus, setActiveStatus] = useState<string>('WIP');
+  const [isUrgentModalOpen, setIsUrgentModalOpen] = useState<boolean>(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const countdown = useCountdown(activeData?.deadline);
@@ -69,7 +74,7 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white">
+    <div className="flex-1 flex flex-col h-full bg-white relative">
       {/* Header */}
       <div className="h-[96px] px-6 flex justify-between items-center border-b border-[#E2E8F0] bg-white shrink-0">
         <div className="flex items-center gap-4 cursor-pointer min-w-0 flex-1" onClick={onOpenDetails}>
@@ -88,56 +93,63 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
                   <img className="w-6 h-6 rounded-full border border-white" src="https://i.pravatar.cc/150?u=52" alt="" />
                   <div className="w-6 h-6 rounded-full border border-white bg-green-700 text-white text-[10px] font-bold flex items-center justify-center">7+</div>
                 </div>
-                {activeData.badges && (
-                  <>
-                    <div className="bg-[#06530B] text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                      {countdown.formatted}
+
+                <div className="bg-[#06530B] text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                  {countdown.formatted || '0D 00H 00M 00S'}
+                </div>
+
+                <Dropdown
+                  align="left"
+                  trigger={
+                    <div className="flex items-center gap-1 bg-[#ECEEF2] text-[#282828] text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer">
+                      {activeStatus} <ChevronDown className="w-3 h-3 text-[#282828]" />
                     </div>
-                    <Dropdown
-                      align="left"
-                      trigger={
-                        <div className="flex items-center gap-1 bg-[#ECEEF2] text-[#282828] text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer">
-                          WIP <ChevronDown className="w-3 h-3 text-[#282828]" />
-                        </div>
+                  }
+                  items={[
+                    { label: 'WIP', onClick: () => setActiveStatus('WIP') },
+                    { label: 'Urgent', onClick: () => setActiveStatus('Urgent') },
+                    { label: 'Late', onClick: () => setActiveStatus('Late') },
+                    { label: 'Delivered', onClick: () => setActiveStatus('Delivered') }
+                  ]}
+                />
+
+                {/* Panel-specific URGENT badge */}
+                {panel === 'employee' && (
+                  <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
+                    <AlertTriangle className="w-3 h-3 text-white" /> URGENT
+                    <Eye className="w-3 h-3 text-white ml-0.5" />
+                  </div>
+                )}
+
+                {(panel === 'team-leader' || panel === 'service-line') && (
+                  <div
+                    className="flex items-center gap-1.5 bg-[#FEE2E2] text-[#EF4444] border border-[#FCA5A5] text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer select-none"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!isUrgent) {
+                        setIsUrgentModalOpen(true);
+                      } else {
+                        setIsUrgent(false);
                       }
-                      items={[
-                        { label: 'WIP', onClick: () => {} },
-                        { label: 'Delivered', onClick: () => {} }
-                      ]}
-                    />
-                    {/* Panel-specific URGENT badge */}
-                    {panel === 'employee' && (
-                      // Employee: static badge with solid red background, white text, and eye icon
-                      <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
-                        <AlertTriangle className="w-3 h-3 text-white" /> URGENT
-                        <Eye className="w-3 h-3 text-white ml-0.5" />
-                      </div>
-                    )}
-                    {(panel === 'team-leader' || panel === 'service-line') && (
-                      // Team-leader / Service-line: badge with clickable mini toggle
-                      <div
-                        className="flex items-center gap-1.5 bg-[#FEE2E2] text-[#EF4444] border border-[#FCA5A5] text-[10px] font-bold px-2 py-0.5 rounded cursor-pointer select-none"
-                        onClick={() => setIsUrgent(prev => !prev)}
-                        title={isUrgent ? 'Click to remove urgent' : 'Click to mark urgent'}
-                      >
-                        URGENT
-                        <div className={`w-7 h-3.5 rounded-full relative transition-colors duration-200 shrink-0 ${
-                          isUrgent ? 'bg-red-500' : 'bg-gray-300'
-                        }`}>
-                          <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white shadow-sm transition-all duration-200 ${
-                            isUrgent ? 'right-0.5' : 'left-0.5'
-                          }`} />
-                        </div>
-                      </div>
-                    )}
-                    {panel === 'super-admin' && (
-                      // Super-admin: plain static badge (action is in the ⋮ dropdown menu)
-                      <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
-                        <AlertTriangle className="w-3 h-3 text-white" /> URGENT
-                        <Eye className="w-3 h-3 text-white ml-0.5" />
-                      </div>
-                    )}
-                  </>
+                    }}
+                    title={isUrgent ? 'Click to remove urgent' : 'Click to mark urgent'}
+                  >
+                    URGENT
+                    <div className={`w-7 h-3.5 rounded-full relative transition-colors duration-200 shrink-0 ${
+                      isUrgent ? 'bg-red-500' : 'bg-gray-300'
+                    }`}>
+                      <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white shadow-sm transition-all duration-200 ${
+                        isUrgent ? 'right-0.5' : 'left-0.5'
+                      }`} />
+                    </div>
+                  </div>
+                )}
+
+                {panel === 'super-admin' && (
+                  <div className="flex items-center gap-1 bg-[#EF4444] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-2xs">
+                    <AlertTriangle className="w-3 h-3 text-white" /> URGENT
+                    <Eye className="w-3 h-3 text-white ml-0.5" />
+                  </div>
                 )}
               </div>
             ) : (
@@ -292,6 +304,15 @@ export default function MessageArea({ activeData, messages, onSendMessage, onOpe
           )}
         </div>
       </form>
+
+      {/* Mark Project as Urgent Modal */}
+      <MarkUrgentModal
+        isOpen={isUrgentModalOpen}
+        onClose={() => setIsUrgentModalOpen(false)}
+        onConfirm={(explanation, notifyAll) => {
+          setIsUrgent(true);
+        }}
+      />
     </div>
   );
 }

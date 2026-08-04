@@ -11,7 +11,8 @@ import {
   Eye,
   Plus,
   AtSign,
-  ChevronDown
+  ChevronDown,
+  Calendar
 } from 'lucide-react';
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
@@ -139,13 +140,24 @@ const initialIssueProjects: IssueProjectOrder[] = [
 
 type IssueTabType = 'issue-project' | 'issue-resolved';
 
+import { usePathname } from 'next/navigation';
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function IssueProjectsContent() {
+  const pathname = usePathname();
+  const isEmployeePanel = pathname?.startsWith('/employee');
+  const isServiceLinePanel = pathname?.startsWith('/service-line');
+
   const [projectsData, setProjectsData] = useState<IssueProjectOrder[]>(initialIssueProjects);
   const [activeTab, setActiveTab] = useState<IssueTabType>('issue-project');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   // Add Issue Modal state
   const [isAddIssueModalOpen, setIsAddIssueModalOpen] = useState(false);
@@ -260,19 +272,41 @@ export default function IssueProjectsContent() {
             </div>
           </div>
 
-          {/* "+ Add Issue" Button */}
-          <button
-            onClick={() => {
-              const target = projectsData.find(p => !p.issue) || projectsData[0];
-              if (target) {
-                setAddIssueTargetProject({ id: target.id, orderId: target.orderId });
-              }
-            }}
-            className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-bold text-[14px] px-4 py-2.5 rounded-[6px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150 self-start sm:self-auto"
-          >
-            <Plus className="size-4 stroke-[2.5]" />
-            <span>Add Issue</span>
-          </button>
+          {/* Header Action Buttons */}
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="bg-[#71717a] hover:bg-[#52525b] text-white font-bold text-[14px] px-4 py-2.5 rounded-[6px] shadow-xs flex items-center gap-2 cursor-pointer transition-all duration-150"
+            >
+              <Calendar className="size-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
+            {/* "+ Add Issue" Button (Hidden for Employee Panel) */}
+            {!isEmployeePanel && (
+              <button
+                onClick={() => {
+                  const target = projectsData.find(p => !p.issue) || projectsData[0];
+                  if (target) {
+                    setAddIssueTargetProject({ id: target.id, orderId: target.orderId });
+                  }
+                }}
+                className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-bold text-[14px] px-4 py-2.5 rounded-[6px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150"
+              >
+                <Plus className="size-4 stroke-[2.5]" />
+                <span>Add Issue</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* 5 Stats Cards Grid matching Figma 602:3895 */}
@@ -397,23 +431,18 @@ export default function IssueProjectsContent() {
           {
             key: 'issue',
             header: 'Project Issues',
-            align: 'right',
+            align: 'center',
             render: (_, item) => {
               if (!item.issue) {
                 return (
-                  <div className="flex items-center justify-end w-full">
-                    <button
-                      onClick={() => setAddIssueTargetProject({ id: item.id, orderId: item.orderId })}
-                      className="bg-[#06530b] hover:bg-[#05290b] text-white font-['Roboto'] font-semibold text-xs h-[29px] w-[89px] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center shadow-2xs"
-                    >
-                      <span>Add Issue</span>
-                    </button>
+                  <div className="flex items-center justify-center w-full">
+                    <span className="text-xs font-semibold text-[#94A3B8]">No Issue</span>
                   </div>
                 );
               }
 
               return (
-                <div className="inline-flex items-center justify-end gap-2.5 w-full">
+                <div className="inline-flex items-center justify-center gap-2.5 w-full">
                   {/* View Issue Eye Icon */}
                   <button
                     onClick={() => setViewingIssue({
@@ -464,8 +493,8 @@ export default function IssueProjectsContent() {
             )
           }
         ]}
-        caption="Sales issue projects and status management"
-        emptyMessage="No issue projects found."
+        caption="Issue projects and status management"
+        emptyMessage="No issues found."
       />
 
       {/* Project Details Modal */}
@@ -482,6 +511,12 @@ export default function IssueProjectsContent() {
           isOpen={!!addIssueTargetProject}
           projectId={addIssueTargetProject.id}
           orderId={addIssueTargetProject.orderId}
+          projectsList={projectsData.map(p => ({
+            id: p.id,
+            orderId: p.orderId,
+            clientName: p.clientName,
+            profileName: p.profileName
+          }))}
           onClose={() => setAddIssueTargetProject(null)}
           onSubmit={handleAddIssueSubmit}
         />
@@ -496,6 +531,14 @@ export default function IssueProjectsContent() {
           onStatusChange={handleIssueStatusChange}
         />
       )}
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

@@ -39,12 +39,18 @@ const mockTeamMembers = [
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function ServiceLineDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'projects' | 'team' | 'refunds'>('projects');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const formattedDate = 'July 14, 2026';
 
@@ -92,21 +98,25 @@ export default function ServiceLineDashboard() {
     {
       key: 'status',
       header: 'Status',
+      align: 'center',
       render: (_, item) => <StatusBadge status={item.status} />
     },
     {
       key: 'value',
       header: 'Value',
+      align: 'center',
       render: (val) => <span className="font-medium text-[#101828] font-['Inter']">{String(val)}</span>
     },
     {
       key: 'initialSeconds',
       header: 'Timeline',
+      align: 'center',
       render: (_, item) => <CountdownTimer initialSeconds={item.initialSeconds} />
     },
     {
       key: 'id',
       header: 'Actions',
+      align: 'center',
       render: (_, item) => (
         <Link
           href={`/service-line/projects/${item.id}`}
@@ -202,7 +212,24 @@ export default function ServiceLineDashboard() {
               </p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-xl text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-4 h-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
             <Link
               href="/service-line/dashboard/create-new-project"
               className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer"
@@ -352,6 +379,14 @@ export default function ServiceLineDashboard() {
           <div className="p-8 text-center text-gray-500">No refunds found.</div>
         )}
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

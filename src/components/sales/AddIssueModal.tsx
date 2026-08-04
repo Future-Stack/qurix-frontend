@@ -1,12 +1,18 @@
-'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Link as LinkIcon, UploadCloud, FileText, ChevronDown, Search, Check } from 'lucide-react';
 
-import React, { useState, useRef } from 'react';
-import { X, Link as LinkIcon, UploadCloud, FileText, Check } from 'lucide-react';
+export interface ProjectOption {
+  id: string;
+  orderId: string;
+  clientName: string;
+  profileName: string;
+}
 
 interface AddIssueModalProps {
   isOpen: boolean;
   projectId: string;
   orderId: string;
+  projectsList?: ProjectOption[];
   onClose: () => void;
   onSubmit: (issueData: {
     projectId: string;
@@ -21,16 +27,56 @@ export default function AddIssueModal({
   isOpen,
   projectId,
   orderId,
+  projectsList = [],
   onClose,
   onSubmit
 }: AddIssueModalProps) {
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(projectId || projectsList[0]?.id || '');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [projectSearch, setProjectSearch] = useState('');
+
   const [explanation, setExplanation] = useState('');
   const [linkInput, setLinkInput] = useState('');
   const [links, setLinks] = useState<string[]>([]);
   const [files, setFiles] = useState<Array<{ name: string; size: string }>>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (projectId) {
+      setSelectedProjectId(projectId);
+    } else if (projectsList.length > 0 && projectsList[0]?.id) {
+      setSelectedProjectId(projectsList[0].id);
+    }
+  }, [projectId, projectsList]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   if (!isOpen) return null;
+
+  const currentProject = projectsList.find(p => p.id === selectedProjectId) || {
+    id: projectId || 'proj-1',
+    orderId: orderId || 'FO2D9BC6E142',
+    clientName: 'tprice34',
+    profileName: 'tech_omega'
+  };
+
+  const filteredProjects = projectsList.filter(p => {
+    const query = projectSearch.toLowerCase();
+    return (
+      p.clientName.toLowerCase().includes(query) ||
+      p.profileName.toLowerCase().includes(query) ||
+      p.orderId.toLowerCase().includes(query)
+    );
+  });
 
   const handleAddLink = () => {
     if (!linkInput.trim()) return;
@@ -104,10 +150,76 @@ export default function AddIssueModal({
         <div className="h-px bg-[#d6d6d6] w-full" />
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-[14px]">
+          {/* Section 0: Select Project */}
+          <div className="flex flex-col gap-[6px] relative" ref={dropdownRef}>
+            <label className="font-['Roboto'] font-bold text-[14px] text-[#06530b]">
+              Select Project <span className="text-red-500">*</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="bg-[#ebebeb] border border-[#d6d6d6] hover:border-[#06530b] rounded-[8px] px-3.5 py-2.5 text-sm text-[#0F172A] flex justify-between items-center w-full cursor-pointer font-medium transition-all"
+            >
+              <span className="truncate font-mono">
+                {`${currentProject.clientName} || ${currentProject.profileName} || ${currentProject.orderId}`}
+              </span>
+              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 shrink-0 ${isDropdownOpen ? 'rotate-180 text-[#06530b]' : ''}`} />
+            </button>
+
+            {/* Dropdown Menu matching Figma 764:1481 */}
+            {isDropdownOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-[#f0f2f5] border border-[#d6d6d6] rounded-[12px] shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                {/* Search Header Input */}
+                <div className="p-2.5 border-b border-[#e0e0e0] bg-[#e6e8ec] flex items-center gap-2">
+                  <Search className="w-4 h-4 text-gray-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={projectSearch}
+                    onChange={(e) => setProjectSearch(e.target.value)}
+                    placeholder="Search projects..."
+                    className="w-full bg-transparent text-sm text-[#0F172A] placeholder:text-gray-400 outline-none font-sans"
+                    autoFocus
+                  />
+                </div>
+
+                {/* Projects List */}
+                <div className="max-h-48 overflow-y-auto py-1">
+                  {filteredProjects.length === 0 ? (
+                    <div className="px-3.5 py-2.5 text-xs text-gray-400 text-center font-sans">
+                      No matching projects
+                    </div>
+                  ) : (
+                    filteredProjects.map((p) => {
+                      const isSelected = p.id === currentProject.id;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedProjectId(p.id);
+                            setIsDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3.5 py-2.5 text-[13px] font-mono flex items-center justify-between transition-colors cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#e0edd8] text-[#06530b] font-bold'
+                              : 'text-[#334155] hover:bg-[#e4e6eb]'
+                          }`}
+                        >
+                          <span className="truncate">{`${p.clientName} || ${p.profileName} || ${p.orderId}`}</span>
+                          {isSelected && <Check className="w-4 h-4 text-[#06530b] shrink-0 ml-2" />}
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Section 1: Explain */}
           <div className="flex flex-col gap-[8px]">
             <label className="font-['Roboto'] font-semibold text-[14px] text-[#06530b]">
-              Explain
+              Explain <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <textarea

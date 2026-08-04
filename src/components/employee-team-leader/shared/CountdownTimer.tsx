@@ -23,7 +23,7 @@ export default function CountdownTimer({ initialSeconds }: { initialSeconds: num
     const seconds = timeLeft % 60;
 
     return (
-        <div className="flex w-[120px] items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white shadow-2xs">
+        <div className="flex w-[120px] mx-auto items-center gap-1 justify-center rounded-lg bg-[#06530B] px-3 py-2 text-xs font-bold text-white shadow-2xs">
             <span>{days}D</span>
             <span>{String(hours).padStart(2, '0')}H</span>
             <span>{String(minutes).padStart(2, '0')}M</span>

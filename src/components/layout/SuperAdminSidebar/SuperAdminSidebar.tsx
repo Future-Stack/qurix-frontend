@@ -17,6 +17,7 @@ import { Menu, X,
 
 import logo from '@/assets/logo-qurix.png'
 import Image from 'next/image';
+import ContactBubbleIcon from '@/components/icons/ContactBubbleIcon';
 
 export default function SuperAdminSidebar() {
   const pathname = usePathname();
@@ -26,7 +27,7 @@ export default function SuperAdminSidebar() {
   const navItems = [
     { icon: LayoutGrid, path: '/super-admin/dashboard', id: 'dashboard', label: 'Dashboard' },
     { icon: MessageCircleMore, path: '/super-admin/messages', id: 'messages', label: 'Messages' },
-    { icon: Users, path: '/super-admin/contacts', id: 'contacts', label: 'Users' },
+    { icon: ContactBubbleIcon, path: '/super-admin/contacts', id: 'contacts', label: 'Users' },
     { icon: Phone, path: '/super-admin/calls', id: 'phone', label: 'Calls' },
     { icon: Target, path: '/super-admin/service-line-management', id: 'target', label: 'Management' },
     { icon: UserPlus, path: '/super-admin/employees', id: 'userplus', label: 'Employees' },
@@ -94,7 +95,7 @@ export default function SuperAdminSidebar() {
                     : 'text-[#828282] hover:bg-gray-50'
                 }`}
               >
-                <item.icon className="w-[20px] h-[20px]" strokeWidth={isActive ? 2 : 1.5} />
+                <item.icon className={item.icon === ContactBubbleIcon ? "w-[22px] h-[22px]" : "w-[20px] h-[20px]"} strokeWidth={isActive ? 2 : 1.5} />
               </Link>
             );
           })}

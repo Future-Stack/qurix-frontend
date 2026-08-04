@@ -14,7 +14,12 @@ import {
   Filter,
   Eye,
   Plus,
+  DollarSign,
+  Flag,
+  ChevronDown,
 } from 'lucide-react';
+
+import { Dropdown } from '@/components/ui/Dropdown/Dropdown';
 
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
@@ -25,11 +30,19 @@ import { mockProjects, mockTeamMembers } from './mockData';
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function SuperAdminDashboard({ params }: { params: { id: string, teamId: string } }) {
-  const [activeTab, setActiveTab] = useState<'projects' | 'team' | 'refunds'>('projects');
+  const [isRefundFilterActive, setIsRefundFilterActive] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
+  const [selectedServiceLineFilter, setSelectedServiceLineFilter] = useState<string>('All Service line');
+  const [selectedTeamFilter, setSelectedTeamFilter] = useState<string>('All Team');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const formattedDate = 'Monday, July 14, 2026';
 
@@ -43,7 +56,25 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
     const matchesSearch =
       item.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.id.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+
+    const matchesServiceLine =
+      selectedServiceLineFilter === 'All Service line' ||
+      item.serviceLine === selectedServiceLineFilter;
+
+    const matchesTeam =
+      selectedTeamFilter === 'All Team' ||
+      item.team === selectedTeamFilter;
+
+    const matchesRefund =
+      !isRefundFilterActive ||
+      item.status.toLowerCase() === 'refund' ||
+      item.status.toLowerCase() === 'cancellation';
+
+    const matchesStatus =
+      selectedStatusFilter === 'All' ||
+      item.status.toLowerCase() === selectedStatusFilter.toLowerCase();
+
+    return matchesSearch && matchesServiceLine && matchesTeam && matchesRefund && matchesStatus;
   });
 
   const filteredTeam = mockTeamMembers.filter((item) => {
@@ -57,16 +88,19 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
     { key: 'id', header: 'Order ID' },
     { key: 'client', header: 'Client name' },
     { key: 'profile', header: 'Profile name' },
+    { key: 'serviceLine', header: 'Service Line', render: (val, item) => <span className="font-semibold text-[#06530B]">{String((item as any).serviceLine || 'FSD')}</span> },
     { key: 'team', header: 'Team' },
     {
       key: 'status',
       header: 'Status',
+      align: 'center',
       render: (value) => <StatusBadge status={String(value)} />,
     },
-    { key: 'value', header: 'Value' },
+    { key: 'value', header: 'Value', align: 'center' },
     {
       key: 'timeline',
       header: 'Timeline',
+      align: 'center',
       render: (_, project) => (
         <CountdownTimer
           initialSeconds={
@@ -80,10 +114,11 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
     {
       key: 'id',
       header: 'Actions',
+      align: 'center',
       render: (val) => (
         <Link
           href={`/super-admin/projects/${val}`}
-          className="flex items-center gap-1 text-[#06530B] font-bold text-xs"
+          className="inline-flex items-center gap-1 text-[#06530B] font-bold text-xs"
         >        <Eye className="w-4 h-4" /> View
         </Link>
       ),
@@ -177,33 +212,57 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
               </p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-xl text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-4 h-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
             <Link href="/super-admin/dashboard/create-new-project" className="flex items-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-sm font-bold transition-colors shadow-sm cursor-pointer">
               <Plus className="w-4 h-4" /> New Project
             </Link>
           </div>
         </div>
 
-        {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* 6 Stats Cards Grid matching design */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           <StatsCard
-            title="Active Projects"
-            value={240}
+            title="Total Projects"
+            value={24}
             icon={FolderOpen}
-            iconBgColor="#eff6ff"
-            iconColor="#3b82f6"
+            iconBgColor="#eef2ff"
+            iconColor="#6366f1"
           />
           <StatsCard
             title="Urgent Projects"
-            value={78}
-            icon={AlertTriangle}
+            value={7}
+            icon={Flag}
             iconBgColor="#fef2f2"
             iconColor="#ef4444"
           />
           <StatsCard
+            title="Total Work Load"
+            value="$18,225"
+            icon={DollarSign}
+            iconBgColor="#e0f2fe"
+            iconColor="#0284c7"
+          />
+          <StatsCard
             title="Total Delivered"
-            value={12}
-            icon={CheckCircle2}
+            value="$8,022"
+            icon={DollarSign}
             iconBgColor="#f0fdf4"
             iconColor="#22c55e"
           />
@@ -223,34 +282,86 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
           />
         </div>
 
-        {/* Filter and Tab Options Control Bar */}
-        <div className="bg-white border border-[#f3f3f3] rounded-[16px] p-3 flex flex-col lg:flex-row items-end lg:items-center justify-between gap-4 shadow-2xs">
-          {/* Tabs */}
-          <div className="flex gap-2 p-1 bg-gray-50 rounded-xl max-w-fit">
+        {/* Filter Options Control Bar matching design */}
+        <div className="bg-white border border-[#f3f3f3] rounded-[16px] p-3 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 shadow-2xs">
+          {/* Left Side Filter Options (All Project, All Service Line Dropdown, All Team Dropdown, Refunds and Cancellations) */}
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* All Project Pill */}
             <button
-              onClick={() => setActiveTab('projects')}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'projects'
-                ? 'bg-[#06530b] text-white shadow-2xs'
-                : 'text-[#282828] hover:bg-gray-200'
-                }`}
+              onClick={() => {
+                setIsRefundFilterActive(false);
+                setSelectedServiceLineFilter('All Service line');
+                setSelectedTeamFilter('All Team');
+              }}
+              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${
+                !isRefundFilterActive && selectedServiceLineFilter === 'All Service line' && selectedTeamFilter === 'All Team'
+                  ? 'bg-[#06530B] text-white shadow-2xs'
+                  : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
+              }`}
             >
               All Project
             </button>
+
+            {/* All Service Line Dropdown */}
+            <Dropdown
+              align="left"
+              trigger={
+                <button
+                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                    selectedServiceLineFilter !== 'All Service line'
+                      ? 'bg-[#06530B] text-white shadow-2xs'
+                      : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{selectedServiceLineFilter}</span>
+                  <ChevronDown className={`w-4 h-4 shrink-0 ${
+                    selectedServiceLineFilter !== 'All Service line' ? 'text-white' : 'text-[#282828]'
+                  }`} />
+                </button>
+              }
+              items={[
+                { label: 'All Service line', onClick: () => { setSelectedServiceLineFilter('All Service line'); } },
+                { label: 'FSD', onClick: () => { setSelectedServiceLineFilter('FSD'); } },
+                { label: 'CMS', onClick: () => { setSelectedServiceLineFilter('CMS'); } },
+                { label: 'SEO', onClick: () => { setSelectedServiceLineFilter('SEO'); } },
+                { label: 'Graphics', onClick: () => { setSelectedServiceLineFilter('Graphics'); } },
+              ]}
+            />
+
+            {/* All Team Dropdown */}
+            <Dropdown
+              align="left"
+              trigger={
+                <button
+                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                    selectedTeamFilter !== 'All Team'
+                      ? 'bg-[#06530B] text-white shadow-2xs'
+                      : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{selectedTeamFilter}</span>
+                  <ChevronDown className={`w-4 h-4 shrink-0 ${
+                    selectedTeamFilter !== 'All Team' ? 'text-white' : 'text-[#282828]'
+                  }`} />
+                </button>
+              }
+              items={[
+                { label: 'All Team', onClick: () => { setSelectedTeamFilter('All Team'); } },
+                { label: 'FS', onClick: () => { setSelectedTeamFilter('FS'); } },
+                { label: 'CM', onClick: () => { setSelectedTeamFilter('CM'); } },
+              ]}
+            />
+
+            {/* Refunds and Cancellations Pill */}
             <button
-              onClick={() => setActiveTab('team')}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'team'
-                ? 'bg-[#06530b] text-white shadow-2xs'
-                : 'text-[#282828] hover:bg-gray-200'
-                }`}
-            >
-              All Service Line
-            </button>
-            <button
-              onClick={() => setActiveTab('refunds')}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium font-['Roboto'] transition-all duration-200 cursor-pointer ${activeTab === 'refunds'
-                ? 'bg-[#06530b] text-white shadow-2xs'
-                : 'text-[#282828] hover:bg-gray-200'
-                }`}
+              onClick={() => {
+                setIsRefundFilterActive(!isRefundFilterActive);
+              }}
+              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${
+                isRefundFilterActive
+                  ? 'bg-[#06530B] text-white shadow-2xs'
+                  : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
+              }`}
             >
               Refunds and Cancellations
             </button>
@@ -300,28 +411,22 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
 
       {/* Table Container */}
       <div className="w-full rounded-[16px] shadow-2xs bg-white">
-        {activeTab === 'projects' && (
-          <DashboardTable
-            data={enrichedProjects}
-            columns={projectColumns}
-            caption="All Projects"
-            emptyMessage="No projects found."
-            getRowKey={(row) => row.id}
-          />
-        )}
-        {activeTab === 'team' && (
-          <DashboardTable
-            data={mockTeamMembers}
-            columns={columnsTeam}
-            caption="All Team Members"
-            emptyMessage="No team members found."
-            getRowKey={(row) => row.empId}
-          />
-        )}
-        {activeTab === 'refunds' && (
-          <div className="p-8 text-center text-gray-500">No refunds found.</div>
-        )}
+        <DashboardTable
+          data={filteredProjects}
+          columns={projectColumns}
+          caption={isRefundFilterActive ? "Refunds & Cancellations Projects" : "All Projects"}
+          emptyMessage="No projects found."
+          getRowKey={(row) => row.id}
+        />
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }
