@@ -2,6 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { 
+  LayoutGrid, 
+  Users, 
+  Phone, 
+  Bookmark, 
+  BookOpen,
+  MessageCircleMore,
+  AlertTriangle,
+  Headphones,
+  Target
+} from 'lucide-react';
+import ContactBubbleIcon from '@/components/icons/ContactBubbleIcon';
 import Sidebar from '@/components/employee-team-leader/layout/employee-team-leader/Sidebar/Sidebar';
 import SettingsModal from '@/components/employee-team-leader/shared/Settings/SettingsModal';
 import Image from 'next/image';
@@ -28,6 +40,18 @@ export default function SalesLayout({ children }: { children: React.ReactNode })
       router.push('/sales/dashboard');
     }
   };
+
+  const salesMenuItems = [
+    { icon: LayoutGrid, href: '/sales/dashboard', label: 'Dashboard' },
+    { icon: MessageCircleMore, href: '/sales/messages', label: 'Messages' },
+    { icon: ContactBubbleIcon, href: '/sales/contacts', label: 'Contacts' },
+    { icon: Phone, href: '/sales/call-logs', label: 'Recent Calls' },
+    { icon: Target, href: '/sales/team-management', label: 'Management', activePaths: ['/sales/team-management'] },
+    { icon: AlertTriangle, href: '/sales/issue-projects', label: 'Issue Projects' },
+    { icon: Bookmark, href: '/sales/favorites', label: 'Favorites' },
+    { icon: Headphones, href: '/sales/station', label: 'Station' },
+    { icon: BookOpen, href: '/sales/learn-books', label: 'Learn Books' },
+  ];
 
   const customLogo = (
     <div className="w-10 h-10 bg-[#06530B] rounded-xl flex items-center justify-center text-white font-bold text-xl">
@@ -57,6 +81,7 @@ export default function SalesLayout({ children }: { children: React.ReactNode })
       {/* Navigation Sidebar */}
       <Sidebar
         basePath="/sales"
+        customMenuItems={salesMenuItems}
         customLogo={customLogo}
         onOpenSettings={() => setIsSettingsOpen(true)}
         isSettingsActive={isSettingsOpen}

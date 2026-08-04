@@ -520,7 +520,7 @@ export default function SalesDashboardPage() {
 
       </div>
 
-      {/* TABLE CONTENT WITH PROJECT ISSUES COLUMN */}
+      {/* TABLE CONTENT WITH VALUE COLUMN */}
       <DashboardTable
         data={filteredProjects}
         getRowKey={(item) => item.id}
@@ -529,53 +529,8 @@ export default function SalesDashboardPage() {
           { key: 'clientName', header: 'Client name', align: 'left', render: (val) => <span className="font-semibold text-[#1E293B]">{String(val)}</span> },
           { key: 'profileName', header: 'Profile name', align: 'left', render: (val) => <span className="text-[#475569]">{String(val)}</span> },
           { key: 'team', header: 'Team', align: 'left', render: (val) => <span className="text-[#475569] capitalize">{String(val)}</span> },
-          {
-            key: 'issue',
-            header: 'Project Issues',
-            align: 'right',
-            render: (_, item) => {
-              if (!item.issue) {
-                return (
-                  <div className="flex items-center justify-end w-full">
-                    <button
-                      onClick={() => setAddIssueTargetProject({ id: item.id, orderId: item.orderId })}
-                      className="bg-[#06530b] hover:bg-[#05290b] text-white font-['Roboto'] font-semibold text-xs h-[29px] w-[89px] rounded-[6px] transition-colors cursor-pointer inline-flex items-center justify-center shadow-2xs"
-                    >
-                      <span>Add Issue</span>
-                    </button>
-                  </div>
-                );
-              }
-
-              return (
-                <div className="inline-flex items-center justify-end gap-2.5 w-full">
-                  {/* View Issue Eye Icon */}
-                  <button
-                    onClick={() => setViewingIssue({
-                      id: item.id,
-                      orderId: item.orderId,
-                      clientName: item.clientName,
-                      explanation: item.issue!.explanation,
-                      links: item.issue!.links,
-                      files: item.issue!.files,
-                      status: item.issue!.status
-                    })}
-                    className="text-[#06530b] hover:opacity-80 transition-opacity cursor-pointer p-0.5"
-                    title="View issue details"
-                  >
-                    <Eye className="size-[20px] stroke-[2]" />
-                  </button>
-
-                  {/* Custom Styled Open Dropdown */}
-                  <IssueStatusDropdown
-                    status={item.issue.status}
-                    onStatusChange={(newStatus) => handleIssueStatusChange(item.id, newStatus)}
-                  />
-                </div>
-              );
-            }
-          },
           { key: 'status', header: 'Status', align: 'center', render: (_, item) => <StatusBadge status={item.status} /> },
+          { key: 'value', header: 'Value', align: 'center', render: (val) => <span className="font-bold text-[#1E293B]">{String(val)}</span> },
           { key: 'timeline', header: 'Timeline', align: 'center', render: () => <CountdownTimer initialSeconds={86400 * 3 + 3600 * 9 + 60 * 25 + 53} /> },
           {
             key: 'orderId',
@@ -599,7 +554,7 @@ export default function SalesDashboardPage() {
             )
           }
         ]}
-        caption="Sales active project orders and issues"
+        caption="Sales active project orders"
         emptyMessage="No projects found."
       />
 
