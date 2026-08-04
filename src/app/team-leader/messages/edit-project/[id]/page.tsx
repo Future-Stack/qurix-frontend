@@ -20,7 +20,8 @@ import {
   Share2,
   DollarSign,
   X,
-  FileCheck
+  FileCheck,
+  CheckCircle
 } from 'lucide-react';
 
 function GithubIcon({ className = "size-4" }: { className?: string }) {
@@ -233,23 +234,29 @@ export default function EditProjectWithIdPage() {
   const avatars = {
     shakil: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
   };
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
 
   return (
-    <div className="flex flex-col h-full max-h-full overflow-hidden space-y-6 select-none relative">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
       
-      {/* Top Header */}
-      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#dadada] pb-4 gap-4">
+      {/* Top Header Bar (Sticky / Fixed at top) */}
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#DADADA] px-6 lg:px-[30px] pt-6 lg:pt-[30px] pb-6 shrink-0 bg-white z-10">
         {/* User Info Header */}
         <div className="flex items-center gap-4">
           <div className="relative shrink-0 size-12 rounded-full p-[2.5px] figma-avatar-ring shadow-sm">
-            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
+            <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center overflow-hidden">
               <img 
                 src={avatars.shakil} 
                 alt="UX-SHAKIL" 
                 className="size-full object-cover rounded-full pointer-events-none"
               />
             </div>
-            <span className="absolute bottom-0 right-0 size-3 bg-emerald-500 border-2 border-white rounded-full" />
+            <span className="z-10 absolute bottom-0 right-0 size-3 bg-emerald-500 border-2 border-white rounded-full" />
           </div>
 
           <div>
@@ -271,19 +278,17 @@ export default function EditProjectWithIdPage() {
             Cancel
           </button>
           <button 
-            onClick={() => {
-              alert(`Project Group (${fiverrOrderId}) Updated Successfully!`);
-              router.back();
-            }}
-            className="px-6 py-2.5 rounded-full bg-[#06530b] text-white font-medium text-[14px] hover:bg-emerald-900 shadow-md transition-all cursor-pointer"
+            onClick={handleSave}
+            className={`px-6 py-2.5 rounded-full font-medium text-[14px] shadow-md transition-all cursor-pointer flex items-center gap-2 ${saved ? 'bg-emerald-600 text-white' : 'bg-[#06530b] hover:bg-emerald-900 text-white'
+              }`}
           >
-            Update Project Group
+            {saved ? <><CheckCircle className="size-4" /> Saved!</> : 'Update Project'}
           </button>
         </div>
       </div>
 
-      {/* Main Form Scrollable Container */}
-      <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-2">
+      {/* Central Layout Container (Scrollable Form Content) */}
+      <div className="w-full max-w-[975px] mx-auto border-x border-[#DADADA] px-4 py-6 md:px-8 md:py-8 flex-1 min-h-0 overflow-y-auto no-scrollbar space-y-6">
         
         {/* SECTION 1: PROJECT INFORMATION */}
         <div className="bg-white border border-[#e5e7eb] rounded-[24px] p-6 space-y-6 shadow-2xs">
@@ -409,6 +414,10 @@ export default function EditProjectWithIdPage() {
                   <option value="Planing">Planing</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Under Review">Under Review</option>
+                  <option value="Urgent">Urgent</option>
+                  <option value="WIP">WIP</option>
+                  <option value="Late">Late</option>
+                  <option value="Delivered">Delivered</option>
                 </select>
                 <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
               </div>
