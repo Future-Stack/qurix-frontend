@@ -11,7 +11,9 @@ import {
   Search,
   Filter,
   Eye,
-  Plus
+  Plus,
+  Flag,
+  DollarSign
 } from 'lucide-react';
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
@@ -21,6 +23,8 @@ import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 import ProjectDetailsModal from '@/components/employee-team-leader/shared/ProjectDetailsModal';
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 interface ProjectData {
   id: string;
   client: string;
@@ -29,6 +33,7 @@ interface ProjectData {
   status: string;
   value: string;
   initialSeconds: number;
+  date: string;
 }
 
 export default function EmployeeDashboardPage() {
@@ -39,9 +44,13 @@ export default function EmployeeDashboardPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
+  // Calendar Modal state & Date Range state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
+
   const formattedDate = 'Saturday, July 25, 2026 · ';
 
-  const orderData = [
+  const orderData: ProjectData[] = [
     {
       id: 'FO2D9BC6E142',
       client: 'lawalx',
@@ -50,6 +59,7 @@ export default function EmployeeDashboardPage() {
       status: 'Urgent',
       value: '$3,615',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-07-25',
     },
     {
       id: 'FO2D9BC6E142',
@@ -59,6 +69,7 @@ export default function EmployeeDashboardPage() {
       status: 'WIP',
       value: '$4,640',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-07-22',
     },
     {
       id: 'FO2D9BC6E142',
@@ -68,6 +79,7 @@ export default function EmployeeDashboardPage() {
       status: 'Late',
       value: '$6,461',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-07-20',
     },
     {
       id: 'FO2D9BC6E142',
@@ -77,6 +89,7 @@ export default function EmployeeDashboardPage() {
       status: 'Delivered',
       value: '$10,176',
       initialSeconds: 0,
+      date: '2026-07-15',
     },
     {
       id: 'FO2D9BC6E142',
@@ -86,6 +99,7 @@ export default function EmployeeDashboardPage() {
       status: 'Urgent',
       value: '$5,969',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-07-10',
     },
     {
       id: 'FO2D9BC6E142',
@@ -95,6 +109,7 @@ export default function EmployeeDashboardPage() {
       status: 'Urgent',
       value: '$7,188',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-07-05',
     },
     {
       id: 'FO2D9BC6E142',
@@ -104,6 +119,7 @@ export default function EmployeeDashboardPage() {
       status: 'Urgent',
       value: '$5,860',
       initialSeconds: 86400 * 3 + 3600 * 9 + 60 * 25 + 53,
+      date: '2026-06-30',
     },
   ];
 
@@ -117,11 +133,33 @@ export default function EmployeeDashboardPage() {
 
     const matchesStatus = selectedStatusFilter === 'All' || item.status === selectedStatusFilter;
 
-    if (activeTab === 'refunds') {
-      return matchesSearch && item.status === 'Late';
+    // Date Range Filter
+    let matchesDate = true;
+    if (dateRange.startDate) {
+      const itemDate = new Date(item.date).getTime();
+      const start = new Date(
+        dateRange.startDate.getFullYear(),
+        dateRange.startDate.getMonth(),
+        dateRange.startDate.getDate()
+      ).getTime();
+      
+      const end = dateRange.endDate
+        ? new Date(
+            dateRange.endDate.getFullYear(),
+            dateRange.endDate.getMonth(),
+            dateRange.endDate.getDate(),
+            23, 59, 59
+          ).getTime()
+        : start + 86399999;
+
+      matchesDate = itemDate >= start && itemDate <= end;
     }
 
-    return matchesSearch && matchesStatus;
+    if (activeTab === 'refunds') {
+      return matchesSearch && matchesDate && item.status === 'Late';
+    }
+
+    return matchesSearch && matchesStatus && matchesDate;
   });
 
   const columns: Column<(typeof orderData)[0]>[] = [
@@ -141,28 +179,27 @@ export default function EmployeeDashboardPage() {
       render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
-      key: 'team',
-      header: 'Team',
-      render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
-    },
-    {
       key: 'status',
       header: 'Status',
+      align: 'center',
       render: (_, item) => <StatusBadge status={item.status} />
     },
     {
       key: 'value',
       header: 'Value',
+      align: 'center',
       render: (val) => <span className="font-medium text-[#101828] font-inter">{String(val)}</span>
     },
     {
       key: 'initialSeconds',
       header: 'Timeline',
+      align: 'center',
       render: (_, item) => <CountdownTimer initialSeconds={item.initialSeconds} />
     },
     {
       key: 'id',
       header: 'Actions',
+      align: 'center',
       render: (_, item) => (
         <button
           onClick={() => setSelectedProject(item)}
@@ -191,12 +228,29 @@ export default function EmployeeDashboardPage() {
               {formattedDate}
             </p>
           </div>
+
+          {/* Top-Right Calendar Button */}
+          <button
+            onClick={() => setIsCalendarOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-lg text-sm font-medium transition-colors cursor-pointer shadow-xs self-start md:self-auto"
+          >
+            <Calendar className="w-4 h-4 stroke-[2]" />
+            <span>Calendar</span>
+            {dateRange.startDate && (
+              <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                  ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                )}
+              </span>
+            )}
+          </button>
         </div>
 
-        {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* 6 Responsive Stats Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           <StatsCard
-            title="Active Projects"
+            title="Total Projects"
             value={24}
             icon={Folder}
             iconBgColor="#eef2ff"
@@ -205,16 +259,23 @@ export default function EmployeeDashboardPage() {
           <StatsCard
             title="Urgent Projects"
             value={7}
-            icon={AlertTriangle}
+            icon={Flag}
             iconBgColor="#fef2f2"
             iconColor="#ef4444"
           />
           <StatsCard
+            title="Total Work Load"
+            value="$18,225"
+            icon={DollarSign}
+            iconBgColor="#dbeafe"
+            iconColor="#2563eb"
+          />
+          <StatsCard
             title="Total Delivered"
-            value={12}
-            icon={CheckCircle2}
-            iconBgColor="#f0fdf4"
-            iconColor="#22c55e"
+            value="$8,022"
+            icon={DollarSign}
+            iconBgColor="#dcfce7"
+            iconColor="#16a34a"
           />
           <StatsCard
             title="Upcoming Deadlines"
@@ -320,6 +381,14 @@ export default function EmployeeDashboardPage() {
           onClose={() => setSelectedProject(null)}
         />
       )}
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
 
     </div>
   );

@@ -1,11 +1,11 @@
 export const mockProjects = [
-  { id: 'FO2D9BC6E142', client: 'lawalx', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$3615', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E143', client: 'Wade Warren', profile: 'bits_wise', team: 'CM', status: 'mp', value: '$4640', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E144', client: 'Dianne Russell', profile: 'bits_wise', team: 'FS', status: 'late', value: '$6461', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E145', client: 'Ronald Richards', profile: 'bits_wise', team: 'FS', status: 'delivered', value: '$10176', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E146', client: 'Leslie Alexander', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$5969', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E147', client: 'Guy Hawkins', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$7188', timeline: '3D 9H 25M 53S' },
-  { id: 'FO2D9BC6E148', client: 'Jenny Wilson', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$5860', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E142', client: 'lawalx', profile: 'bits_wise', serviceLine: 'FSD', team: 'FS', status: 'urgent', value: '$3615', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E143', client: 'Wade Warren', profile: 'bits_wise', serviceLine: 'CMS', team: 'CM', status: 'wip', value: '$4640', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E144', client: 'Dianne Russell', profile: 'bits_wise', serviceLine: 'SEO', team: 'FS', status: 'late', value: '$6461', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E145', client: 'Ronald Richards', profile: 'bits_wise', serviceLine: 'FSD', team: 'FS', status: 'delivered', value: '$10176', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E146', client: 'Leslie Alexander', profile: 'bits_wise', serviceLine: 'Graphics', team: 'FS', status: 'refund', value: '$5969', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E147', client: 'Guy Hawkins', profile: 'bits_wise', serviceLine: 'FSD', team: 'FS', status: 'cancellation', value: '$7188', timeline: '3D 9H 25M 53S' },
+  { id: 'FO2D9BC6E148', client: 'Jenny Wilson', profile: 'bits_wise', serviceLine: 'SEO', team: 'FS', status: 'urgent', value: '$5860', timeline: '3D 9H 25M 53S' },
 ];
 
 export const mockTeamMembers = [

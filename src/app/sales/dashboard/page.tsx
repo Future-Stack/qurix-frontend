@@ -221,6 +221,8 @@ const initialProjectsData: ProjectOrder[] = [
 
 type TabType = 'all-projects' | 'mention-group' | 'issue-project' | 'issue-resolved';
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function SalesDashboardPage() {
   const router = useRouter();
   const [projectsData, setProjectsData] = useState<ProjectOrder[]>(initialProjectsData);
@@ -230,6 +232,10 @@ export default function SalesDashboardPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   // Add Issue Modal state
   const [addIssueTargetProject, setAddIssueTargetProject] = useState<{ id: string; orderId: string } | null>(null);
@@ -346,14 +352,34 @@ export default function SalesDashboardPage() {
             </div>
           </div>
 
-          {/* "+ New Project" Button */}
-          <button
-            onClick={() => router.push('/sales/dashboard/create-new-project')}
-            className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-bold text-[14px] px-5 py-2.5 rounded-[6px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150 self-start sm:self-auto"
-          >
-            <Plus className="size-4 stroke-[2.5]" />
-            <span>New Project</span>
-          </button>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-[6px] text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="size-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
+            {/* "+ New Project" Button */}
+            <button
+              onClick={() => router.push('/sales/dashboard/create-new-project')}
+              className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-bold text-[14px] px-5 py-2.5 rounded-[6px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150"
+            >
+              <Plus className="size-4 stroke-[2.5]" />
+              <span>New Project</span>
+            </button>
+          </div>
         </div>
 
         {/* 5 Stats Cards Grid matching Figma 602:3529 */}
@@ -613,6 +639,14 @@ export default function SalesDashboardPage() {
           onStatusChange={handleIssueStatusChange}
         />
       )}
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

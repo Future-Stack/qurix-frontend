@@ -85,11 +85,17 @@ function StatCard({ icon: Icon, number, label, iconBg, iconColor }: any) {
   );
 }
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 export default function TeamManagementDetailsPage() {
   const params = useParams();
   const teamId = params?.id as string;
   const [activeTab, setActiveTab] = useState('All Project');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const projectColumns: Column<(typeof mockProjects)[0]>[] = [
     { key: 'orderId', header: 'Order ID', render: (val) => <span className="font-bold text-[#06530B]">{String(val)}</span> },
@@ -166,8 +172,20 @@ export default function TeamManagementDetailsPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button className="bg-[#747474] hover:bg-[#5c5c5c] text-white px-4 py-2.5 rounded-[6px] text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer">
-              <Calendar className="w-4 h-4" /> Calendar
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="bg-[#747474] hover:bg-[#5c5c5c] text-white px-4 py-2.5 rounded-[6px] text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
             </button>
             <Link
               href={`/service-line/team-management/${teamId}/projects/create-new-project`}
@@ -353,6 +371,14 @@ export default function TeamManagementDetailsPage() {
         )}
 
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

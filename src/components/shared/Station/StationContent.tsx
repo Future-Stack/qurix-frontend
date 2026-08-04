@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Search, Phone, MessageCircle, Check } from 'lucide-react';
+import CustomSelect from '@/components/ui/Dropdown/CustomSelect';
 
 export interface Salesperson {
   id: string;
@@ -342,19 +343,18 @@ const INITIAL_PROFILES: ProfileItem[] = [
 ];
 
 export default function StationContent() {
-  const [departmentFilter, setDepartmentFilter] = useState<'Graphics' | 'SEO' | 'FSD' | 'CMS'>('Graphics');
+  const [departmentFilter, setDepartmentFilter] = useState<'All' | 'Graphics' | 'SEO' | 'FSD' | 'CMS'>('All');
   const [shiftFilter, setShiftFilter] = useState<'All' | 'Morning' | 'Regular' | 'Evening'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
 
-  const departments: ('Graphics' | 'SEO' | 'FSD' | 'CMS')[] = ['Graphics', 'SEO', 'FSD', 'CMS'];
   const shifts: ('All' | 'Morning' | 'Regular' | 'Evening')[] = ['All', 'Morning', 'Regular', 'Evening'];
 
   // Filter profiles
   const filteredProfiles = useMemo(() => {
     return INITIAL_PROFILES.filter((profile) => {
       // Department Filter
-      if (departmentFilter && profile.department !== departmentFilter && searchQuery === '') {
+      if (departmentFilter !== 'All' && profile.department !== departmentFilter && searchQuery === '') {
         return false;
       }
 
@@ -407,26 +407,25 @@ export default function StationContent() {
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 w-full">
           
           {/* Filter Pills Wrapper */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-4">
             
-            {/* Department Pills */}
-            <div className="bg-[#eceef0] border border-[#c7c4d8]/40 p-1.5 rounded-xl flex items-center gap-1.5 shrink-0">
-              {departments.map((dept) => {
-                const isActive = departmentFilter === dept;
-                return (
-                  <button
-                    key={dept}
-                    onClick={() => setDepartmentFilter(dept)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs lg:text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? 'bg-[#06530b] text-white shadow-xs'
-                        : 'text-[#414141] hover:text-[#06530b] hover:bg-white/60'
-                    }`}
-                  >
-                    {dept}
-                  </button>
-                );
-              })}
+            {/* Department Label & CustomSelect Dropdown Filter */}
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-bold text-[#0F172A] shrink-0">Department</span>
+              <CustomSelect
+                options={[
+                  { label: 'All Departments', value: 'All' },
+                  { label: 'Graphics', value: 'Graphics' },
+                  { label: 'SEO', value: 'SEO' },
+                  { label: 'FSD', value: 'FSD' },
+                  { label: 'CMS', value: 'CMS' }
+                ]}
+                value={departmentFilter}
+                onChange={(val) => setDepartmentFilter(val as any)}
+                variant="filter"
+                fullWidth={false}
+                buttonClassName="min-w-[175px] bg-[#eceef0] border border-[#c7c4d8]/40 rounded-xl text-xs md:text-sm font-medium text-[#1e293b] hover:bg-[#e2e8f0]"
+              />
             </div>
 
             {/* Shift Pills */}

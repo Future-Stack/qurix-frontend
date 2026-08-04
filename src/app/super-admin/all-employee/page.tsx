@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  Users, User, UserX, Briefcase, Clock, Activity, Download, Plus, Search, ChevronDown, Eye
+  Users, User, UserX, Briefcase, Clock, Activity, Download, Plus, Search, ChevronDown, Eye, Calendar
 } from 'lucide-react';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
+
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
 
 const mockEmployees = [
   { id: '1', name: 'Wrajakishore Loy', handle: '@julie_mutie', empId: 'KNC-8821', designation: 'Node JS Developer', email: 'tanya.hill@example.com', serviceLine: 'FSD', team: 'CM', status: 'ACTIVE', lastLogin: '24 mins ago', avatar: 'https://i.pravatar.cc/150?u=1' },
@@ -19,6 +21,10 @@ const mockEmployees = [
 
 export default function SuperAdminAllEmployeesPage() {
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const filteredEmployees = mockEmployees.filter(emp =>
     emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -68,7 +74,24 @@ export default function SuperAdminAllEmployeesPage() {
             <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-1">All Employees</h1>
             <p className="text-xs md:text-sm text-[#64748B]">Super Admin Panel</p>
           </div>
-          <div className="flex items-center gap-4 w-full sm:w-auto">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-xl text-xs md:text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-4 h-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
             <Link
               href="/super-admin/all-employee/create"
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-[#06530B] hover:bg-[#05290b] text-white rounded-xl text-xs md:text-sm font-bold transition-colors shadow-sm"
@@ -111,6 +134,14 @@ export default function SuperAdminAllEmployeesPage() {
         </div>
 
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

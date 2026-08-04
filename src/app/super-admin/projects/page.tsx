@@ -2,11 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Eye, Search } from 'lucide-react';
+import { Plus, Eye, Search, Calendar } from 'lucide-react';
 import { DashboardTable } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable';
 import { Column } from '@/components/employee-team-leader/shared/DashboardTable/DashboardTable.types';
 import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
+
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
 
 const mockProjectsList = [
   { id: 'FO2D9BC6E142', client: 'lawalx', profile: 'bits_wise', team: 'FS', status: 'urgent', value: '$3615', seconds: 293153 },
@@ -19,6 +21,10 @@ const mockProjectsList = [
 export default function SuperAdminProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   const filteredProjects = mockProjectsList.filter(p => {
     const matchesSearch = p.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -61,6 +67,23 @@ export default function SuperAdminProjectsPage() {
               <h1 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-0.5">Projects Management</h1>
               <p className="text-xs md:text-sm text-[#64748B]">Super Admin Panel</p>
             </div>
+
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-xl text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="w-4 h-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
           </div>
 
           {/* Controls & Filters */}
@@ -109,6 +132,14 @@ export default function SuperAdminProjectsPage() {
 
         </div>
       </div>
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

@@ -25,14 +25,14 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     if (['active', 'suspended', 'inactive'].includes(normalized)) {
         const dotColor = normalized === 'active' ? 'bg-[#00AB0C]' : normalized === 'suspended' ? 'bg-[#EF4444]' : 'bg-[#475569]';
         return (
-            <div className={`flex items-center gap-1.5 font-bold text-[11px] ${styles[normalized] || 'text-[#475569]'}`}>
+            <div className={`inline-flex items-center justify-center gap-1.5 font-bold text-[11px] ${styles[normalized] || 'text-[#475569]'}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`}></span> {normalized.toUpperCase()}
             </div>
         );
     }
 
     return (
-        <span className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase ${styles[normalized] || 'bg-gray-100 text-gray-500'}`}>
+        <span className={`inline-flex items-center justify-center px-3 py-1 rounded-md text-[10px] font-bold uppercase ${styles[normalized] || 'bg-gray-100 text-gray-500'}`}>
             {status}
         </span>
     );

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { 
   Edit2, User, Hash, Mail, Phone, Briefcase, 
-  CheckCircle2, ArrowLeft, KeyRound, UserX
+  CheckCircle2, ArrowLeft, KeyRound, UserX, Ban
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -189,6 +189,16 @@ export default function SuperAdminViewEmployeePage() {
                       <CheckCircle2 className="w-4 h-4" /> Reactivate Account
                     </>
                   )}
+                </button>
+
+                {/* Close this member button */}
+                <button
+                  type="button"
+                  onClick={() => setIsActive(false)}
+                  className="w-full mt-3 py-2.5 px-4 bg-[#FEE2E2] hover:bg-red-200/80 text-[#EF4444] border border-[#FCA5A5]/40 rounded-[12px] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none"
+                >
+                  <Ban className="w-4 h-4 text-[#EF4444] shrink-0" />
+                  <span>Close this member</span>
                 </button>
               </div>
 

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import logo from '../../../assets/logo-qurix.png';
+import ContactBubbleIcon from '@/components/icons/ContactBubbleIcon';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -27,7 +28,7 @@ export default function Sidebar() {
   const navItems = [
     { icon: LayoutGrid, path: '/service-line/dashboard', id: 'dashboard', label: 'Dashboard' },
     { icon: MessageCircleMore, path: '/service-line/messages', id: 'messages', label: 'Messages' },
-    { icon: Users, path: '/service-line/all-employee', id: 'team', label: 'Team' },
+    { icon: ContactBubbleIcon, path: '/service-line/all-employee', id: 'team', label: 'Team' },
     { icon: Phone, path: '/service-line/calls', id: 'phone', label: 'Calls' },
     { icon: Target, path: '/service-line/team-management', id: 'target', label: 'Management' },
     { icon: UserPlus, path: '/service-line/employees', id: 'userplus', label: 'Employees' },
@@ -94,7 +95,7 @@ export default function Sidebar() {
                     : 'text-[#828282] hover:bg-gray-50'
                   }`}
               >
-                <item.icon className="w-[20px] h-[20px]" strokeWidth={isActive ? 2 : 1.5} />
+                <item.icon className={item.icon === ContactBubbleIcon ? "w-[22px] h-[22px]" : "w-[20px] h-[20px]"} strokeWidth={isActive ? 2 : 1.5} />
               </Link>
             );
           })}

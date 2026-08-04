@@ -10,7 +10,12 @@ import {
   Search,
   Filter,
   Eye,
-  Plus
+  Plus,
+  LayoutGrid,
+  List,
+  Edit2,
+  Flag,
+  DollarSign
 } from 'lucide-react';
 import Link from 'next/link';
 import StatsCard from '@/components/employee-team-leader/shared/StatsCard';
@@ -159,6 +164,8 @@ const allProjectsData = [
 
 import { useRouter } from 'next/navigation';
 
+import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+
 type TabType = 'all-projects' | 'team-members' | 'refunds';
 
 export default function TeamLeaderDashboardPage() {
@@ -169,6 +176,15 @@ export default function TeamLeaderDashboardPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
+
+  // Team Member specific view mode and filters matching /service-line/team-management Employee tab
+  const [memberViewMode, setMemberViewMode] = useState<'grid' | 'table'>('grid');
+  const [memberStatusFilter, setMemberStatusFilter] = useState<string>('All');
+  const [showMemberFilters, setShowMemberFilters] = useState<boolean>(false);
+
+  // Calendar Modal state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({ startDate: null, endDate: null });
 
   // Filtered project list
   const filteredProjects = allProjectsData.filter((item) => {
@@ -186,14 +202,20 @@ export default function TeamLeaderDashboardPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // Filtered team members list
+  // Filtered team members list matching status & search
   const filteredTeamMembers = teamMembers.filter((item) => {
-    return (
+    const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.handle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.designation.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+      item.designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.empId.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
+      memberStatusFilter === 'All' ||
+      item.status.toUpperCase() === memberStatusFilter.toUpperCase();
+
+    return matchesSearch && matchesStatus;
   });
 
   return (
@@ -225,20 +247,40 @@ export default function TeamLeaderDashboardPage() {
             </div>
           </div>
 
-          {/* "+ New Project" Button */}
-          <button
-            onClick={() => router.push('/team-leader/dashboard/create-new-project')}
-            className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-medium text-[14px] px-5 py-2.5 rounded-[12px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150 self-start sm:self-auto"
-          >
-            <Plus className="size-4 stroke-[2.5]" />
-            <span>New Project</span>
-          </button>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {/* Calendar Button */}
+            <button
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-[#71717a] hover:bg-[#52525b] text-white rounded-[12px] text-sm font-medium transition-colors cursor-pointer shadow-xs"
+            >
+              <Calendar className="size-4 stroke-[2]" />
+              <span>Calendar</span>
+              {dateRange.startDate && (
+                <span className="ml-1 text-[11px] bg-white/20 px-2 py-0.5 rounded font-mono text-white">
+                  {dateRange.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {dateRange.endDate && dateRange.endDate.getTime() !== dateRange.startDate.getTime() && (
+                    ` - ${dateRange.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                  )}
+                </span>
+              )}
+            </button>
+
+            {/* "+ New Project" Button */}
+            <button
+              onClick={() => router.push('/team-leader/dashboard/create-new-project')}
+              className="bg-[#06530b] hover:bg-emerald-900 active:scale-[0.99] text-white font-medium text-[14px] px-5 py-2.5 rounded-[12px] shadow-sm flex items-center gap-2 cursor-pointer transition-all duration-150"
+            >
+              <Plus className="size-4 stroke-[2.5]" />
+              <span>New Project</span>
+            </button>
+          </div>
         </div>
 
-        {/* 5 Stats Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* 6 Responsive Stats Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           <StatsCard
-            title="Active Projects"
+            title="Total Projects"
             value={24}
             icon={Folder}
             iconBgColor="#eef2ff"
@@ -247,16 +289,23 @@ export default function TeamLeaderDashboardPage() {
           <StatsCard
             title="Urgent Projects"
             value={7}
-            icon={AlertTriangle}
+            icon={Flag}
             iconBgColor="#fef2f2"
             iconColor="#ef4444"
           />
           <StatsCard
+            title="Total Work Load"
+            value="$18,225"
+            icon={DollarSign}
+            iconBgColor="#dbeafe"
+            iconColor="#2563eb"
+          />
+          <StatsCard
             title="Total Delivered"
-            value={12}
-            icon={CheckCircle2}
-            iconBgColor="#f0fdf4"
-            iconColor="#22c55e"
+            value="$8,022"
+            icon={DollarSign}
+            iconBgColor="#dcfce7"
+            iconColor="#16a34a"
           />
           <StatsCard
             title="Upcoming Deadlines"
@@ -315,7 +364,7 @@ export default function TeamLeaderDashboardPage() {
 
           </div>
 
-          {/* Search and Order Filtering */}
+          {/* Search, Filter & View Mode Switcher */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Search input */}
             <div className="relative flex-1 sm:w-64">
@@ -330,20 +379,49 @@ export default function TeamLeaderDashboardPage() {
             </div>
 
             {/* Filter Trigger Button */}
-            {activeTab !== 'team-members' && (
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center justify-center gap-2 bg-[#f3f3f5] hover:bg-gray-200 border border-transparent hover:border-[#eaecf0] rounded-[8px] px-4 py-2 text-sm font-medium font-['Roboto'] text-[#434343] transition-all duration-200 cursor-pointer ${showFilters ? 'bg-gray-200 border-[#eaecf0]' : ''
+            <button
+              onClick={() => {
+                if (activeTab === 'team-members') {
+                  setShowMemberFilters(!showMemberFilters);
+                } else {
+                  setShowFilters(!showFilters);
+                }
+              }}
+              className={`flex items-center justify-center gap-2 bg-[#f3f3f5] hover:bg-gray-200 border border-transparent hover:border-[#eaecf0] rounded-[8px] px-4 py-2 text-sm font-medium font-['Roboto'] text-[#434343] transition-all duration-200 cursor-pointer ${
+                (activeTab === 'team-members' && showMemberFilters) || (activeTab !== 'team-members' && showFilters) ? 'bg-gray-200 border-[#eaecf0]' : ''
+              }`}
+            >
+              <Filter className="size-4" />
+              <span>{activeTab === 'team-members' ? 'Filter' : 'Order Filtering'}</span>
+            </button>
+
+            {/* View Mode Switcher for Team Members Tab */}
+            {activeTab === 'team-members' && (
+              <div className="flex items-center gap-1.5 bg-[#F3F3F5] p-1 rounded-[8px]">
+                <button
+                  onClick={() => setMemberViewMode('grid')}
+                  className={`p-1.5 rounded-[6px] transition-colors cursor-pointer ${
+                    memberViewMode === 'grid' ? 'bg-[#06530B] text-white shadow-2xs' : 'text-[#434343] hover:text-black'
                   }`}
-              >
-                <Filter className="size-4" />
-                <span>Order Filtering</span>
-              </button>
+                  title="Grid View"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setMemberViewMode('table')}
+                  className={`p-1.5 rounded-[6px] transition-colors cursor-pointer ${
+                    memberViewMode === 'table' ? 'bg-[#06530B] text-white shadow-2xs' : 'text-[#434343] hover:text-black'
+                  }`}
+                  title="Table View"
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Expanded filters options (if triggered) */}
+        {/* Expanded filters for Projects */}
         {showFilters && activeTab !== 'team-members' && (
           <div className="bg-white border border-[#f3f3f3] rounded-[16px] p-3 flex flex-wrap items-center gap-3 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-200">
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider font-['Roboto']">Status Filter:</span>
@@ -352,6 +430,25 @@ export default function TeamLeaderDashboardPage() {
                 key={status}
                 onClick={() => setSelectedStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${selectedStatusFilter === status
+                  ? 'bg-[#06530b] text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Expanded filters for Team Members */}
+        {showMemberFilters && activeTab === 'team-members' && (
+          <div className="bg-white border border-[#f3f3f3] rounded-[16px] p-3 flex flex-wrap items-center gap-3 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-200">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider font-['Roboto']">Status Filter:</span>
+            {['All', 'Active', 'Suspended', 'Inactive'].map((status) => (
+              <button
+                key={status}
+                onClick={() => setMemberStatusFilter(status)}
+                className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors duration-150 ${memberStatusFilter === status
                   ? 'bg-[#06530b] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
@@ -378,13 +475,13 @@ export default function TeamLeaderDashboardPage() {
             { key: 'orderId', header: 'Order ID', render: (val) => <span className="font-bold text-[#1E293B]">{String(val)}</span> },
             { key: 'clientName', header: 'Client name', render: (val) => <span className="font-semibold text-[#1E293B]">{String(val)}</span> },
             { key: 'profileName', header: 'Profile name', render: (val) => <span className="text-[#475569]">{String(val)}</span> },
-            { key: 'team', header: 'Team', render: (val) => <span className="text-[#475569]">{String(val)}</span> },
-            { key: 'status', header: 'Status', render: (_, item) => <StatusBadge status={item.status} /> },
-            { key: 'value', header: 'Value', render: (val) => <span className="font-bold text-[#0F172A]">{String(val)}</span> },
-            { key: 'timeline', header: 'Timeline', render: () => <CountdownTimer initialSeconds={86400 * 3 + 3600 * 9 + 60 * 25 + 53} /> },
+            { key: 'status', header: 'Status', align: 'center', render: (_, item) => <StatusBadge status={item.status} /> },
+            { key: 'value', header: 'Value', align: 'center', render: (val) => <span className="font-bold text-[#0F172A]">{String(val)}</span> },
+            { key: 'timeline', header: 'Timeline', align: 'center', render: () => <CountdownTimer initialSeconds={86400 * 3 + 3600 * 9 + 60 * 25 + 53} /> },
             {
               key: 'orderId',
               header: 'Actions',
+              align: 'center',
               render: (_, item) => (
                 <button
                   onClick={() => setSelectedProject({
@@ -411,46 +508,143 @@ export default function TeamLeaderDashboardPage() {
       {/* ========================================================================= */}
       {/* TAB CONTENT: TEAM MEMBERS TABLE */}
       {/* ========================================================================= */}
+      {/* ========================================================================= */}
+      {/* TAB CONTENT: TEAM MEMBERS (GRID / TABLE) */}
+      {/* ========================================================================= */}
       {activeTab === 'team-members' && (
-        <DashboardTable
-          data={filteredTeamMembers}
-          getRowKey={(item) => item.id}
-          columns={[
-            {
-              key: 'name',
-              header: 'Profile',
-              render: (_, item) => (
-                <div className="flex items-center gap-3">
-                  <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover" />
-                  <div>
-                    <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{item.name}</div>
-                    <div className="text-[11px] text-[#64748B]">{item.handle}</div>
+        memberViewMode === 'grid' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredTeamMembers.map((member) => (
+              <div
+                key={member.id}
+                className="bg-[#FAFAFA] border border-[#F2F2F2] rounded-[16px] p-[17px] flex flex-col justify-between hover:shadow-md transition-shadow"
+              >
+                <div>
+                  {/* Member Card Header */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={member.avatar}
+                        alt={member.name}
+                        className="w-[36px] h-[36px] rounded-full object-cover shrink-0"
+                      />
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-[#191C1E] text-[14px] leading-tight">
+                          {member.name}
+                        </span>
+                        <span className="text-[#464555] text-[12px] leading-tight">
+                          {member.handle}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`rounded-full px-2 py-1 flex items-center gap-1.5 shrink-0 ${
+                      member.status.toUpperCase() === 'ACTIVE' ? 'bg-[#06530B]/9' :
+                      member.status.toUpperCase() === 'SUSPENDED' ? 'bg-orange-50' : 'bg-gray-100'
+                    }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${
+                        member.status.toUpperCase() === 'ACTIVE' ? 'bg-[#06530B]' :
+                        member.status.toUpperCase() === 'SUSPENDED' ? 'bg-orange-500' : 'bg-gray-400'
+                      }`} />
+                      <span className={`text-[11px] font-bold tracking-wider uppercase ${
+                        member.status.toUpperCase() === 'ACTIVE' ? 'text-[#06530B]' :
+                        member.status.toUpperCase() === 'SUSPENDED' ? 'text-orange-600' : 'text-gray-500'
+                      }`}>
+                        {member.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-full h-px bg-[#EAECF0] my-3.5" />
+
+                  {/* Member Details */}
+                  <div className="space-y-3.5 text-[12px]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">EMP ID</span>
+                      <span className="text-[#0F172A]">{member.empId}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">Phone</span>
+                      <span className="text-[#0F172A]">{member.phone}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">Email</span>
+                      <span className="text-[#0F172A] truncate max-w-[170px]">{member.email}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">Designation</span>
+                      <span className="text-[#0F172A]">{member.designation}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">Joining Date</span>
+                      <span className="text-[#0F172A]">{member.joiningDate}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#0F172A]">Last Active</span>
+                      <span className="text-[#0F172A]">{member.lastLogin}</span>
+                    </div>
                   </div>
                 </div>
-              )
-            },
-            { key: 'empId', header: 'Emp ID', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
-            { key: 'designation', header: 'Designation', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
-            { key: 'email', header: 'E-mail', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
-            { key: 'status', header: 'Status', render: (val) => <StatusBadge status={String(val)} /> },
-            { key: 'joiningDate', header: 'Joining Date', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
-            { key: 'lastLogin', header: 'Last Active', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
-            {
-              key: 'id',
-              header: 'Actions',
-              render: (_, item) => (
-                <button
-                  onClick={() => setSelectedMember(item)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer"
-                >
-                  <Eye className="w-4 h-4" /> View
-                </button>
-              )
-            }
-          ]}
-          caption="Team Members list"
-          emptyMessage="No team members found."
-        />
+
+                <div>
+                  <div className="w-full h-px bg-[#EAECF0] my-3.5" />
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2.5">
+                    <button
+                      onClick={() => setSelectedMember(member)}
+                      className="flex-1 h-[29px] bg-[#06530B] hover:bg-[#05290b] text-white rounded-[8px] flex items-center justify-center gap-1 text-[14px] font-semibold transition-colors cursor-pointer"
+                    >
+                      <Eye className="w-4 h-4" /> View
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full rounded-[16px] shadow-2xs bg-white">
+            <DashboardTable
+              data={filteredTeamMembers}
+              getRowKey={(item) => item.id}
+              columns={[
+                {
+                  key: 'name',
+                  header: 'Profile',
+                  render: (_, item) => (
+                    <div className="flex items-center gap-3">
+                      <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover" />
+                      <div>
+                        <div className="text-[13px] font-bold text-[#0F172A] mb-0.5">{item.name}</div>
+                        <div className="text-[11px] text-[#64748B]">{item.handle}</div>
+                      </div>
+                    </div>
+                  )
+                },
+                { key: 'empId', header: 'Emp ID', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+                { key: 'designation', header: 'Designation', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+                { key: 'email', header: 'E-mail', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+                { key: 'status', header: 'Status', align: 'center', render: (val) => <StatusBadge status={String(val)} /> },
+                { key: 'joiningDate', header: 'Joining Date', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+                { key: 'lastLogin', header: 'Last Active', align: 'center', render: (val) => <span className="text-[13px] font-medium text-[#475569]">{String(val)}</span> },
+                {
+                  key: 'id',
+                  header: 'Actions',
+                  align: 'center',
+                  render: (_, item) => (
+                    <button
+                      onClick={() => setSelectedMember(item)}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#06530B] hover:text-[#00AB0C] transition-colors cursor-pointer"
+                    >
+                      <Eye className="w-4 h-4" /> View
+                    </button>
+                  )
+                }
+              ]}
+              caption="Team Members list"
+              emptyMessage="No team members found."
+            />
+          </div>
+        )
       )}
 
       {selectedProject && (
@@ -466,6 +660,14 @@ export default function TeamLeaderDashboardPage() {
           onClose={() => setSelectedMember(null)}
         />
       )}
+
+      {/* Date Range Calendar Modal */}
+      <DateRangeCalendarModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        initialRange={dateRange}
+        onApplyRange={(newRange) => setDateRange(newRange)}
+      />
     </div>
   );
 }

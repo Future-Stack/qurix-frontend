@@ -1,9 +1,9 @@
 "use client";
 
-import React, { use, Suspense } from 'react';
+import React, { use, Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Edit2, Building2, ShieldCheck, Ban } from 'lucide-react';
+import { Edit2, Building2, ShieldCheck, Ban, ArrowLeft } from 'lucide-react';
 
 const mockEmployeeData: Record<string, {
   fullName: string;
@@ -25,73 +25,52 @@ const mockEmployeeData: Record<string, {
   avatar: string;
 }> = {
   '1': {
-    fullName: 'Hossain Mishu',
-    username: '@hossain_mishu',
-    employeeId: '16056',
+    fullName: 'MD SHAKIL',
+    username: '@uxshakil',
+    employeeId: '15714',
     phoneNumber: '+880 123 456 789',
-    officialEmail: 'hossain@softvence.com',
+    officialEmail: 'shakil@softvence.com',
     designation: 'Senior UI/UX Designer',
     joiningDate: 'Oct 12, 2020',
     employmentType: 'Full-time Permanent',
     serviceLine: 'FSD',
     team: 'Future Stack',
     teamLeader: 'Imran',
-    loginEmail: 'hossain@softvence.com',
+    loginEmail: 'shakil@softvence.com',
     lastLogin: 'Thu Jul 30, 3:52 PM',
     passwordStatus: 'Strong',
     role: 'Employee',
     status: 'Active',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
   },
-  '2': {
-    fullName: 'Sofia Ahmed',
-    username: '@sofia_ahmed',
-    employeeId: '16057',
-    phoneNumber: '+880 123 456 790',
-    officialEmail: 'sofia@softvence.com',
-    designation: 'Lead Frontend Developer',
-    joiningDate: 'Jan 15, 2021',
-    employmentType: 'Full-time Permanent',
-    serviceLine: 'FSD',
-    team: 'Future Stack',
-    teamLeader: 'Imran',
-    loginEmail: 'sofia@softvence.com',
-    lastLogin: 'Thu Jul 30, 2:10 PM',
-    passwordStatus: 'Strong',
-    role: 'Employee',
-    status: 'Active',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-  },
 };
 
-function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
+function ViewSalesEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get('returnTo');
-  const [isMemberClosed, setIsMemberClosed] = React.useState(false);
+  const [isMemberClosed, setIsMemberClosed] = useState(false);
 
   const employee = mockEmployeeData[id] ?? {
-    fullName: 'Hossain Mishu',
-    username: '@hossain_mishu',
-    employeeId: '16056',
+    fullName: 'MD SHAKIL',
+    username: '@uxshakil',
+    employeeId: '15714',
     phoneNumber: '+880 123 456 789',
-    officialEmail: 'hossain@softvence.com',
+    officialEmail: 'shakil@softvence.com',
     designation: 'Senior UI/UX Designer',
     joiningDate: 'Oct 12, 2020',
     employmentType: 'Full-time Permanent',
     serviceLine: 'FSD',
     team: 'Future Stack',
     teamLeader: 'Imran',
-    loginEmail: 'hossain@softvence.com',
+    loginEmail: 'shakil@softvence.com',
     lastLogin: 'Thu Jul 30, 3:52 PM',
     passwordStatus: 'Strong',
     role: 'Employee',
     status: 'Active',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
   };
-
-  const editHref = `/super-admin/employees/${id}/edit${returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : ''}`;
 
   return (
     <div className="w-full h-full min-h-0 flex flex-col overflow-hidden bg-white">
@@ -100,8 +79,8 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
           <div className="w-16 h-16 rounded-full p-[2.5px] figma-avatar-ring shrink-0">
             <div className="w-full h-full rounded-full p-0.5 bg-white flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-white font-bold text-xl overflow-hidden relative">
-                <span className="z-10">C</span>
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 via-purple-500 to-transparent opacity-60"></div>
+                <span className="z-10">S</span>
+                <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500 via-teal-500 to-transparent opacity-60"></div>
               </div>
             </div>
           </div>
@@ -109,7 +88,7 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
             <h1 className="text-xl font-semibold text-black tracking-tight mb-1">
               Employee Information
             </h1>
-            <p className="text-sm text-[#A19791]">Admin Panel</p>
+            <p className="text-sm text-[#A19791]">Sales Panel</p>
           </div>
         </div>
 
@@ -117,16 +96,10 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
           <button
             type="button"
             onClick={() => returnTo ? router.push(returnTo) : router.back()}
-            className="flex-1 sm:flex-none px-4 py-2 border border-[#E8EAF0] bg-white rounded-[12px] text-sm font-medium text-[#64748B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2 border border-[#E8EAF0] bg-white rounded-[12px] text-sm font-medium text-[#64748B] hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-2"
           >
-            Back
+            <ArrowLeft className="w-4 h-4" /> Back
           </button>
-          <Link
-            href={editHref}
-            className="flex-1 sm:flex-none px-4 py-2 bg-[#06530B] hover:bg-[#05290b] text-white rounded-[10px] text-sm font-medium transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-2"
-          >
-            <Edit2 className="w-4 h-4" /> Edit information
-          </Link>
         </div>
       </div>
 
@@ -266,7 +239,7 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
                 </div>
               </div>
 
-              {/* Close this member button matching design */}
+              {/* Close this member button */}
               <button
                 type="button"
                 onClick={() => setIsMemberClosed(!isMemberClosed)}
@@ -287,10 +260,10 @@ function ViewEmployeeContent({ params }: { params: Promise<{ id: string }> }) {
   );
 }
 
-export default function ViewEmployeePage({ params }: { params: Promise<{ id: string }> }) {
+export default function SalesViewEmployeePage({ params }: { params: Promise<{ id: string }> }) {
   return (
     <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-      <ViewEmployeeContent params={params} />
+      <ViewSalesEmployeeContent params={params} />
     </Suspense>
   );
 }
