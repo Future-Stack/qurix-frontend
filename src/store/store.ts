@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
+  // Persist the full auth slice (accessToken, refreshToken, user)
   whitelist: ["auth"],
 };
 
