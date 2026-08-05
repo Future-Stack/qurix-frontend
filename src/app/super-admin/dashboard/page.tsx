@@ -31,8 +31,12 @@ import StatusBadge from '@/components/employee-team-leader/shared/StatusBadge';
 import CountdownTimer from '@/components/employee-team-leader/shared/CountdownTimer';
 
 import DateRangeCalendarModal, { DateRange } from '@/components/employee-team-leader/shared/DateRangeCalendarModal';
+import { useAppSelector } from '@/store/hooks/hooks';
+import { selectUser } from '@/store/features/Auth/authSlice';
 
 export default function SuperAdminDashboard({ params }: { params: { id: string, teamId: string } }) {
+  const user = useAppSelector(selectUser);
+  console.log("user in gol in ", user);
   const [isRefundFilterActive, setIsRefundFilterActive] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('All');
@@ -293,11 +297,10 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
                 setSelectedServiceLineFilter('All Service line');
                 setSelectedTeamFilter('All Team');
               }}
-              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${
-                !isRefundFilterActive && selectedServiceLineFilter === 'All Service line' && selectedTeamFilter === 'All Team'
+              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${!isRefundFilterActive && selectedServiceLineFilter === 'All Service line' && selectedTeamFilter === 'All Team'
                   ? 'bg-[#06530B] text-white shadow-2xs'
                   : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
-              }`}
+                }`}
             >
               All Project
             </button>
@@ -307,16 +310,14 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
               align="left"
               trigger={
                 <button
-                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
-                    selectedServiceLineFilter !== 'All Service line'
+                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${selectedServiceLineFilter !== 'All Service line'
                       ? 'bg-[#06530B] text-white shadow-2xs'
                       : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
-                  }`}
+                    }`}
                 >
                   <span>{selectedServiceLineFilter}</span>
-                  <ChevronDown className={`w-4 h-4 shrink-0 ${
-                    selectedServiceLineFilter !== 'All Service line' ? 'text-white' : 'text-[#282828]'
-                  }`} />
+                  <ChevronDown className={`w-4 h-4 shrink-0 ${selectedServiceLineFilter !== 'All Service line' ? 'text-white' : 'text-[#282828]'
+                    }`} />
                 </button>
               }
               items={[
@@ -333,16 +334,14 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
               align="left"
               trigger={
                 <button
-                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
-                    selectedTeamFilter !== 'All Team'
+                  className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${selectedTeamFilter !== 'All Team'
                       ? 'bg-[#06530B] text-white shadow-2xs'
                       : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
-                  }`}
+                    }`}
                 >
                   <span>{selectedTeamFilter}</span>
-                  <ChevronDown className={`w-4 h-4 shrink-0 ${
-                    selectedTeamFilter !== 'All Team' ? 'text-white' : 'text-[#282828]'
-                  }`} />
+                  <ChevronDown className={`w-4 h-4 shrink-0 ${selectedTeamFilter !== 'All Team' ? 'text-white' : 'text-[#282828]'
+                    }`} />
                 </button>
               }
               items={[
@@ -357,11 +356,10 @@ export default function SuperAdminDashboard({ params }: { params: { id: string, 
               onClick={() => {
                 setIsRefundFilterActive(!isRefundFilterActive);
               }}
-              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${
-                isRefundFilterActive
+              className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap ${isRefundFilterActive
                   ? 'bg-[#06530B] text-white shadow-2xs'
                   : 'bg-[#F3F3F5] text-[#282828] hover:bg-gray-200'
-              }`}
+                }`}
             >
               Refunds and Cancellations
             </button>

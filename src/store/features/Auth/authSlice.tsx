@@ -1,50 +1,68 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserData } from "./types/authTypes";
+import { Employee } from "./types/authTypes";
+import { RootState } from "@/store/store";
 
-type Tstate = {
+type AuthState = {
   accessToken: string | null;
-  restToken: string | null;
-  user: UserData | null;
+  refreshToken: string | null;
+  restToken: string | null; // password-reset flow
+  user: Employee | null;
 };
 
-const initialState: Tstate = {
+const initialState: AuthState = {
   accessToken: null,
+  refreshToken: null,
   restToken: null,
   user: null,
 };
 
 const authSlice = createSlice({
-  name: "user",
+  name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<string>) => {
-      if (!action.payload) {
-        console.error("Invalid payload received:", action.payload);
-        return;
-      }
-
-      state.accessToken = action.payload;
+    // Called after a successful login — stores both tokens + employee
+    setCredentials: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken: string;
+        user: Employee;
+      }>
+    ) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.user = action.payload.user;
     },
+
+    // Called after a successful token refresh
+    updateTokens: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken: string;
+      }>
+    ) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+    },
+
+    // Store employee profile fetched from /auth/me
+    setUser: (state, action: PayloadAction<Employee>) => {
+      state.user = action.payload;
+    },
+
+    // Password-reset flow helpers
     addResetToken: (state, action: PayloadAction<string>) => {
-      if (!action.payload) {
-        console.error("Invalid payload received:", action.payload);
-        return;
-      }
       state.restToken = action.payload;
     },
     clearResetToken: (state) => {
       state.restToken = null;
     },
 
-    addCurrentUser: (state, action: PayloadAction<UserData>) => {
-      state.user = action.payload;
-    },
-    removeCurrentUser: (state) => {
-      state.user = null;
-    },
-
+    // Full logout — clear everything
     logout: (state) => {
       state.accessToken = null;
+      state.refreshToken = null;
       state.restToken = null;
       state.user = null;
     },
@@ -52,13 +70,27 @@ const authSlice = createSlice({
 });
 
 export const {
+  setCredentials,
+  updateTokens,
   setUser,
   addResetToken,
   clearResetToken,
-  addCurrentUser,
-  removeCurrentUser,
   logout,
 } = authSlice.actions;
 
+// Selectors
+export const selectUser = (state: RootState) => state.auth.user;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+export const selectRefreshToken = (state: RootState) => state.auth.refreshToken;
+export const selectResetToken = (state: RootState) => state.auth.restToken;
+export const selectIsAuthenticated = (state: RootState) => !!state.auth.accessToken;
+
 const authReducer = authSlice.reducer;
 export default authReducer;
+
+
+
+// DLEVELOPER NOTE  
+// Use User  anywher like this
+//  const user = useAppSelector(selectUser);
