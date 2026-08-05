@@ -64,7 +64,7 @@ const baseQueryWithToasts: typeof baseQueryAPI = async (
 export const baseAPI = createApi({
   reducerPath: "baseAPI",
   baseQuery: baseQueryWithToasts,
-  tagTypes: ["user"],
+  tagTypes: ["CalendarEvent", "Notification", "NotificationPreferences"],
 
   endpoints: () => ({}),
 });

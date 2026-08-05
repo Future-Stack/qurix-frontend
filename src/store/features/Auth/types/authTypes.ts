@@ -1,5 +1,3 @@
-import { AdminPermissions } from "@/store/settings/users/types/userAdminTypes";
-
 export type RegisterUserRequest = {
   email: string;
   password: string;
@@ -72,7 +70,6 @@ export interface UserData {
   taskAssignEmail: boolean;
   createAt: string;
   updatedAt: string;
-  userPermissions: AdminPermissions[];
 }
 
 export type UserProfileResponse = ApiResponse<UserData>;
