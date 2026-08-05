@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 // Original baseQueryAPI
 const baseQueryAPI = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL,
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BASE_API_URL || "https://qurix-api.softvenceomegaforce.cloud/api/v1",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     if (token) {
@@ -64,7 +64,14 @@ const baseQueryWithToasts: typeof baseQueryAPI = async (
 export const baseAPI = createApi({
   reducerPath: "baseAPI",
   baseQuery: baseQueryWithToasts,
-  tagTypes: ["CalendarEvent", "Notification", "NotificationPreferences"],
+  tagTypes: [
+    "CalendarEvent",
+    "Notification",
+    "NotificationPreferences",
+    "File",
+    "Link",
+    "Auth",
+  ],
 
   endpoints: () => ({}),
 });
