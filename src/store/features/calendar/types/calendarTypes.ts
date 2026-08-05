@@ -1,4 +1,4 @@
-import { QurixApiResponse } from "@/store/notification/types/notificationTypes";
+import { QurixApiResponse } from "../../notification/types/notificationTypes";
 
 export type CalendarEventType =
   | "PROJECT_DEADLINE"
