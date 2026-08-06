@@ -20,6 +20,8 @@ import Sidebar from '@/components/employee-team-leader/layout/employee-team-lead
 import logo from '@/assets/logo-qurix.png';
 import SettingsModal from '@/components/employee-team-leader/shared/Settings/SettingsModal';
 
+import RoleGuard from '@/components/auth/RoleGuard';
+
 export default function ServiceLineLayout({ children }: { children: React.ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const pathname = usePathname();
@@ -78,21 +80,23 @@ export default function ServiceLineLayout({ children }: { children: React.ReactN
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
-      <Sidebar
-        basePath="/service-line"
-        customMenuItems={serviceLineMenuItems}
-        customLogo={customLogo}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        isSettingsActive={isSettingsOpen}
-      />
-      <main className={`flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm overflow-hidden flex flex-col ${mainPadding}`}>
-        {children}
-      </main>
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={handleCloseSettings}
-      />
-    </div>
+    <RoleGuard allowedRoles={['SERVICE_LINE']}>
+      <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
+        <Sidebar
+          basePath="/service-line"
+          customMenuItems={serviceLineMenuItems}
+          customLogo={customLogo}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          isSettingsActive={isSettingsOpen}
+        />
+        <main className={`flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm overflow-hidden flex flex-col ${mainPadding}`}>
+          {children}
+        </main>
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={handleCloseSettings}
+        />
+      </div>
+    </RoleGuard>
   );
 }
