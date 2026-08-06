@@ -20,6 +20,8 @@ import Image from 'next/image';
 import logo from '@/assets/logo-qurix.png';
 
 
+import RoleGuard from '@/components/auth/RoleGuard';
+
 export default function SalesLayout({ children }: { children: React.ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const pathname = usePathname();
@@ -77,26 +79,28 @@ export default function SalesLayout({ children }: { children: React.ReactNode })
     : 'p-4 pb-28 md:p-6 lg:p-[30px]';
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
-      {/* Navigation Sidebar */}
-      <Sidebar
-        basePath="/sales"
-        customMenuItems={salesMenuItems}
-        customLogo={customLogo}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        isSettingsActive={isSettingsOpen}
-      />
+    <RoleGuard allowedRoles={['SALES']}>
+      <div className="h-screen max-h-screen overflow-hidden bg-[#f5f5f5] text-[#282828] flex flex-col md:flex-row p-0 md:p-6 lg:p-[30px] gap-6 lg:gap-[30px] font-sans antialiased relative">
+        {/* Navigation Sidebar */}
+        <Sidebar
+          basePath="/sales"
+          customMenuItems={salesMenuItems}
+          customLogo={customLogo}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          isSettingsActive={isSettingsOpen}
+        />
 
-      {/* Main Content Area */}
-      <main className={`flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm overflow-hidden flex flex-col ${mainPadding}`}>
-        {children}
-      </main>
+        {/* Main Content Area */}
+        <main className={`flex-1 h-full max-h-full bg-white rounded-none md:rounded-[30px] border border-[#eaecf0] shadow-sm overflow-hidden flex flex-col ${mainPadding}`}>
+          {children}
+        </main>
 
-      {/* Settings Modal Overlay */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={handleCloseSettings}
-      />
-    </div>
+        {/* Settings Modal Overlay */}
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={handleCloseSettings}
+        />
+      </div>
+    </RoleGuard>
   );
 }
