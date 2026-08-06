@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Employee } from "./types/authTypes";
 import { RootState } from "@/store/store";
 
+import { setAuthCookies, clearAuthCookies } from "@/lib/auth-utils";
+
 type AuthState = {
   accessToken: string | null;
   refreshToken: string | null;
@@ -32,6 +34,7 @@ const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
+      setAuthCookies(action.payload.accessToken, action.payload.user?.roles || []);
     },
 
     // Called after a successful token refresh
@@ -44,11 +47,17 @@ const authSlice = createSlice({
     ) => {
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      if (state.user?.roles) {
+        setAuthCookies(action.payload.accessToken, state.user.roles);
+      }
     },
 
     // Store employee profile fetched from /auth/me
     setUser: (state, action: PayloadAction<Employee>) => {
       state.user = action.payload;
+      if (state.accessToken) {
+        setAuthCookies(state.accessToken, action.payload?.roles || []);
+      }
     },
 
     // Password-reset flow helpers
@@ -65,6 +74,7 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.restToken = null;
       state.user = null;
+      clearAuthCookies();
     },
   },
 });
