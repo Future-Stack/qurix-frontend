@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useLoginMutation, useLazyGetMeQuery } from '@/store/features/Auth/authApi';
 import { setCredentials, setUser } from '@/store/features/Auth/authSlice';
 import { useAppDispatch } from '@/store/hooks/hooks';
+import { getDashboardRoute } from '@/lib/auth-utils';
 
 // ─── Form schema ─────────────────────────────────────────────────────────────
 const loginSchema = z.object({
@@ -19,16 +20,6 @@ const loginSchema = z.object({
 });
 
 type LoginValues = z.infer<typeof loginSchema>;
-
-// ─── Role → route map ────────────────────────────────────────────────────────
-function getDashboardRoute(roles: string[]): string {
-  if (roles.includes('SUPER_ADMIN') || roles.includes('ADMIN')) return '/super-admin/dashboard';
-  if (roles.includes('SERVICE_LINE')) return '/service-line/dashboard';
-  if (roles.includes('TEAM_LEADER')) return '/team-leader/dashboard';
-  if (roles.includes('EMPLOYEE')) return '/employee/dashboard';
-  if (roles.includes('SALES')) return '/sales/dashboard';
-  return '/employee/dashboard'; // safe fallback
-}
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function LoginForm() {
