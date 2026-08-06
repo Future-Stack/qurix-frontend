@@ -23,6 +23,11 @@ import {
     X
 } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/store/hooks/hooks';
+import { logout } from '@/store/features/Auth/authSlice';
+import { toast } from 'sonner';
+
 type ModalView = 'main' | 'account' | 'notifications' | 'privacy' | 'active-sessions' | 'about';
 
 interface SettingsModalProps {
@@ -31,7 +36,16 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+    const router = useRouter();
+    const dispatch = useAppDispatch();
     const [currentView, setCurrentView] = useState<ModalView>('main');
+
+    const handleLogout = () => {
+        dispatch(logout());
+        onClose();
+        toast.success('Logged out successfully');
+        router.replace('/login');
+    };
 
     // Reset view to main whenever modal opens
     useEffect(() => {
@@ -256,17 +270,14 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
                         {/* Log Out Button */}
                         <button
-                            onClick={() => {
-                                alert('Logging out...');
-                                onClose();
-                            }}
+                            onClick={handleLogout}
                             className="w-full h-[52px] rounded-[12px] bg-[#ffeded] border border-[#ef4444] hover:bg-[#ffe2e2] active:scale-[0.99] transition-all duration-150 flex items-center justify-center gap-[14px] cursor-pointer group"
                         >
                             <div className="size-[20px] shrink-0 flex items-center justify-center text-[#ef4444]">
                                 <LogOut className="size-5 stroke-[2]" />
                             </div>
                             <span className="font-['Roboto'] font-bold text-[14px] text-[#ef4444] leading-tight">
-                                Log out
+                                Log out 
                             </span>
                         </button>
                     </>
